@@ -2,6 +2,7 @@ import { useState, useEffect, useRef, type FormEvent } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { useAuth } from '@/contexts/AuthContext'
 import { getActiveTemplate, getPatientRecord, submitCheckinSession, getRecentAlerts } from '@/api/checkin'
+import { runAlertEngine } from '@/api/alerts'
 import { loadCheckinState, saveCheckinState, clearCheckinState } from '@/lib/checkinStorage'
 import { parseAnswers } from '@/lib/checkinParser'
 import type { CheckinState, ParsedAnswers, AlertRow } from '@/api/supabase.types'
@@ -255,7 +256,7 @@ export function PortalCheckin() {
     const submittedAt = new Date().toISOString()
 
     try {
-      await submitCheckinSession({
+      const { checkinId } = await submitCheckinSession({
         patientId: finalState.patientId,
         conditionId: finalState.conditionId,
         templateSlug: finalState.templateSlug,
@@ -263,6 +264,12 @@ export function PortalCheckin() {
         parsed,
         rawAnswers: finalState.answers,
       })
+
+      try {
+        await runAlertEngine(finalState.patientId, finalState.conditionId, checkinId, parsed)
+      } catch {
+        // alert engine failures never block confirmation
+      }
 
       const alerts = await getRecentAlerts(finalState.patientId, submittedAt)
       clearCheckinState(finalState.patientId)
