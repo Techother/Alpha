@@ -21,9 +21,14 @@ export function evaluateAlerts(
 
   // Rule: weight_gain — today's weight ≥ 2 lbs above minimum of prior 3 observations
   if (parsed.weight_lbs !== null && recentWeightObs.length > 0) {
-    const priorMin = Math.min(...recentWeightObs.map(o => o.value_numeric!))
-    if (parsed.weight_lbs - priorMin >= 2) {
-      addAlert('weight_gain', 'high')
+    const weightValues = recentWeightObs
+      .map(o => o.value_numeric)
+      .filter((v): v is number => v !== null)
+    if (weightValues.length > 0) {
+      const priorMin = Math.min(...weightValues)
+      if (parsed.weight_lbs - priorMin >= 2) {
+        addAlert('weight_gain', 'high')
+      }
     }
   }
 
