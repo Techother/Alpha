@@ -65,6 +65,7 @@ export async function submitCheckinSession(
   const completedAt = new Date().toISOString()
 
   // 1. Insert chatbot_session
+  // TODO(Sub-project B): look up template UUID from templateSlug and write template_id here
   const { data: sessionData, error: sessionError } = await supabase
     .from('chatbot_sessions')
     .insert({

@@ -84,7 +84,9 @@ export function PortalCheckin() {
           startedAt: new Date().toISOString(),
         }
         setCheckinState(fresh)
-        startChatting(fresh, [])
+        // Inline startChatting to avoid stale closure dep on the function reference
+        setMessages([{ role: 'bot', text: fresh.questions[0].text }])
+        setStage('chatting')
       }
     }
 
