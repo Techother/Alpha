@@ -139,3 +139,43 @@ export interface Checkin {
   checked_in_at: string
   created_at: string
 }
+
+export interface AlertRow {
+  id: string
+  patient_id: string
+  alert_type: string
+  severity: 'high' | 'medium' | 'low'
+  created_at: string
+}
+
+export interface ParsedAnswers {
+  weight_lbs: number | null
+  heart_rate: number | null
+  bp_systolic: number | null
+  bp_diastolic: number | null
+  fatigue_score: number | null
+  breathlessness: number | null
+  swelling: number | null
+  medications: boolean | null
+  free_text: string | null
+}
+
+export interface CheckinState {
+  sessionId: string
+  patientId: string
+  conditionId: string
+  templateSlug: string
+  questions: Question[]
+  answers: Record<string, string>
+  currentIndex: number
+  startedAt: string
+}
+
+export interface SubmitPayload {
+  patientId: string
+  conditionId: string
+  templateSlug: string
+  startedAt: string
+  parsed: ParsedAnswers
+  rawAnswers: Record<string, string>
+}
