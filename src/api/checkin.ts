@@ -60,7 +60,7 @@ export async function getPatientRecord(
 
 export async function submitCheckinSession(
   payload: SubmitPayload
-): Promise<{ sessionId: string }> {
+): Promise<{ sessionId: string; checkinId: string }> {
   const { patientId, conditionId, templateSlug, startedAt, parsed } = payload
   const completedAt = new Date().toISOString()
 
@@ -160,7 +160,7 @@ export async function submitCheckinSession(
 
   void templateSlug // retained in payload interface for future transcript storage
 
-  return { sessionId }
+  return { sessionId, checkinId }
 }
 
 export async function getRecentAlerts(
