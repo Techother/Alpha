@@ -38,9 +38,10 @@ export function PortalCheckin() {
   // Load patient record and template on mount
   useEffect(() => {
     if (!profile) return
+    const currentProfile = profile
 
     async function init() {
-      const record = await getPatientRecord(profile!.id)
+      const record = await getPatientRecord(currentProfile.id)
       if (!record) {
         setErrorMsg("Your account isn't fully set up yet. Contact your care team.")
         setStage('error')
@@ -118,6 +119,15 @@ export function PortalCheckin() {
       const ans = savedState.answers[q.id]
       if (ans !== undefined) msgs.push({ role: 'patient', text: ans || '(skipped)' })
     }
+    // If all questions already answered, go directly to review
+    if (savedState.currentIndex >= savedState.questions.length) {
+      setCheckinState(savedState)
+      setReviewAnswers({ ...savedState.answers })
+      setReviewErrors({})
+      setStage('reviewing')
+      return
+    }
+
     // Add current question bot message
     const currentQ = savedState.questions[savedState.currentIndex]
     msgs.push({ role: 'bot', text: currentQ.text })
@@ -204,7 +214,7 @@ export function PortalCheckin() {
     const merged: CheckinState = {
       ...checkinState,
       answers: reviewAnswers,
-      currentIndex: checkinState.questions.length - 1,
+      currentIndex: checkinState.questions.length,
     }
     setCheckinState(merged)
     saveCheckinState(merged)
