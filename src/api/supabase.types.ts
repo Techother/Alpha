@@ -189,3 +189,28 @@ export interface AlertInsert {
   alert_type: string
   severity: 'high' | 'medium' | 'low'
 }
+
+export interface AdminStats {
+  activePatients: number
+  checkinsToday: number
+  unreviewedAlerts: number
+  alertsThisWeek: number
+}
+
+export interface PatientRosterRow {
+  id: string            // patients.id
+  name: string          // profiles.full_name
+  conditionName: string // conditions.name
+  conditionSlug: string // conditions.slug
+  lastCheckinAt: string | null
+  openAlertCount: number
+}
+
+export interface PatientDetail {
+  latestCheckin: Checkin | null
+  recentAlerts: AlertRow[]
+}
+
+export interface AlertWithPatient extends AlertRow {
+  patientName: string
+}
