@@ -1,10 +1,9 @@
 import { useState, useEffect, useRef, type FormEvent } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { useAuth } from '@/contexts/AuthContext'
-import { getActiveTemplate, getPatientRecord } from '@/api/checkin'
+import { getActiveTemplate, getPatientRecord, submitCheckinSession, getRecentAlerts } from '@/api/checkin'
 import { loadCheckinState, saveCheckinState, clearCheckinState } from '@/lib/checkinStorage'
 import { parseAnswers } from '@/lib/checkinParser'
-import { submitCheckinSession, getRecentAlerts } from '@/api/checkin'
 import type { CheckinState, ParsedAnswers, AlertRow } from '@/api/supabase.types'
 
 type Stage = 'loading' | 'error' | 'idle' | 'chatting' | 'reviewing' | 'confirmed'
@@ -88,7 +87,10 @@ export function PortalCheckin() {
       }
     }
 
-    init()
+    init().catch(() => {
+      setErrorMsg('Unable to load check-in. Please try again.')
+      setStage('error')
+    })
   }, [profile])
 
   // Auto-scroll chat to bottom on new messages
@@ -98,6 +100,7 @@ export function PortalCheckin() {
 
   function startChatting(state: CheckinState, existingMessages: Message[]) {
     const q = state.questions[state.currentIndex]
+    if (!q && existingMessages.length === 0) return  // fully completed saved session — nothing to show
     const botMessages: Message[] = existingMessages.length > 0
       ? existingMessages
       : [{ role: 'bot', text: q.text }]
@@ -249,9 +252,8 @@ export function PortalCheckin() {
         rawAnswers: finalState.answers,
       })
 
-      clearCheckinState(finalState.patientId)
-
       const alerts = await getRecentAlerts(finalState.patientId, submittedAt)
+      clearCheckinState(finalState.patientId)
       setConfirmed({ parsed, alerts, submittedAt })
       setStage('confirmed')
     } catch (err) {
