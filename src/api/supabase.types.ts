@@ -179,3 +179,11 @@ export interface SubmitPayload {
   parsed: ParsedAnswers
   rawAnswers: Record<string, string>
 }
+
+export interface AlertInsert {
+  patient_id: string
+  condition_id: string
+  checkin_id: string
+  alert_type: string
+  severity: 'high' | 'medium' | 'low'
+}
