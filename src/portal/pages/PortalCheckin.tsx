@@ -266,7 +266,7 @@ export function PortalCheckin() {
       })
 
       try {
-        await runAlertEngine(finalState.patientId, finalState.conditionId, checkinId, parsed)
+        await runAlertEngine(finalState.patientId, finalState.conditionId, checkinId, parsed, submittedAt)
       } catch {
         // alert engine failures never block confirmation
       }
@@ -274,6 +274,7 @@ export function PortalCheckin() {
       const alerts = await getRecentAlerts(finalState.patientId, submittedAt)
       clearCheckinState(finalState.patientId)
       setConfirmed({ parsed, alerts, submittedAt })
+      setSubmitting(false)
       setStage('confirmed')
     } catch (err) {
       setReviewErrors({ _submit: err instanceof Error ? err.message : 'Submission failed. Please try again.' })

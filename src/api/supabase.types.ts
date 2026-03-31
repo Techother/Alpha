@@ -143,6 +143,8 @@ export interface Checkin {
 export interface AlertRow {
   id: string
   patient_id: string
+  condition_id: string | null
+  checkin_id: string | null
   alert_type: string
   severity: 'high' | 'medium' | 'low'
   created_at: string

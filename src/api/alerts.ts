@@ -4,7 +4,8 @@ import type { AlertInsert, Observation, ParsedAnswers } from './supabase.types'
 
 export async function getRecentWeightObservations(
   patientId: string,
-  days: number
+  limit: number,
+  before: string
 ): Promise<Observation[]> {
   try {
     const { data, error } = await supabase
@@ -12,8 +13,9 @@ export async function getRecentWeightObservations(
       .select('*')
       .eq('patient_id', patientId)
       .eq('observation_type', 'weight_lbs')
+      .lt('observed_at', before)
       .order('observed_at', { ascending: false })
-      .limit(days)
+      .limit(limit)
 
     if (error) return []
     return (data ?? []) as Observation[]
@@ -36,10 +38,11 @@ export async function runAlertEngine(
   patientId: string,
   conditionId: string,
   checkinId: string,
-  parsed: ParsedAnswers
+  parsed: ParsedAnswers,
+  submittedAt: string
 ): Promise<void> {
   try {
-    const recentWeightObs = await getRecentWeightObservations(patientId, 3)
+    const recentWeightObs = await getRecentWeightObservations(patientId, 3, submittedAt)
     const alertRows = evaluateAlerts(parsed, recentWeightObs, patientId, conditionId, checkinId)
     await insertAlerts(alertRows)
   } catch (err) {
