@@ -13,7 +13,7 @@ import type {
 
 export async function getAdminStats(): Promise<AdminStats> {
   const todayMidnight = new Date()
-  todayMidnight.setHours(0, 0, 0, 0)
+  todayMidnight.setUTCHours(0, 0, 0, 0)
   const todayISO = todayMidnight.toISOString()
 
   const sevenDaysAgo = new Date()
@@ -62,10 +62,12 @@ export async function getPatientRoster(): Promise<PatientRosterRow[]> {
     // Fetch alert counts for last 30 days, grouped by patient
     const thirtyDaysAgo = new Date()
     thirtyDaysAgo.setDate(thirtyDaysAgo.getDate() - 30)
-    const { data: alerts } = await supabase
+    const { data: alerts, error: alertCountErr } = await supabase
       .from('alerts')
       .select('patient_id')
       .gte('created_at', thirtyDaysAgo.toISOString())
+
+    if (alertCountErr) console.warn('getPatientRoster alert count error:', alertCountErr.message)
 
     // Count alerts per patient client-side
     const alertCounts: Record<string, number> = {}
