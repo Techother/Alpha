@@ -41,15 +41,18 @@ function SeverityBadge({ severity }: { severity: 'high' | 'medium' | 'low' }) {
   }
   const s = styles[severity]
   return (
-    <span style={{
-      background: s.bg,
-      color: s.color,
-      fontSize: 'var(--font-size-xs)',
-      fontWeight: 'var(--font-weight-bold)',
-      padding: '2px 8px',
-      borderRadius: 'var(--radius-full)',
-      whiteSpace: 'nowrap',
-    }}>
+    <span
+      style={{
+        background: s.bg,
+        color: s.color,
+        fontSize: 'var(--font-size-xs)',
+        fontWeight: 'var(--font-weight-bold)',
+        padding: '2px 8px',
+        borderRadius: 'var(--radius-full)',
+        whiteSpace: 'nowrap',
+      }}
+      aria-label={`Severity: ${severity}`}
+    >
       {s.label}
     </span>
   )
