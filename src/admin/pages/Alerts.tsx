@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react'
+import { useEffect, useMemo, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { getAlerts } from '@/api/admin'
 import type { AlertWithPatient } from '@/api/supabase.types'
@@ -54,9 +54,14 @@ function formatTimestamp(iso: string): string {
          date.toLocaleTimeString('en-US', { hour: 'numeric', minute: '2-digit' })
 }
 
+const SEVERITY_BADGE_LABELS: Record<'high' | 'medium' | 'low', string> = {
+  high: 'HIGH',
+  medium: 'MED',
+  low: 'LOW',
+}
+
 function SeverityBadge({ severity }: { severity: 'high' | 'medium' | 'low' }) {
   const s = SEVERITY_COLORS[severity]
-  const labels = { high: 'HIGH', medium: 'MED', low: 'LOW' }
   return (
     <span
       aria-label={`Severity: ${severity}`}
@@ -70,7 +75,7 @@ function SeverityBadge({ severity }: { severity: 'high' | 'medium' | 'low' }) {
         whiteSpace: 'nowrap',
       }}
     >
-      {labels[severity]}
+      {SEVERITY_BADGE_LABELS[severity]}
     </span>
   )
 }
@@ -102,8 +107,12 @@ export function Alerts() {
     ? allAlerts
     : allAlerts.filter(a => a.severity === severityFilter)
 
-  const countFor = (s: SeverityFilter) =>
-    s === null ? allAlerts.length : allAlerts.filter(a => a.severity === s).length
+  const severityCounts = useMemo(() => ({
+    all:    allAlerts.length,
+    high:   allAlerts.filter(a => a.severity === 'high').length,
+    medium: allAlerts.filter(a => a.severity === 'medium').length,
+    low:    allAlerts.filter(a => a.severity === 'low').length,
+  }), [allAlerts])
 
   return (
     <div>
@@ -147,6 +156,22 @@ export function Alerts() {
               role="tab"
               aria-selected={isActive}
               onClick={() => setSeverityFilter(tab.value)}
+              onKeyDown={(e) => {
+                if (e.key === 'ArrowRight' || e.key === 'ArrowLeft') {
+                  e.preventDefault()
+                  const currentIdx = SEVERITY_TABS.findIndex(t => t.value === tab.value)
+                  const nextIdx = e.key === 'ArrowRight'
+                    ? (currentIdx + 1) % SEVERITY_TABS.length
+                    : (currentIdx - 1 + SEVERITY_TABS.length) % SEVERITY_TABS.length
+                  setSeverityFilter(SEVERITY_TABS[nextIdx].value)
+                } else if (e.key === 'Home') {
+                  e.preventDefault()
+                  setSeverityFilter(SEVERITY_TABS[0].value)
+                } else if (e.key === 'End') {
+                  e.preventDefault()
+                  setSeverityFilter(SEVERITY_TABS[SEVERITY_TABS.length - 1].value)
+                }
+              }}
               style={{
                 padding: '5px 14px',
                 borderRadius: 'var(--radius-md)',
@@ -161,7 +186,7 @@ export function Alerts() {
             >
               {tab.label}{' '}
               <span aria-hidden="true" style={{ opacity: 0.6, fontWeight: 'var(--font-weight-normal)' }}>
-                {countFor(tab.value)}
+                {tab.value === null ? severityCounts.all : severityCounts[tab.value]}
               </span>
             </button>
           )
