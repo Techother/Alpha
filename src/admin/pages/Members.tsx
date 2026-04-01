@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react'
+import { useEffect, useMemo, useState } from 'react'
 import { useSearchParams } from 'react-router-dom'
 import { getPatientRoster, getPatientDetail } from '@/api/admin'
 import type { PatientRosterRow, PatientDetail } from '@/api/supabase.types'
@@ -136,7 +136,6 @@ function BPTile({ systolic, diastolic }: { systolic: number | null | undefined; 
 export function Members() {
   const [searchParams] = useSearchParams()
   const [roster, setRoster]               = useState<PatientRosterRow[]>([])
-  const [filtered, setFiltered]           = useState<PatientRosterRow[]>([])
   const [selectedId, setSelectedId]       = useState<string | null>(null)
   const [detail, setDetail]               = useState<PatientDetail | null>(null)
   const [search, setSearch]               = useState('')
@@ -152,7 +151,6 @@ export function Members() {
         const rows = await getPatientRoster()
         if (cancelled) return
         setRoster(rows)
-        setFiltered(rows)
 
         const paramId = searchParams.get('patient')
         if (paramId && rows.some(r => r.id === paramId)) {
@@ -175,19 +173,24 @@ export function Members() {
     let cancelled = false
     async function load() {
       setDetailLoading(true)
-      const d = await getPatientDetail(selectedId)
-      if (cancelled) return
-      setDetail(d)
-      setDetailLoading(false)
+      try {
+        const d = await getPatientDetail(selectedId)
+        if (cancelled) return
+        setDetail(d)
+      } catch {
+        if (cancelled) return
+        setDetail(null)
+      } finally {
+        if (!cancelled) setDetailLoading(false)
+      }
     }
     load()
     return () => { cancelled = true }
   }, [selectedId])
 
-  // Client-side search filter
-  useEffect(() => {
+  const filtered = useMemo(() => {
     const q = search.toLowerCase()
-    setFiltered(q ? roster.filter(p => p.name.toLowerCase().includes(q)) : roster)
+    return q ? roster.filter(p => p.name.toLowerCase().includes(q)) : roster
   }, [search, roster])
 
   const selected = roster.find(r => r.id === selectedId) ?? null
@@ -210,7 +213,7 @@ export function Members() {
             Members
           </h1>
           <div style={{ position: 'relative' }}>
-            <span style={{ position: 'absolute', left: 8, top: '50%', transform: 'translateY(-50%)', color: 'var(--color-text-muted)', fontSize: 14 }}>⌕</span>
+            <span aria-hidden="true" style={{ position: 'absolute', left: 8, top: '50%', transform: 'translateY(-50%)', color: 'var(--color-text-muted)', fontSize: 14 }}>⌕</span>
             <input
               type="search"
               placeholder="Search patients…"
@@ -258,7 +261,7 @@ export function Members() {
               <button
                 key={patient.id}
                 onClick={() => setSelectedId(patient.id)}
-                aria-pressed={isSelected}
+                aria-current={isSelected ? 'true' : undefined}
                 aria-label={`Select patient ${patient.name}`}
                 style={{
                   display: 'block',
@@ -267,8 +270,8 @@ export function Members() {
                   padding: '8px 10px',
                   borderRadius: 'var(--radius-md)',
                   background: isSelected ? 'var(--color-primary-subtle)' : 'transparent',
-                  borderLeft: isSelected ? '3px solid var(--color-primary)' : '3px solid transparent',
                   border: 'none',
+                  borderLeft: isSelected ? '3px solid var(--color-primary)' : '3px solid transparent',
                   cursor: 'pointer',
                   marginBottom: 'var(--space-1)',
                   transition: 'background var(--transition-fast)',
