@@ -1,0 +1,106 @@
+<h2>Alerts Page</h2>
+<p class="subtitle">Severity filter tabs + chronological list. Read-only for now.</p>
+
+<div class="mockup" style="margin-top: 20px;">
+  <div class="mockup-header">Alerts — /admin/alerts</div>
+  <div class="mockup-body" style="padding: 0;">
+    <div style="display:flex; font-size:13px; height: 440px;">
+
+      <!-- Sidebar nav -->
+      <div style="width:100px; background:#fff; border-right:1px solid #d9dee5; padding:14px 10px; display:flex; flex-direction:column; gap:6px; flex-shrink:0;">
+        <div style="display:flex;align-items:center;gap:6px;margin-bottom:10px;padding-bottom:10px;border-bottom:1px solid #eaecf0;">
+          <div style="width:22px;height:22px;border-radius:5px;background:#003087;color:#fff;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:10px;flex-shrink:0;">C</div>
+          <span style="font-weight:600;font-size:11px;color:#1a1f36;">CardioTrack</span>
+        </div>
+        <div style="padding:5px 8px;font-size:11px;color:#6b7280;">Dashboard</div>
+        <div style="padding:5px 8px;font-size:11px;color:#6b7280;">Members</div>
+        <div style="padding:5px 8px;border-radius:6px;background:#e8f0fb;font-size:11px;font-weight:600;color:#003087;">Alerts</div>
+        <div style="padding:5px 8px;font-size:11px;color:#6b7280;">Backlog</div>
+      </div>
+
+      <!-- Main content -->
+      <div style="flex:1; background:#f5f7fa; padding:20px; overflow:auto;">
+
+        <!-- Page header -->
+        <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:16px;">
+          <h1 style="font-size:18px;font-weight:700;color:#1a1f36;margin:0;">Alerts</h1>
+          <span style="font-size:12px;color:#6b7280;">Showing last 30 days</span>
+        </div>
+
+        <!-- Filter tabs -->
+        <div style="display:flex;gap:4px;margin-bottom:16px;background:#fff;padding:4px;border-radius:8px;border:1px solid #d9dee5;width:fit-content;">
+          <div style="padding:5px 14px;border-radius:6px;background:#1a1f36;color:#fff;font-size:12px;font-weight:600;cursor:pointer;">All <span style="opacity:0.6;font-weight:400;">11</span></div>
+          <div style="padding:5px 14px;border-radius:6px;font-size:12px;color:#dc2626;font-weight:500;cursor:pointer;">High <span style="opacity:0.6;font-weight:400;">6</span></div>
+          <div style="padding:5px 14px;border-radius:6px;font-size:12px;color:#d97706;font-weight:500;cursor:pointer;">Medium <span style="opacity:0.6;font-weight:400;">5</span></div>
+          <div style="padding:5px 14px;border-radius:6px;font-size:12px;color:#2563eb;font-weight:500;cursor:pointer;">Low <span style="opacity:0.6;font-weight:400;">0</span></div>
+        </div>
+
+        <!-- Alert list -->
+        <div style="background:#fff;border-radius:10px;border:1px solid #d9dee5;overflow:hidden;">
+
+          <!-- Column headers -->
+          <div style="display:grid;grid-template-columns:80px 1fr 160px 140px;gap:12px;padding:8px 16px;background:#f8f9fb;border-bottom:1px solid #eaecf0;font-size:10px;font-weight:600;color:#6b7280;letter-spacing:0.04em;">
+            <span>SEVERITY</span>
+            <span>ALERT</span>
+            <span>PATIENT</span>
+            <span>TIME</span>
+          </div>
+
+          <!-- Row 1 -->
+          <div style="display:grid;grid-template-columns:80px 1fr 160px 140px;gap:12px;padding:10px 16px;border-bottom:1px solid #f0f2f5;align-items:center;">
+            <span style="background:#fef2f2;color:#dc2626;font-size:10px;font-weight:600;padding:2px 8px;border-radius:99px;width:fit-content;">HIGH</span>
+            <span style="font-size:12px;color:#1a1f36;">Weight gain +3.2 lbs above baseline</span>
+            <span style="font-size:12px;color:#0066cc;cursor:pointer;">Jane Doe</span>
+            <span style="font-size:11px;color:#6b7280;">Today 9:14am</span>
+          </div>
+
+          <!-- Row 2 -->
+          <div style="display:grid;grid-template-columns:80px 1fr 160px 140px;gap:12px;padding:10px 16px;border-bottom:1px solid #f0f2f5;align-items:center;">
+            <span style="background:#fef2f2;color:#dc2626;font-size:10px;font-weight:600;padding:2px 8px;border-radius:99px;width:fit-content;">HIGH</span>
+            <span style="font-size:12px;color:#1a1f36;">Abnormal heart rate — 108 bpm</span>
+            <span style="font-size:12px;color:#0066cc;cursor:pointer;">Mark Chen</span>
+            <span style="font-size:11px;color:#6b7280;">Today 8:52am</span>
+          </div>
+
+          <!-- Row 3 -->
+          <div style="display:grid;grid-template-columns:80px 1fr 160px 140px;gap:12px;padding:10px 16px;border-bottom:1px solid #f0f2f5;align-items:center;">
+            <span style="background:#fffbeb;color:#d97706;font-size:10px;font-weight:600;padding:2px 8px;border-radius:99px;width:fit-content;">MED</span>
+            <span style="font-size:12px;color:#1a1f36;">Missed medications</span>
+            <span style="font-size:12px;color:#0066cc;cursor:pointer;">Jane Doe</span>
+            <span style="font-size:11px;color:#6b7280;">Yesterday 7:30am</span>
+          </div>
+
+          <!-- Row 4 -->
+          <div style="display:grid;grid-template-columns:80px 1fr 160px 140px;gap:12px;padding:10px 16px;border-bottom:1px solid #f0f2f5;align-items:center;">
+            <span style="background:#fef2f2;color:#dc2626;font-size:10px;font-weight:600;padding:2px 8px;border-radius:99px;width:fit-content;">HIGH</span>
+            <span style="font-size:12px;color:#1a1f36;">High breathlessness score — 4/5</span>
+            <span style="font-size:12px;color:#0066cc;cursor:pointer;">Sara Kim</span>
+            <span style="font-size:11px;color:#6b7280;">Yesterday 8:05am</span>
+          </div>
+
+          <!-- Row 5 -->
+          <div style="display:grid;grid-template-columns:80px 1fr 160px 140px;gap:12px;padding:10px 16px;border-bottom:1px solid #f0f2f5;align-items:center;">
+            <span style="background:#fffbeb;color:#d97706;font-size:10px;font-weight:600;padding:2px 8px;border-radius:99px;width:fit-content;">MED</span>
+            <span style="font-size:12px;color:#1a1f36;">High swelling score — 4/5</span>
+            <span style="font-size:12px;color:#0066cc;cursor:pointer;">Tom Rivera</span>
+            <span style="font-size:11px;color:#6b7280;">Mar 30, 9:22am</span>
+          </div>
+
+          <!-- Row 6 -->
+          <div style="display:grid;grid-template-columns:80px 1fr 160px 140px;gap:12px;padding:10px 16px;align-items:center;">
+            <span style="background:#fef2f2;color:#dc2626;font-size:10px;font-weight:600;padding:2px 8px;border-radius:99px;width:fit-content;">HIGH</span>
+            <span style="font-size:12px;color:#1a1f36;">Weight gain +2.1 lbs above baseline</span>
+            <span style="font-size:12px;color:#0066cc;cursor:pointer;">Priya Patel</span>
+            <span style="font-size:11px;color:#6b7280;">Mar 29, 7:48am</span>
+          </div>
+
+        </div>
+
+        <p style="font-size:11px;color:#9ca3af;margin-top:10px;text-align:center;">Patient names are clickable — navigates to that patient in Members</p>
+
+      </div>
+    </div>
+  </div>
+</div>
+
+<p class="subtitle" style="margin-top:16px;">Filter tabs at top (All / High / Medium / Low with counts). Table columns: Severity · Alert description · Patient (clickable link to Members) · Time. Does this look right?</p>

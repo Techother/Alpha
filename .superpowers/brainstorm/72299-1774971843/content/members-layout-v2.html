@@ -1,0 +1,135 @@
+<h2>Members — with Blood Pressure</h2>
+<p class="subtitle">BP added as a combined systolic/diastolic tile alongside the other vitals.</p>
+
+<div class="mockup" style="margin-top: 20px;">
+  <div class="mockup-header">Members — /admin/members</div>
+  <div class="mockup-body" style="padding: 0;">
+    <div style="display:flex; font-size:13px; height: 460px;">
+
+      <!-- Sidebar nav -->
+      <div style="width:100px; background:#fff; border-right:1px solid #d9dee5; padding:14px 10px; display:flex; flex-direction:column; gap:6px; flex-shrink:0;">
+        <div style="display:flex;align-items:center;gap:6px;margin-bottom:10px;padding-bottom:10px;border-bottom:1px solid #eaecf0;">
+          <div style="width:22px;height:22px;border-radius:5px;background:#003087;color:#fff;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:10px;flex-shrink:0;">C</div>
+          <span style="font-weight:600;font-size:11px;color:#1a1f36;">CardioTrack</span>
+        </div>
+        <div style="padding:5px 8px;font-size:11px;color:#6b7280;">Dashboard</div>
+        <div style="padding:5px 8px;border-radius:6px;background:#e8f0fb;font-size:11px;font-weight:600;color:#003087;">Members</div>
+        <div style="padding:5px 8px;font-size:11px;color:#6b7280;">Alerts</div>
+        <div style="padding:5px 8px;font-size:11px;color:#6b7280;">Backlog</div>
+      </div>
+
+      <!-- Patient list column -->
+      <div style="width:220px; background:#fff; border-right:1px solid #d9dee5; display:flex; flex-direction:column; flex-shrink:0;">
+        <div style="padding:14px 12px 10px; border-bottom:1px solid #eaecf0;">
+          <div style="font-size:15px;font-weight:700;color:#1a1f36;margin-bottom:8px;">Members</div>
+          <div style="position:relative;">
+            <div style="position:absolute;left:8px;top:50%;transform:translateY(-50%);color:#9ca3af;font-size:12px;">⌕</div>
+            <input class="mock-input" placeholder="Search patients…" style="padding-left:24px;font-size:12px;width:100%;box-sizing:border-box;" />
+          </div>
+        </div>
+        <div style="flex:1;overflow:auto;padding:6px;">
+          <div style="padding:8px 10px;border-radius:7px;background:#e8f0fb;border-left:3px solid #003087;margin-bottom:2px;cursor:pointer;">
+            <div style="display:flex;justify-content:space-between;align-items:start;">
+              <div>
+                <div style="font-weight:600;font-size:12px;color:#1a1f36;">Jane Doe</div>
+                <div style="font-size:10px;color:#6b7280;margin-top:1px;">Heart Failure · Today</div>
+              </div>
+              <span style="background:#fef2f2;color:#dc2626;font-size:9px;font-weight:700;padding:1px 6px;border-radius:99px;">2</span>
+            </div>
+          </div>
+          <div style="padding:8px 10px;border-radius:7px;margin-bottom:2px;cursor:pointer;">
+            <div style="display:flex;justify-content:space-between;align-items:start;">
+              <div>
+                <div style="font-size:12px;color:#1a1f36;">Mark Chen</div>
+                <div style="font-size:10px;color:#6b7280;margin-top:1px;">Heart Failure · Yesterday</div>
+              </div>
+              <span style="background:#fef2f2;color:#dc2626;font-size:9px;font-weight:700;padding:1px 6px;border-radius:99px;">1</span>
+            </div>
+          </div>
+          <div style="padding:8px 10px;border-radius:7px;margin-bottom:2px;cursor:pointer;">
+            <div><div style="font-size:12px;color:#1a1f36;">Sara Kim</div><div style="font-size:10px;color:#6b7280;margin-top:1px;">Heart Failure · 2 days ago</div></div>
+          </div>
+          <div style="padding:8px 10px;border-radius:7px;cursor:pointer;">
+            <div><div style="font-size:12px;color:#1a1f36;">Tom Rivera</div><div style="font-size:10px;color:#6b7280;margin-top:1px;">Heart Failure · 3 days ago</div></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Detail panel -->
+      <div style="flex:1; background:#f5f7fa; padding:20px; overflow:auto;">
+
+        <!-- Patient header -->
+        <div style="display:flex;align-items:center;gap:12px;margin-bottom:16px;">
+          <div style="width:40px;height:40px;border-radius:50%;background:#003087;color:#fff;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:15px;flex-shrink:0;">JD</div>
+          <div>
+            <div style="font-size:16px;font-weight:700;color:#1a1f36;">Jane Doe</div>
+            <div style="font-size:11px;color:#6b7280;margin-top:2px;">
+              <span style="background:#dbeafe;color:#1d4ed8;padding:1px 7px;border-radius:99px;font-weight:600;font-size:10px;">Heart Failure</span>
+              &nbsp;MRN 00142 · DOB 1952-03-18
+            </div>
+          </div>
+          <div style="margin-left:auto;text-align:right;">
+            <div style="font-size:11px;color:#6b7280;">Last check-in</div>
+            <div style="font-size:12px;font-weight:600;color:#1a1f36;">Today, 9:14am</div>
+          </div>
+        </div>
+
+        <!-- Latest vitals — 5 tiles, 2 rows -->
+        <div style="margin-bottom:14px;">
+          <div style="font-size:10px;font-weight:600;color:#6b7280;letter-spacing:0.05em;margin-bottom:8px;">LATEST VITALS</div>
+          <!-- Row 1: the 3 most important clinical measures -->
+          <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-bottom:8px;">
+            <div style="background:#fff;border-radius:8px;padding:10px 12px;border:1px solid #d9dee5;">
+              <div style="font-size:9px;font-weight:600;color:#6b7280;margin-bottom:4px;">WEIGHT</div>
+              <div style="font-size:20px;font-weight:700;color:#1a1f36;line-height:1;">182</div>
+              <div style="font-size:10px;color:#6b7280;margin-top:2px;">lbs</div>
+            </div>
+            <div style="background:#fff;border-radius:8px;padding:10px 12px;border:1px solid #d9dee5;">
+              <div style="font-size:9px;font-weight:600;color:#6b7280;margin-bottom:4px;">BLOOD PRESSURE</div>
+              <div style="font-size:20px;font-weight:700;color:#1a1f36;line-height:1;">124<span style="font-size:13px;font-weight:400;color:#6b7280;">/82</span></div>
+              <div style="font-size:10px;color:#6b7280;margin-top:2px;">mmHg</div>
+            </div>
+            <div style="background:#fff;border-radius:8px;padding:10px 12px;border:1px solid #d9dee5;">
+              <div style="font-size:9px;font-weight:600;color:#6b7280;margin-bottom:4px;">HEART RATE</div>
+              <div style="font-size:20px;font-weight:700;color:#1a1f36;line-height:1;">74</div>
+              <div style="font-size:10px;color:#6b7280;margin-top:2px;">bpm</div>
+            </div>
+          </div>
+          <!-- Row 2: symptom scores -->
+          <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:8px;">
+            <div style="background:#fff;border-radius:8px;padding:10px 12px;border:1px solid #d9dee5;">
+              <div style="font-size:9px;font-weight:600;color:#6b7280;margin-bottom:4px;">BREATHLESSNESS</div>
+              <div style="font-size:20px;font-weight:700;color:#1a1f36;line-height:1;">2<span style="font-size:12px;font-weight:400;color:#9ca3af;">/5</span></div>
+            </div>
+            <div style="background:#fff;border-radius:8px;padding:10px 12px;border:1px solid #d9dee5;">
+              <div style="font-size:9px;font-weight:600;color:#6b7280;margin-bottom:4px;">SWELLING</div>
+              <div style="font-size:20px;font-weight:700;color:#1a1f36;line-height:1;">1<span style="font-size:12px;font-weight:400;color:#9ca3af;">/5</span></div>
+            </div>
+            <div style="background:#fff;border-radius:8px;padding:10px 12px;border:1px solid #d9dee5;">
+              <div style="font-size:9px;font-weight:600;color:#6b7280;margin-bottom:4px;">FATIGUE</div>
+              <div style="font-size:20px;font-weight:700;color:#1a1f36;line-height:1;">3<span style="font-size:12px;font-weight:400;color:#9ca3af;">/5</span></div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Recent alerts -->
+        <div style="background:#fff;border-radius:8px;border:1px solid #d9dee5;padding:12px;">
+          <div style="font-size:12px;font-weight:600;color:#1a1f36;margin-bottom:10px;">Recent Alerts</div>
+          <div style="display:flex;align-items:center;gap:10px;padding:6px 0;border-bottom:1px solid #f0f2f5;">
+            <span style="background:#fef2f2;color:#dc2626;font-size:10px;font-weight:600;padding:2px 7px;border-radius:99px;white-space:nowrap;">HIGH</span>
+            <span style="font-size:12px;color:#1a1f36;flex:1;">Weight gain +3.2 lbs above baseline</span>
+            <span style="font-size:10px;color:#9ca3af;">Today 9:14am</span>
+          </div>
+          <div style="display:flex;align-items:center;gap:10px;padding:6px 0;">
+            <span style="background:#fffbeb;color:#d97706;font-size:10px;font-weight:600;padding:2px 7px;border-radius:99px;white-space:nowrap;">MED</span>
+            <span style="font-size:12px;color:#1a1f36;flex:1;">Missed medications</span>
+            <span style="font-size:10px;color:#9ca3af;">Yesterday</span>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </div>
+</div>
+
+<p class="subtitle" style="margin-top:16px;">Vitals now in two rows: Weight / BP / Heart Rate on top, Breathlessness / Swelling / Fatigue below. BP shows as "124/82 mmHg". Does this look right?</p>
