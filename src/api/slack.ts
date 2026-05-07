@@ -1,29 +1,38 @@
-const API = 'https://slack.com/api'
-const token = import.meta.env.VITE_SLACK_BOT_TOKEN as string
+// src/api/slack.ts
+// Calls /api/proxy-slack — no Slack credentials in the browser.
+// Identical export signatures preserved so no callers need to change.
+import { supabase } from './supabase'
 
-async function slackFetch(endpoint: string, body: Record<string, any>) {
-  const res = await fetch(`${API}/${endpoint}`, {
-    method: 'POST',
-    headers: { Authorization: `Bearer ${token}`, 'Content-Type': 'application/json' },
-    body: JSON.stringify(body),
+async function getToken(): Promise<string> {
+  const { data: { session } } = await supabase.auth.getSession()
+  return session?.access_token ?? ''
+}
+
+async function proxyFetch(method: string, params?: Record<string, string>, body?: unknown) {
+  const token = await getToken()
+  const qs = params ? '?' + new URLSearchParams(params).toString() : ''
+  const res = await fetch(`/api/proxy-slack${qs}`, {
+    method,
+    headers: {
+      'Content-Type': 'application/json',
+      Authorization: `Bearer ${token}`,
+    },
+    body: body ? JSON.stringify(body) : undefined,
   })
-  const data = await res.json()
-  if (!data.ok) throw new Error(`Slack error: ${data.error}`)
-  return data
+  if (!res.ok) {
+    const err = await res.json().catch(() => ({ error: `HTTP ${res.status}` }))
+    throw new Error(err.error ?? `Proxy error ${res.status}`)
+  }
+  return res.json()
 }
 
 export async function getChannelMessages(channelId: string) {
-  const res = await fetch(
-    `${API}/conversations.history?channel=${channelId}&limit=20`,
-    { headers: { Authorization: `Bearer ${token}` } }
-  )
-  const data = await res.json()
-  if (!data.ok) throw new Error(`Slack error: ${data.error}`)
+  const data = await proxyFetch('GET', { action: 'messages', channelId })
   return (data.messages ?? []) as Array<{ user: string; text: string; ts: string }>
 }
 
 export async function postMessage(channelId: string, text: string) {
-  return slackFetch('chat.postMessage', { channel: channelId, text })
+  return proxyFetch('POST', undefined, { action: 'postMessage', channelId, text })
 }
 
 export async function postPatientAlert({
@@ -41,33 +50,13 @@ export async function postPatientAlert({
   threshold: string
   provider: string
 }) {
-  const channelId = import.meta.env.VITE_SLACK_CHANNEL_ID as string
-  const blocks = [
-    {
-      type: 'header',
-      text: { type: 'plain_text', text: '🚨 CardioTrack Alert', emoji: true },
-    },
-    {
-      type: 'section',
-      fields: [
-        { type: 'mrkdwn', text: `*Patient:*\n${patientName}` },
-        { type: 'mrkdwn', text: `*MRN:*\n${mrn}` },
-        { type: 'mrkdwn', text: `*Alert Type:*\n${alertType.replace(/_/g, ' ')}` },
-        { type: 'mrkdwn', text: `*Provider:*\n${provider}` },
-      ],
-    },
-    {
-      type: 'section',
-      text: {
-        type: 'mrkdwn',
-        text: `*Recorded Value:* ${value}\n*Threshold:* ${threshold}`,
-      },
-    },
-    { type: 'divider' },
-  ]
-  return slackFetch('chat.postMessage', {
-    channel: channelId,
-    text: `CardioTrack Alert: ${alertType} for ${patientName} (${mrn})`,
-    blocks,
+  return proxyFetch('POST', undefined, {
+    action: 'postPatientAlert',
+    patientName,
+    mrn,
+    alertType,
+    value,
+    threshold,
+    provider,
   })
 }
