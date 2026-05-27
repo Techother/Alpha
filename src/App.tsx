@@ -1,4 +1,5 @@
 import { useState, useEffect, useRef, useCallback } from 'react'
+import { useNavigate, useLocation } from 'react-router-dom'
 import {
   supabase, signIn, signOut, onAuthChange,
   getPatients, getPatient, getPatientCheckins,
@@ -11,9 +12,9 @@ import { getChannelMessages, postMessage, postPatientAlert } from './api/slack'
 import { initGoogleCalendar, signInGoogle, isSignedIn, getUpcomingEvents, createEvent } from './api/gcal'
 import { FEATURES } from './config'
 import { getBillingPeriodData, getMonthlyBillingSummary, logRpmTime, exportBillingCSV } from './api/billing'
-import { getPatientMedications, addMedication, deactivateMedication, getMedicationAdherence, logMedications } from './api/medications'
+import { getPatientMedications, addMedication, deactivateMedication, getMedicationAdherence } from './api/medications'
 import { getActiveTcmEpisodes, getPatientTcmEpisodes, createTcmEpisode, logTcmContact, completeTcmMilestone, getOverdueTcmEpisodes } from './api/tcm'
-import { getPatientScreenings, getLatestScreening, createScreeningResult, getPatientsNeedingScreening, scorePHQ9, scoreGAD7 } from './api/screening'
+import { getLatestScreening, createScreeningResult, getPatientsNeedingScreening, scorePHQ9, scoreGAD7 } from './api/screening'
 import { sendTestSMS } from './api/twilio'
 
 // ── Design tokens ─────────────────────────────────────────────
@@ -103,9 +104,9 @@ function Empty({ icon = '○', msg }: { icon?: string; msg: string }) {
 }
 
 type BtnV = 'primary' | 'ghost' | 'danger'
-function Btn({ children, onClick, variant = 'primary', disabled, style: s, type = 'button', full }: {
+function Btn({ children, onClick, variant = 'primary', disabled, style: s, type = 'button', full, title }: {
   children: React.ReactNode; onClick?: () => void; variant?: BtnV
-  disabled?: boolean; style?: React.CSSProperties; type?: 'button' | 'submit'; full?: boolean
+  disabled?: boolean; style?: React.CSSProperties; type?: 'button' | 'submit'; full?: boolean; title?: string
 }) {
   const base: React.CSSProperties = { fontFamily: F.body, fontSize: 14, fontWeight: 500, padding: '10px 18px', borderRadius: 8, cursor: disabled ? 'not-allowed' : 'pointer', opacity: disabled ? 0.5 : 1, border: '1px solid transparent', display: 'inline-flex', alignItems: 'center', justifyContent: 'center', gap: 6, transition: 'opacity 0.15s, transform 0.1s', minHeight: 44, width: full ? '100%' : undefined, WebkitTapHighlightColor: 'transparent' }
   const v: Record<BtnV, React.CSSProperties> = {
@@ -113,7 +114,7 @@ function Btn({ children, onClick, variant = 'primary', disabled, style: s, type 
     ghost:   { background: 'transparent', color: T.text, border: `1px solid ${T.border}` },
     danger:  { background: T.red, color: '#fff' },
   }
-  return <button type={type} onClick={onClick} disabled={disabled} style={{ ...base, ...v[variant], ...s }}>{children}</button>
+  return <button type={type} onClick={onClick} disabled={disabled} title={title} style={{ ...base, ...v[variant], ...s }}>{children}</button>
 }
 
 type TagT = 'default' | 'green' | 'red' | 'amber' | 'teal'
@@ -354,11 +355,12 @@ const NAV: { key: Section; label: string; icon: string }[] = [
 
 // ── Sidebar (desktop) ─────────────────────────────────────────
 
-function Sidebar({ section, setSection, alertCount, overdueTcm, screeningDue, billingCount, open, onClose }: {
-  section: Section; setSection: (s: Section) => void; alertCount: number
+function Sidebar({ section, alertCount, overdueTcm, screeningDue, billingCount, open, onClose }: {
+  section: Section; alertCount: number
   overdueTcm: number; screeningDue: number; billingCount: number; open: boolean; onClose: () => void
 }) {
-  function go(s: Section) { setSection(s); onClose() }
+  const navigate = useNavigate()
+  function go(s: Section) { navigate('/' + s); onClose() }
   function badge(key: Section) {
     if (key === 'alerts' && alertCount > 0) return { count: alertCount, color: T.red }
     if (key === 'care-programs' && overdueTcm > 0) return { count: overdueTcm, color: T.red }
@@ -389,7 +391,7 @@ function Sidebar({ section, setSection, alertCount, overdueTcm, screeningDue, bi
         <div style={{ padding: '12px 18px', borderTop: `1px solid ${T.border}` }}>
           <div style={{ fontFamily: F.mono, fontSize: 10, color: T.mid, marginBottom: 6 }}>Connections</div>
           <div style={{ display: 'flex', gap: 6 }}>
-            {[['DB', !!import.meta.env.VITE_SUPABASE_URL], ['AT', !!import.meta.env.VITE_AIRTABLE_API_KEY], ['SL', !!import.meta.env.VITE_SLACK_BOT_TOKEN], ['GC', !!import.meta.env.VITE_GCAL_CLIENT_ID]].map(([l, ok]) => (
+            {[['DB', !!import.meta.env.VITE_SUPABASE_URL], ['AT', true], ['SL', true], ['GC', true]].map(([l, ok]) => (
               <div key={l as string} title={l as string} style={{ width: 8, height: 8, borderRadius: '50%', background: ok ? T.green : T.dim }} />
             ))}
           </div>
@@ -401,12 +403,13 @@ function Sidebar({ section, setSection, alertCount, overdueTcm, screeningDue, bi
 
 // ── Bottom nav (mobile) ───────────────────────────────────────
 
-function BottomNav({ section, setSection, alertCount }: { section: Section; setSection: (s: Section) => void; alertCount: number }) {
+function BottomNav({ section, alertCount }: { section: Section; alertCount: number }) {
+  const navigate = useNavigate()
   const primary = [NAV[0], NAV[1], NAV[2], NAV[3], NAV[6]] // dashboard, patients, alerts, billing, backlog
   return (
     <div className="bottom-nav">
       {primary.map(n => (
-        <button key={n.key} onClick={() => setSection(n.key)} style={{ flex: 1, display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', gap: 3, padding: '8px 4px', background: 'none', border: 'none', color: section === n.key ? T.teal : T.dim, cursor: 'pointer', position: 'relative', fontFamily: F.body, fontSize: 10, minHeight: 56, WebkitTapHighlightColor: 'transparent' }}>
+        <button key={n.key} onClick={() => navigate('/' + n.key)} style={{ flex: 1, display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', gap: 3, padding: '8px 4px', background: 'none', border: 'none', color: section === n.key ? T.teal : T.dim, cursor: 'pointer', position: 'relative', fontFamily: F.body, fontSize: 10, minHeight: 56, WebkitTapHighlightColor: 'transparent' }}>
           <span style={{ fontSize: 20 }}>{n.icon}</span>
           {n.label.slice(0, 6)}
           {n.key === 'alerts' && alertCount > 0 && <span style={{ position: 'absolute', top: 6, right: '50%', marginRight: -18, background: T.red, color: '#fff', borderRadius: 8, fontSize: 9, padding: '1px 5px', fontFamily: F.mono }}>{alertCount}</span>}
@@ -605,7 +608,7 @@ function PatientMonitor({ patientId, onBack }: { patientId: string; onBack: () =
       {/* Alerts */}
       {!aL && (alerts ?? []).length > 0 && (
         <Card style={{ marginBottom: 16 }}>
-          <CardHeader style={{ color: T.red }}>Open Alerts</CardHeader>
+          <CardHeader><span style={{ color: T.red }}>Open Alerts</span></CardHeader>
           {(alerts as any[]).map((a) => (
             <div key={a.id} style={{ display: 'flex', gap: 10, padding: '12px 16px', borderBottom: `1px solid ${T.border}`, alignItems: 'center' }}>
               <SevBar severity={a.severity} />
@@ -614,7 +617,7 @@ function PatientMonitor({ patientId, onBack }: { patientId: string; onBack: () =
                 <div style={{ fontFamily: F.body, fontSize: 12, color: T.mid }}>{a.description}</div>
                 <div style={{ fontFamily: F.mono, fontSize: 10, color: T.dim, marginTop: 2 }}>{timeAgo(a.created_at)}</div>
               </div>
-              <Btn variant="ghost" onClick={() => handleAck(a.id)} style={{ fontSize: 12, padding: '6px 10px', minHeight: 36 }}>Ack</Btn>
+              <Btn variant="ghost" onClick={() => handleAck(a.id)} title="Acknowledge alert" style={{ fontSize: 12, padding: '6px 10px', minHeight: 36 }}>Acknowledge</Btn>
             </div>
           ))}
         </Card>
@@ -861,8 +864,19 @@ function ChatbotModal({ patient, onClose }: { patient: any; onClose: () => void 
     if (next < QS.length) {
       let reply = QS[next].prompt
       try {
-        const url = import.meta.env.VITE_ANTHROPIC_PROXY_URL
-        if (url) { const r = await fetch(url, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ system: `You are a compassionate cardiac care assistant checking in with ${patient.first_name}, a heart failure patient. Be warm and brief.`, userMessage: text, nextQuestion: QS[next].prompt }) }); if (r.ok) { const d = await r.json(); if (d.reply) reply = d.reply } }
+        const chatRes = await fetch('/api/chat', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            Authorization: `Bearer ${(await supabase.auth.getSession()).data.session?.access_token ?? ''}`,
+          },
+          body: JSON.stringify({
+            system: `You are a compassionate cardiac care assistant checking in with ${patient.first_name}, a heart failure patient. Be warm and brief.`,
+            userMessage: text,
+            nextQuestion: QS[next].prompt,
+          }),
+        })
+        if (chatRes.ok) { const d = await chatRes.json(); if (d.reply) reply = d.reply }
       } catch { /* use default */ }
       setMessages(m => [...m, { role: 'assistant', content: reply }])
       setStep(next); setBusy(false)
@@ -967,6 +981,7 @@ function BillingDashboard() {
   const [expandedId, setExpandedId] = useState<string | null>(null)
   const [logForm, setLogForm] = useState<Record<string, any>>({})
   const [saving, setSaving] = useState(false)
+  const [actionError, setActionError] = useState('')
   const { data: summary, loading, refresh } = useAsync(() => getMonthlyBillingSummary(period), [period])
 
   const rows = summary ?? []
@@ -987,8 +1002,8 @@ function BillingDashboard() {
     try {
       const f = logForm[patientId] ?? {}
       await logRpmTime({ patientId, logDate: f.date || today.toISOString().slice(0, 10), durationMinutes: Number(f.duration || 0), activityType: f.activityType || 'Chart Review', notes: f.notes })
-      setExpandedId(null); refresh()
-    } catch (e: any) { alert(e.message) } finally { setSaving(false) }
+      setExpandedId(null); setActionError(''); refresh()
+    } catch (e: any) { setActionError(e.message) } finally { setSaving(false) }
   }
 
   function updateLogForm(pid: string, field: string, val: string) {
@@ -1060,6 +1075,7 @@ function BillingDashboard() {
                   </div>
                   <div style={{ marginTop: 10 }}>
                     <Btn onClick={() => handleLogTime(r.patientId)} disabled={saving} style={{ fontSize: 13 }}>{saving ? <Spin /> : 'Save Time Log'}</Btn>
+                    {actionError && <div style={{ color: T.red, fontSize: 12, marginTop: 6, fontFamily: F.body }}>{actionError}</div>}
                   </div>
                 </div>
               )}
@@ -1105,6 +1121,7 @@ function CCMTab({ period }: { period: string }) {
   const [logOpen, setLogOpen] = useState<string | null>(null)
   const [logForm, setLogForm] = useState({ date: new Date().toISOString().slice(0, 10), duration: '', activityType: 'Chart Review', notes: '' })
   const [saving, setSaving] = useState(false)
+  const [logError, setLogError] = useState('')
   const { data: billingData } = useAsync(() => getMonthlyBillingSummary(period), [period])
 
   const enrolled = (patients ?? []).filter((p: any) => p.ccm_enrolled)
@@ -1124,8 +1141,8 @@ function CCMTab({ period }: { period: string }) {
       const db = (await import('./api/supabase')).supabase
       if (!db) throw new Error('Supabase not configured')
       await db.from('ccm_time_logs').insert({ patient_id: patientId, log_date: logForm.date, duration_minutes: Number(logForm.duration), activity_type: logForm.activityType, notes: logForm.notes || null, billing_period: period })
-      setLogOpen(null)
-    } catch (e: any) { alert(e.message) } finally { setSaving(false) }
+      setLogOpen(null); setLogError('')
+    } catch (e: any) { setLogError(e.message) } finally { setSaving(false) }
   }
 
   return (
@@ -1165,8 +1182,9 @@ function CCMTab({ period }: { period: string }) {
             <Field label="Duration (min)" type="number" value={logForm.duration} onChange={v => setLogForm(f => ({ ...f, duration: v }))} />
             <SelectField label="Activity" value={logForm.activityType} onChange={v => setLogForm(f => ({ ...f, activityType: v }))} options={['Chart Review', 'Patient Communication', 'Care Plan Update', 'Specialist Coordination']} />
             <Field label="Notes" value={logForm.notes} onChange={v => setLogForm(f => ({ ...f, notes: v }))} />
+            {logError && <div style={{ color: T.red, fontSize: 12, fontFamily: F.body }}>{logError}</div>}
             <div style={{ display: 'flex', gap: 8 }}>
-              <Btn onClick={() => handleLogCcm(logOpen)} disabled={saving} full>{saving ? <Spin /> : 'Save'}</Btn>
+              <Btn onClick={() => handleLogCcm(logOpen)} disabled={saving} full>{saving ? <Spin /> : 'Save Time'}</Btn>
               <Btn variant="ghost" onClick={() => setLogOpen(null)} full>Cancel</Btn>
             </div>
           </div>
@@ -1187,8 +1205,9 @@ function TCMTab({ today }: { today: string }) {
   const [newOpen, setNewOpen] = useState(false)
   const [contactOpen, setContactOpen] = useState<string | null>(null)
   const [newForm, setNewForm] = useState({ patientId: '', dischargeDate: today, dischargeFacility: '', diagnosis: '', complexity: 'moderate', notes: '' })
-  const [contactForm, setContactForm] = useState({ contactDate: today, contactType: 'phone', reached: 'true', milestone: 'day2', notes: '' })
+  const [contactForm, setContactForm] = useState({ contactDate: today, contactType: 'phone', reached: 'Yes', milestone: 'day2', notes: '' })
   const [saving, setSaving] = useState(false)
+  const [formError, setFormError] = useState('')
 
   function milestoneStatus(ep: any, m: 'day2' | 'day7') {
     const completed = ep[`${m}_completed`]
@@ -1202,16 +1221,16 @@ function TCMTab({ today }: { today: string }) {
     e.preventDefault(); setSaving(true)
     try {
       await createTcmEpisode({ patientId: newForm.patientId, dischargeDate: newForm.dischargeDate, dischargeFacility: newForm.dischargeFacility, diagnosis: newForm.diagnosis, complexity: newForm.complexity as 'moderate' | 'high', notes: newForm.notes })
-      setNewOpen(false); refresh()
-    } catch (e: any) { alert(e.message) } finally { setSaving(false) }
+      setNewOpen(false); setFormError(''); refresh()
+    } catch (e: any) { setFormError(e.message) } finally { setSaving(false) }
   }
 
   async function handleContact(e: React.FormEvent) {
     e.preventDefault(); setSaving(true)
     try {
-      await logTcmContact(contactOpen!, { contactDate: contactForm.contactDate, contactType: contactForm.contactType as any, reached: contactForm.reached === 'true', milestone: contactForm.milestone as any, notes: contactForm.notes })
-      setContactOpen(null); refresh()
-    } catch (e: any) { alert(e.message) } finally { setSaving(false) }
+      await logTcmContact(contactOpen!, { contactDate: contactForm.contactDate, contactType: contactForm.contactType as any, reached: contactForm.reached === 'Yes', milestone: contactForm.milestone as any, notes: contactForm.notes })
+      setContactOpen(null); setFormError(''); refresh()
+    } catch (e: any) { setFormError(e.message) } finally { setSaving(false) }
   }
 
   const overdueCount = (overdueEps ?? []).length
@@ -1289,6 +1308,7 @@ function TCMTab({ today }: { today: string }) {
                 </div>
               </div>
               <Field label="Notes" value={newForm.notes} onChange={v => setNewForm(f => ({ ...f, notes: v }))} />
+              {formError && <div style={{ color: T.red, fontSize: 12, fontFamily: F.body }}>{formError}</div>}
               <div style={{ display: 'flex', gap: 8 }}>
                 <Btn type="submit" disabled={saving || !newForm.patientId} full>{saving ? <Spin /> : 'Create Episode'}</Btn>
                 <Btn variant="ghost" onClick={() => setNewOpen(false)} full>Cancel</Btn>
@@ -1306,9 +1326,10 @@ function TCMTab({ today }: { today: string }) {
             <form onSubmit={handleContact} style={{ display: 'flex', flexDirection: 'column', gap: 12 }}>
               <Field label="Date" type="date" value={contactForm.contactDate} onChange={v => setContactForm(f => ({ ...f, contactDate: v }))} />
               <SelectField label="Contact Type" value={contactForm.contactType} onChange={v => setContactForm(f => ({ ...f, contactType: v }))} options={['phone', 'video', 'in-person']} />
-              <SelectField label="Patient Reached" value={contactForm.reached} onChange={v => setContactForm(f => ({ ...f, reached: v }))} options={['true', 'false']} />
+              <SelectField label="Patient Reached" value={contactForm.reached} onChange={v => setContactForm(f => ({ ...f, reached: v }))} options={['Yes', 'No']} />
               <SelectField label="Milestone" value={contactForm.milestone} onChange={v => setContactForm(f => ({ ...f, milestone: v }))} options={['day2', 'day7', 'follow-up']} />
               <Field label="Notes" value={contactForm.notes} onChange={v => setContactForm(f => ({ ...f, notes: v }))} />
+              {formError && <div style={{ color: T.red, fontSize: 12, fontFamily: F.body }}>{formError}</div>}
               <div style={{ display: 'flex', gap: 8 }}>
                 <Btn type="submit" disabled={saving} full>{saving ? <Spin /> : 'Save Contact'}</Btn>
                 <Btn variant="ghost" onClick={() => setContactOpen(null)} full>Cancel</Btn>
@@ -1535,6 +1556,7 @@ function MedicationsSection({ patient }: { patient: any }) {
   const [addOpen, setAddOpen] = useState(false)
   const [form, setForm] = useState({ name: '', dosage: '', frequency: 'Once daily', instructions: '' })
   const [saving, setSaving] = useState(false)
+  const [addError, setAddError] = useState('')
 
   const adherenceMap: Record<string, any> = {}
   for (const a of (adherence ?? [])) adherenceMap[(a as any).medicationId] = a
@@ -1543,8 +1565,8 @@ function MedicationsSection({ patient }: { patient: any }) {
     e.preventDefault(); setSaving(true)
     try {
       await addMedication({ patient_id: patient.id, name: form.name, dosage: form.dosage, frequency: form.frequency, instructions: form.instructions })
-      setAddOpen(false); setForm({ name: '', dosage: '', frequency: 'Once daily', instructions: '' }); refresh()
-    } catch (e: any) { alert(e.message) } finally { setSaving(false) }
+      setAddOpen(false); setAddError(''); setForm({ name: '', dosage: '', frequency: 'Once daily', instructions: '' }); refresh()
+    } catch (e: any) { setAddError(e.message) } finally { setSaving(false) }
   }
 
   if (!FEATURES.MED_TRACKING) return <ComingSoon title="Medication Management" icon="💊" description="Track patient medications and adherence rates." />
@@ -1587,8 +1609,9 @@ function MedicationsSection({ patient }: { patient: any }) {
             <SelectField label="Frequency" value={form.frequency} onChange={v => setForm(f => ({ ...f, frequency: v }))}
               options={['Once daily', 'Twice daily', 'Three times daily', 'As needed', 'Weekly']} />
             <Field label="Instructions" value={form.instructions} onChange={v => setForm(f => ({ ...f, instructions: v }))} />
+            {addError && <div style={{ color: T.red, fontSize: 12, fontFamily: F.body }}>{addError}</div>}
             <div style={{ display: 'flex', gap: 8 }}>
-              <Btn type="submit" disabled={saving} full>{saving ? <Spin /> : 'Save'}</Btn>
+              <Btn type="submit" disabled={saving} full>{saving ? <Spin /> : 'Add Medication'}</Btn>
               <Btn variant="ghost" onClick={() => setAddOpen(false)} full>Cancel</Btn>
             </div>
           </form>
@@ -1683,10 +1706,11 @@ function BacklogPanel() {
   const [pf, setPf] = useState({ Name: '', 'Target Date': '', Notes: '' })
   const [saving, setSaving] = useState(false)
   const [postId, setPostId] = useState<string|null>(null)
+  const [actionError, setActionError] = useState('')
 
-  async function addStory(e: React.FormEvent) { e.preventDefault(); setSaving(true); try { await createStory({ ...sf, 'Story Points': Number(sf['Story Points']) }); sR(); setSf({ Name: '', Priority: 'Medium', 'Story Points': '3', Sprint: '' }) } catch (e: any) { alert(e.message) } finally { setSaving(false) } }
-  async function addSprint(e: React.FormEvent) { e.preventDefault(); setSaving(true); try { await createSprint(pf); spR(); setPf({ Name: '', 'Target Date': '', Notes: '' }) } catch (e: any) { alert(e.message) } finally { setSaving(false) } }
-  async function postSprint(sp: any) { setPostId(sp.id); try { await postMessage(import.meta.env.VITE_SLACK_CHANNEL_ID, `*Sprint: ${sp.Name}*\nTarget: ${sp['Target Date']??'—'}\nServer: ${sp['Server Points']??0} pts | Client: ${sp['Client Points']??0} pts\n${sp.Notes??''}`) } catch(e: any) { alert(e.message) } finally { setPostId(null) } }
+  async function addStory(e: React.FormEvent) { e.preventDefault(); setSaving(true); try { await createStory({ ...sf, 'Story Points': Number(sf['Story Points']) }); sR(); setSf({ Name: '', Priority: 'Medium', 'Story Points': '3', Sprint: '' }); setActionError('') } catch (e: any) { setActionError(e.message) } finally { setSaving(false) } }
+  async function addSprint(e: React.FormEvent) { e.preventDefault(); setSaving(true); try { await createSprint(pf); spR(); setPf({ Name: '', 'Target Date': '', Notes: '' }); setActionError('') } catch (e: any) { setActionError(e.message) } finally { setSaving(false) } }
+  async function postSprint(sp: any) { setPostId(sp.id); try { await postMessage('', `*Sprint: ${sp.Name}*\nTarget: ${sp['Target Date']??'—'}\nServer: ${sp['Server Points']??0} pts | Client: ${sp['Client Points']??0} pts\n${sp.Notes??''}`); setActionError('') } catch(e: any) { setActionError(e.message) } finally { setPostId(null) } }
 
   const grouped: Record<string, any[]> = {}
   for (const s of (stories ?? [])) { const sp = s.Sprint ?? 'Unassigned'; grouped[sp] = grouped[sp] ?? []; grouped[sp].push(s) }
@@ -1737,6 +1761,7 @@ function BacklogPanel() {
               <Field label="Story Points" type="number" value={sf['Story Points']} onChange={v => setSf(f=>({...f,'Story Points':v}))} />
               <Field label="Sprint" value={sf.Sprint} onChange={v => setSf(f=>({...f,Sprint:v}))} />
               <Btn type="submit" disabled={saving} full>{saving ? <Spin /> : 'Add Story'}</Btn>
+              {actionError && <div style={{ color: T.red, fontSize: 12, fontFamily: F.body, marginTop: 4 }}>{actionError}</div>}
             </form>
           </div>
         </Card>
@@ -1768,8 +1793,10 @@ function CalendarPanel() {
   const [saving, setSaving] = useState(false)
 
   useEffect(() => {
-    const t = setInterval(() => { if ((window as any).gapi?.load) { clearInterval(t); initGoogleCalendar().then(() => { setReady(true); setSignedIn(isSignedIn()) }).catch(() => {}) } }, 500)
-    return () => clearInterval(t)
+    // Phase 3: gapi removed — initGoogleCalendar() is a no-op, isSignedIn() always returns true
+    initGoogleCalendar()
+      .then(() => { setReady(true); setSignedIn(isSignedIn()) })
+      .catch(() => { setReady(true) })
   }, [])
 
   async function handleSignIn() { try { await signInGoogle(); setSignedIn(true); load() } catch (e: any) { setError(e.message) } }
@@ -1828,11 +1855,10 @@ function CalendarPanel() {
 // ── Slack ─────────────────────────────────────────────────────
 
 function SlackPanel() {
-  const ch = import.meta.env.VITE_SLACK_CHANNEL_ID as string
-  const { data: messages, loading, error, refresh } = useAsync(() => getChannelMessages(ch), [ch])
+  const { data: messages, loading, error, refresh } = useAsync(() => getChannelMessages(''), [])
   const [text, setText] = useState(''); const [sending, setSending] = useState(false); const [sendErr, setSendErr] = useState('')
 
-  async function handleSend(e: React.FormEvent) { e.preventDefault(); setSending(true); setSendErr(''); try { await postMessage(ch, text); setText(''); refresh() } catch(e: any) { setSendErr(e.message) } finally { setSending(false) } }
+  async function handleSend(e: React.FormEvent) { e.preventDefault(); setSending(true); setSendErr(''); try { await postMessage('', text); setText(''); refresh() } catch(e: any) { setSendErr(e.message) } finally { setSending(false) } }
 
   return (
     <div style={{ display: 'flex', flexDirection: 'column', gap: 16 }}>
@@ -1875,11 +1901,11 @@ function SetupPanel() {
   useEffect(() => { setGcalOk(isSignedIn()) }, [])
   const integrations = [
     { name: 'Supabase',        ok: !!import.meta.env.VITE_SUPABASE_URL && !!import.meta.env.VITE_SUPABASE_ANON_KEY, status: 'Database & Auth',     link: 'https://supabase.com/dashboard' },
-    { name: 'Airtable',        ok: !!import.meta.env.VITE_AIRTABLE_API_KEY,                                          status: 'Product Backlog',     link: 'https://airtable.com/account' },
-    { name: 'Slack',           ok: !!import.meta.env.VITE_SLACK_BOT_TOKEN,                                           status: 'Alerts & Messaging',  link: 'https://api.slack.com/apps' },
+    { name: 'Airtable',        ok: true,                                                                              status: 'Product Backlog',     link: 'https://airtable.com/account' },
+    { name: 'Slack',           ok: true,                                                                              status: 'Alerts & Messaging',  link: 'https://api.slack.com/apps' },
     { name: 'Google Calendar', ok: gcalOk,                                                                            status: 'Appointments',        link: 'https://console.cloud.google.com' },
-    { name: 'Anthropic Proxy', ok: !!import.meta.env.VITE_ANTHROPIC_PROXY_URL,                                       status: 'AI Check-in Chatbot', link: 'https://docs.anthropic.com' },
-    { name: 'Twilio',          ok: !!import.meta.env.VITE_TWILIO_ACCOUNT_SID,                                        status: 'SMS Check-ins',       link: 'https://console.twilio.com' },
+    { name: 'Anthropic Proxy', ok: true,                                                                              status: 'AI Check-in Chatbot', link: 'https://docs.anthropic.com' },
+    { name: 'Twilio',          ok: true,                                                                              status: 'SMS Check-ins',       link: 'https://console.twilio.com' },
   ]
   return (
     <div style={{ display: 'flex', flexDirection: 'column', gap: 16 }}>
@@ -1941,13 +1967,15 @@ export default function App() {
   const [view, setView] = useState<AppView>('landing')
   const [session, setSession] = useState<any>(null)
   const [authLoading, setAuthLoading] = useState(true)
-  const [section, setSection] = useState<Section>('dashboard')
   const [selectedPatientId, setSelectedPatientId] = useState<string | null>(null)
   const [alertCount, setAlertCount] = useState(0)
   const [overdueTcm, setOverdueTcm] = useState(0)
   const [screeningDue, setScreeningDue] = useState(0)
   const [billingCount, setBillingCount] = useState(0)
   const [menuOpen, setMenuOpen] = useState(false)
+  const navigate = useNavigate()
+  const { pathname } = useLocation()
+  const section: Section = (pathname.slice(1) as Section) || 'dashboard'
 
   useEffect(() => {
     if (!supabase) { setAuthLoading(false); return }
@@ -1992,15 +2020,14 @@ export default function App() {
     </>
   )
 
-  function go(s: Section) { setSection(s); setSelectedPatientId(null); setMenuOpen(false) }
-  function selectPatient(id: string) { setSelectedPatientId(id); setSection('patients') }
+  function selectPatient(id: string) { setSelectedPatientId(id); navigate('/patients') }
 
   const pageTitle = section === 'patients' && selectedPatientId ? 'Patient' : TITLES[section]
 
   return (
     <>
       <style>{GLOBAL_CSS}</style>
-      <Sidebar section={section} setSection={go} alertCount={alertCount} overdueTcm={overdueTcm} screeningDue={screeningDue} billingCount={billingCount} open={menuOpen} onClose={() => setMenuOpen(false)} />
+      <Sidebar section={section} alertCount={alertCount} overdueTcm={overdueTcm} screeningDue={screeningDue} billingCount={billingCount} open={menuOpen} onClose={() => setMenuOpen(false)} />
       <div className="main-content">
         <TopBar title={pageTitle} onMenu={() => setMenuOpen(o => !o)} onSignOut={() => signOut()} />
         <main className="page">
@@ -2017,7 +2044,7 @@ export default function App() {
           {section === 'setup'        && <SetupPanel />}
         </main>
       </div>
-      <BottomNav section={section} setSection={go} alertCount={alertCount} />
+      <BottomNav section={section} alertCount={alertCount} />
     </>
   )
 }
