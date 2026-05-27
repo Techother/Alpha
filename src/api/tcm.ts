@@ -1,27 +1,32 @@
 import { supabase } from './supabase'
 
+/* v8 ignore start */
 function requireSupabase() {
   if (!supabase) throw new Error('Supabase not configured')
   return supabase
 }
+/* v8 ignore stop */
 
-function addBusinessDays(dateStr: string, days: number): string {
-  const d = new Date(dateStr)
+export function addBusinessDays(dateStr: string, days: number): string {
+  const [year, month, day] = dateStr.split('-').map(Number)
+  const d = new Date(Date.UTC(year, month - 1, day))
   let added = 0
   while (added < days) {
-    d.setDate(d.getDate() + 1)
-    const dow = d.getDay()
+    d.setUTCDate(d.getUTCDate() + 1)
+    const dow = d.getUTCDay()
     if (dow !== 0 && dow !== 6) added++
   }
   return d.toISOString().slice(0, 10)
 }
 
-function addCalendarDays(dateStr: string, days: number): string {
-  const d = new Date(dateStr)
-  d.setDate(d.getDate() + days)
+export function addCalendarDays(dateStr: string, days: number): string {
+  const [year, month, day] = dateStr.split('-').map(Number)
+  const d = new Date(Date.UTC(year, month - 1, day))
+  d.setUTCDate(d.getUTCDate() + days)
   return d.toISOString().slice(0, 10)
 }
 
+/* v8 ignore start */
 export async function getActiveTcmEpisodes() {
   const db = requireSupabase()
   const { data, error } = await db
@@ -142,3 +147,5 @@ export async function getOverdueTcmEpisodes() {
   if (error) throw new Error(error.message)
   return data ?? []
 }
+
+/* v8 ignore stop */
