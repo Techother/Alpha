@@ -1,5 +1,5 @@
 -- =============================================================
--- CardioTrack v3.0 Foundation Migration
+-- Alpha Health Track v3.0 Foundation Migration
 -- Apply in: Supabase dashboard > SQL Editor
 -- Project: wtjotacchiurbjcizdws
 -- =============================================================

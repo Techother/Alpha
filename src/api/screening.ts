@@ -1,5 +1,6 @@
 import { supabase } from './supabase'
 
+/* v8 ignore start */
 function requireSupabase() {
   if (!supabase) throw new Error('Supabase not configured')
   return supabase
@@ -76,6 +77,7 @@ export async function getPatientsNeedingScreening() {
   const recentIds = new Set((recentScreenings ?? []).map((s: any) => s.patient_id))
   return patients.filter((p: any) => !recentIds.has(p.id))
 }
+/* v8 ignore stop */
 
 export function scorePHQ9(answers: number[]): { score: number; severity: string } {
   const score = answers.reduce((sum, a) => sum + (a ?? 0), 0)

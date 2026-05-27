@@ -1,53 +1,49 @@
-declare const gapi: any
+// src/api/gcal.ts
+// Google Calendar calls are now handled server-side via api/proxy-gcal.js.
+// This client module is a thin proxy caller — no gapi, no OAuth2 browser flow.
+import { supabase } from './supabase'
 
-const CLIENT_ID = import.meta.env.VITE_GCAL_CLIENT_ID as string
-const API_KEY = import.meta.env.VITE_GCAL_API_KEY as string
-const SCOPES = 'https://www.googleapis.com/auth/calendar'
-const DISCOVERY_DOC = 'https://www.googleapis.com/discovery/v1/apis/calendar/v3/rest'
+async function getToken(): Promise<string> {
+  const { data: { session } } = await supabase.auth.getSession()
+  return session?.access_token ?? ''
+}
 
-let gapiInited = false
-let tokenClient: any = null
+async function proxyFetch(method: string, params?: Record<string, string>, body?: unknown) {
+  const token = await getToken()
+  const qs = params ? '?' + new URLSearchParams(params).toString() : ''
+  const res = await fetch(`/api/proxy-gcal${qs}`, {
+    method,
+    headers: {
+      'Content-Type': 'application/json',
+      Authorization: `Bearer ${token}`,
+    },
+    body: body ? JSON.stringify(body) : undefined,
+  })
+  if (!res.ok) {
+    const err = await res.json().catch(() => ({ error: `HTTP ${res.status}` }))
+    throw new Error(err.error ?? `Proxy error ${res.status}`)
+  }
+  return res.json()
+}
 
+// No-op: service account auth is handled server-side
 export async function initGoogleCalendar(): Promise<void> {
-  return new Promise((resolve) => {
-    gapi.load('client', async () => {
-      await gapi.client.init({ apiKey: API_KEY, discoveryDocs: [DISCOVERY_DOC] })
-      gapiInited = true
-      resolve()
-    })
-  })
+  return Promise.resolve()
 }
 
+// No-op: no browser OAuth2 flow with service accounts
 export function signInGoogle(): Promise<void> {
-  return new Promise((resolve, reject) => {
-    if (!tokenClient) {
-      tokenClient = (window as any).google.accounts.oauth2.initTokenClient({
-        client_id: CLIENT_ID,
-        scope: SCOPES,
-        callback: (resp: any) => {
-          if (resp.error) { reject(new Error(resp.error)); return }
-          resolve()
-        },
-      })
-    }
-    tokenClient.requestAccessToken({ prompt: 'consent' })
-  })
+  return Promise.resolve()
 }
 
+// Always true: proxy handles authentication
 export function isSignedIn(): boolean {
-  return gapiInited && !!gapi.client.getToken()
+  return true
 }
 
 export async function getUpcomingEvents(maxResults = 10) {
-  const res = await gapi.client.calendar.events.list({
-    calendarId: 'primary',
-    timeMin: new Date().toISOString(),
-    showDeleted: false,
-    singleEvents: true,
-    maxResults,
-    orderBy: 'startTime',
-  })
-  return (res.result.items ?? []) as Array<{
+  const data = await proxyFetch('GET', { action: 'events', maxResults: String(maxResults) })
+  return (data.items ?? []) as Array<{
     id: string
     summary: string
     start: { dateTime?: string; date?: string }
@@ -67,14 +63,5 @@ export async function createEvent({
   endDateTime: string
   description?: string
 }) {
-  const res = await gapi.client.calendar.events.insert({
-    calendarId: 'primary',
-    resource: {
-      summary: title,
-      description,
-      start: { dateTime: startDateTime, timeZone: Intl.DateTimeFormat().resolvedOptions().timeZone },
-      end: { dateTime: endDateTime, timeZone: Intl.DateTimeFormat().resolvedOptions().timeZone },
-    },
-  })
-  return res.result
+  return proxyFetch('POST', undefined, { action: 'createEvent', title, startDateTime, endDateTime, description })
 }

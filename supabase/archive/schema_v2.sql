@@ -1,3 +1,18 @@
+-- =============================================================
+-- ARCHIVED: Alpha Health Track v2 Schema Additions (schema_v2.sql)
+-- Status: SUPERSEDED — do not apply to any database
+-- Superseded by: migrations/001_v3_foundation.sql
+-- Reason: v2 added medications, medication_logs, rpm_time_logs,
+--   ccm_time_logs, tcm_episodes, tcm_contacts, screening_results,
+--   and alert_rules on top of the v1 flat schema. v3 replaces these
+--   with medication_regimens and medication_events (in 001). The v2
+--   tables are NOT queried by the current application code
+--   (src/api/supabase.ts) and are out of scope for this milestone.
+-- Kept for: Reference — the v2 table structures document what was
+--   considered for medications and time-logging; this may inform
+--   future phases if those features are revisited.
+-- =============================================================
+
 -- Alpha Health Track v2 Schema additions
 -- Run after schema.sql
 

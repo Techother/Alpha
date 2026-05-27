@@ -220,7 +220,7 @@ function LandingPage({ onSignIn }: { onSignIn: () => void }) {
     <div style={{ minHeight: '100dvh', background: T.bg, fontFamily: F.body }}>
       {/* Nav */}
       <nav style={{ position: 'sticky', top: 0, zIndex: 10, background: 'rgba(8,12,16,0.9)', backdropFilter: 'blur(12px)', borderBottom: `1px solid ${T.border}`, padding: '0 20px', height: 56, display: 'flex', alignItems: 'center', gap: 12 }}>
-        <div style={{ fontFamily: F.display, fontSize: 20, color: T.teal, flex: 1 }}>CardioTrack</div>
+        <div style={{ fontFamily: F.display, fontSize: 20, color: T.teal, flex: 1 }}>Alpha Health Track</div>
         <Btn onClick={onSignIn} style={{ padding: '8px 20px', minHeight: 38, fontSize: 13 }}>Sign In</Btn>
       </nav>
 
@@ -233,7 +233,7 @@ function LandingPage({ onSignIn }: { onSignIn: () => void }) {
           Heart failure care,<br /><span style={{ color: T.teal }}>from anywhere.</span>
         </h1>
         <p style={{ fontSize: 16, color: T.mid, lineHeight: 1.7, marginBottom: 36, maxWidth: 480, margin: '0 auto 36px' }}>
-          CardioTrack gives cardiac care teams real-time patient monitoring, AI-powered daily check-ins, and instant alerting — in one clinical-grade dashboard.
+          Alpha Health Track gives cardiac care teams real-time patient monitoring, AI-powered daily check-ins, and instant alerting — in one clinical-grade dashboard.
         </p>
         <div style={{ display: 'flex', gap: 12, justifyContent: 'center', flexWrap: 'wrap' }}>
           <Btn onClick={onSignIn} style={{ fontSize: 15, padding: '12px 28px' }}>Get Started →</Btn>
@@ -283,14 +283,14 @@ function LandingPage({ onSignIn }: { onSignIn: () => void }) {
             ))}
           </div>
           <div style={{ marginTop: 36 }}>
-            <Btn onClick={onSignIn} full style={{ maxWidth: 320, margin: '0 auto', fontSize: 15 }}>Sign In to CardioTrack →</Btn>
+            <Btn onClick={onSignIn} full style={{ maxWidth: 320, margin: '0 auto', fontSize: 15 }}>Sign In to Alpha Health Track →</Btn>
           </div>
         </div>
       </div>
 
       {/* Footer */}
       <div style={{ borderTop: `1px solid ${T.border}`, padding: '20px', textAlign: 'center', fontFamily: F.mono, fontSize: 11, color: T.dim }}>
-        CardioTrack · Clinical Cardiac Remote Monitoring · For authorized care teams only
+        Alpha Health Track · Clinical Remote Monitoring · For authorized care teams only
       </div>
     </div>
   )
@@ -314,7 +314,7 @@ function LoginScreen({ onBack }: { onBack: () => void }) {
     <div style={{ minHeight: '100dvh', background: T.bg, display: 'flex', flexDirection: 'column' }}>
       <nav style={{ background: 'rgba(8,12,16,0.9)', backdropFilter: 'blur(12px)', borderBottom: `1px solid ${T.border}`, padding: '0 20px', height: 56, display: 'flex', alignItems: 'center', gap: 12 }}>
         <button onClick={onBack} style={{ background: 'none', border: 'none', color: T.mid, cursor: 'pointer', fontSize: 20, padding: 4 }}>←</button>
-        <div style={{ fontFamily: F.display, fontSize: 18, color: T.teal }}>CardioTrack</div>
+        <div style={{ fontFamily: F.display, fontSize: 18, color: T.teal }}>Alpha Health Track</div>
       </nav>
       <div style={{ flex: 1, display: 'flex', alignItems: 'center', justifyContent: 'center', padding: 20 }}>
         <div style={{ background: T.s1, border: `1px solid ${T.border}`, borderRadius: 14, padding: 'clamp(24px, 5vw, 40px)', width: '100%', maxWidth: 400, boxShadow: '0 24px 64px rgba(0,0,0,0.5)', animation: 'slideUp 0.3s ease' }}>
@@ -373,7 +373,7 @@ function Sidebar({ section, alertCount, overdueTcm, screeningDue, billingCount, 
       <div className={`sidebar-overlay ${open ? 'open' : ''}`} onClick={onClose} />
       <div className={`sidebar ${open ? 'open' : ''}`}>
         <div style={{ padding: '20px 18px 14px', borderBottom: `1px solid ${T.border}` }}>
-          <div style={{ fontFamily: F.display, fontSize: 20, color: T.teal }}>CardioTrack</div>
+          <div style={{ fontFamily: F.display, fontSize: 20, color: T.teal }}>Alpha Health Track</div>
           <div style={{ fontFamily: F.mono, fontSize: 10, color: T.mid, marginTop: 2 }}>Cardiac Monitoring · v2</div>
         </div>
         <nav style={{ flex: 1, padding: '10px 0', overflowY: 'auto' }}>

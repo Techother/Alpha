@@ -30,5 +30,5 @@ export const PATIENT_COPY = {
   conditionLabel: 'Heart Failure',
   weightUnit: 'lbs',
   weightWarning: 'Contact your care team if your weight increases by 2 or more pounds in 3 days.',
-  disclaimer: 'CardioTrack is a wellness tracking tool. It does not provide medical advice.',
+  disclaimer: 'Alpha Health Track is a wellness tracking tool. It does not provide medical advice.',
 } as const

@@ -40,4 +40,10 @@ describe('cpt99458Count — additional RPM time units (each additional 20 min af
   it('2 add-ons when 60 minutes', () => {
     expect(cpt99458Count(60)).toBe(2)
   })
+  it('caps at 2 add-ons when 80 minutes (CMS limit — floor would be 3)', () => {
+    expect(cpt99458Count(80)).toBe(2)
+  })
+  it('caps at 2 add-ons when 100 minutes (CMS limit — floor would be 4)', () => {
+    expect(cpt99458Count(100)).toBe(2)
+  })
 })

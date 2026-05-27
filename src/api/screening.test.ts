@@ -31,6 +31,9 @@ describe('scorePHQ9', () => {
   it('severe: score 27 (maximum — all 3s)', () => {
     expect(scorePHQ9([3, 3, 3, 3, 3, 3, 3, 3, 3])).toEqual({ score: 27, severity: 'severe' })
   })
+  it('null answer treated as 0 — ?? fallback branch', () => {
+    expect(scorePHQ9([null as any, 0, 0, 0, 0, 0, 0, 0, 0])).toEqual({ score: 0, severity: 'none' })
+  })
 })
 
 describe('scoreGAD7', () => {
@@ -57,5 +60,8 @@ describe('scoreGAD7', () => {
   })
   it('severe: score 21 (maximum — all 3s)', () => {
     expect(scoreGAD7([3, 3, 3, 3, 3, 3, 3])).toEqual({ score: 21, severity: 'severe' })
+  })
+  it('null answer treated as 0 — ?? fallback branch', () => {
+    expect(scoreGAD7([null as any, 0, 0, 0, 0, 0, 0])).toEqual({ score: 0, severity: 'none' })
   })
 })

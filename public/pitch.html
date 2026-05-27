@@ -1,0 +1,1178 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Alpha Health Track — Investor Pitch Deck</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link href="https://fonts.googleapis.com/css2?family=Fraunces:wght@400;600;700;900&family=DM+Sans:wght@400;500;600;700&family=DM+Mono&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --bg:     #080C10;
+      --s1:     #0D1117;
+      --s2:     #111820;
+      --s3:     #16202C;
+      --border: #1E2D3D;
+      --red:    #E53E3E;
+      --amber:  #DD6B20;
+      --green:  #38A169;
+      --teal:   #0BC5EA;
+      --blue:   #4299E1;
+      --text:   #E2E8F0;
+      --mid:    #718096;
+      --dim:    #2D3748;
+    }
+
+    html, body {
+      height: 100%; overflow: hidden;
+      background: var(--bg);
+      color: var(--text);
+      font-family: 'DM Sans', sans-serif;
+    }
+
+    /* ── Deck shell ── */
+    .deck { width: 100vw; height: 100vh; position: relative; overflow: hidden; }
+
+    .slide {
+      position: absolute; inset: 0;
+      display: flex; flex-direction: column;
+      padding: 56px 72px 80px;
+      opacity: 0; pointer-events: none;
+      transition: opacity .4s ease, transform .4s ease;
+      transform: translateX(40px);
+      overflow: hidden;
+    }
+    .slide.active {
+      opacity: 1; pointer-events: all;
+      transform: translateX(0);
+    }
+    .slide.prev {
+      opacity: 0; transform: translateX(-40px);
+    }
+
+    /* ── Nav ── */
+    .deck-nav {
+      position: fixed; bottom: 28px; left: 50%; transform: translateX(-50%);
+      display: flex; align-items: center; gap: 8px;
+      background: rgba(13,17,23,0.85);
+      backdrop-filter: blur(12px);
+      border: 1px solid var(--border);
+      border-radius: 100px;
+      padding: 10px 16px;
+      z-index: 100;
+    }
+    .dot {
+      width: 7px; height: 7px; border-radius: 50%;
+      background: var(--dim); cursor: pointer;
+      transition: background .2s, transform .2s;
+    }
+    .dot.active { background: var(--teal); transform: scale(1.3); }
+    .nav-btn {
+      background: none; border: 1px solid var(--border);
+      color: var(--mid); width: 30px; height: 30px;
+      border-radius: 50%; cursor: pointer; font-size: 14px;
+      display: flex; align-items: center; justify-content: center;
+      transition: border-color .2s, color .2s;
+      margin: 0 4px;
+    }
+    .nav-btn:hover { border-color: var(--teal); color: var(--teal); }
+    .slide-counter {
+      font-family: 'DM Mono', monospace; font-size: 11px;
+      color: var(--mid); min-width: 40px; text-align: center;
+    }
+
+    /* ── Slide label ── */
+    .slide-label {
+      font-family: 'DM Mono', monospace; font-size: 11px;
+      color: var(--teal); text-transform: uppercase; letter-spacing: 3px;
+      margin-bottom: 16px;
+    }
+    .slide-logo {
+      font-family: 'Fraunces', serif; font-size: 15px; font-weight: 700;
+      color: var(--teal); margin-bottom: 32px; letter-spacing: -0.3px;
+    }
+    .slide-logo span { color: var(--mid); }
+
+    /* ── Typography ── */
+    h1 {
+      font-family: 'Fraunces', serif;
+      font-size: clamp(38px, 5vw, 68px);
+      font-weight: 900; line-height: 1.02; letter-spacing: -2px;
+    }
+    h2 {
+      font-family: 'Fraunces', serif;
+      font-size: clamp(28px, 3.5vw, 48px);
+      font-weight: 800; line-height: 1.1; letter-spacing: -1.5px;
+    }
+    h3 {
+      font-family: 'Fraunces', serif;
+      font-size: 22px; font-weight: 700; line-height: 1.2;
+    }
+    .gradient {
+      background: linear-gradient(90deg, var(--teal), var(--blue));
+      -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+    }
+    .body-lg { font-size: 20px; color: var(--mid); line-height: 1.65; }
+    .body-md { font-size: 16px; color: var(--mid); line-height: 1.65; }
+
+    /* ── Layout helpers ── */
+    .two-col { display: grid; grid-template-columns: 1fr 1fr; gap: 56px; align-items: start; flex: 1; }
+    .three-col { display: grid; grid-template-columns: repeat(3, 1fr); gap: 24px; }
+    .four-col { display: grid; grid-template-columns: repeat(4, 1fr); gap: 20px; }
+    .slide-body { flex: 1; display: flex; flex-direction: column; justify-content: center; }
+
+    /* ── Cards ── */
+    .card {
+      background: var(--s1); border: 1px solid var(--border);
+      border-radius: 16px; padding: 24px;
+    }
+    .card.accent { border-color: var(--teal); background: rgba(11,197,234,0.04); }
+    .card.green { border-color: var(--green); background: rgba(56,161,105,0.04); }
+    .card.red { border-color: var(--red); background: rgba(229,62,62,0.04); }
+    .card.amber { border-color: var(--amber); background: rgba(221,107,32,0.04); }
+
+    /* ── Stat big ── */
+    .big-stat { font-family: 'Fraunces', serif; font-weight: 900; line-height: 1; }
+    .big-stat.xl { font-size: clamp(52px, 7vw, 90px); }
+    .big-stat.lg { font-size: clamp(36px, 5vw, 60px); }
+    .big-stat.md { font-size: clamp(28px, 3.5vw, 44px); }
+    .stat-label { font-size: 13px; color: var(--mid); margin-top: 6px; line-height: 1.4; }
+
+    /* ── Pill badge ── */
+    .pill {
+      display: inline-flex; align-items: center; gap: 6px;
+      font-family: 'DM Mono', monospace; font-size: 11px;
+      padding: 5px 12px; border-radius: 100px;
+    }
+    .pill.teal { background: rgba(11,197,234,0.1); color: var(--teal); border: 1px solid rgba(11,197,234,0.2); }
+    .pill.green { background: rgba(56,161,105,0.1); color: var(--green); border: 1px solid rgba(56,161,105,0.2); }
+    .pill.red { background: rgba(229,62,62,0.1); color: var(--red); border: 1px solid rgba(229,62,62,0.2); }
+    .pill.amber { background: rgba(221,107,32,0.1); color: var(--amber); border: 1px solid rgba(221,107,32,0.2); }
+    .pill.blue { background: rgba(66,153,225,0.1); color: var(--blue); border: 1px solid rgba(66,153,225,0.2); }
+
+    /* ── Check list ── */
+    .check-list { list-style: none; }
+    .check-list li {
+      display: flex; gap: 10px; align-items: flex-start;
+      font-size: 16px; color: var(--mid); padding: 10px 0;
+      border-bottom: 1px solid rgba(30,45,61,0.5);
+    }
+    .check-list li:last-child { border-bottom: none; }
+    .check-list li::before { content: '✓'; color: var(--teal); font-weight: 700; flex-shrink: 0; margin-top: 1px; }
+    .check-list strong { color: var(--text); display: block; }
+
+    /* ── Progress bar ── */
+    .progress-bar-wrap { margin-bottom: 16px; }
+    .progress-label { display: flex; justify-content: space-between; font-size: 13px; margin-bottom: 6px; }
+    .progress-label span:first-child { color: var(--text); font-weight: 500; }
+    .progress-label span:last-child { font-family: 'DM Mono', monospace; font-size: 12px; color: var(--teal); }
+    .bar-track { height: 6px; background: var(--dim); border-radius: 99px; overflow: hidden; }
+    .bar-fill { height: 100%; border-radius: 99px; background: linear-gradient(90deg, var(--teal), var(--blue)); }
+
+    /* ── Table ── */
+    .pitch-table { width: 100%; border-collapse: collapse; }
+    .pitch-table th {
+      text-align: left; padding: 10px 14px;
+      font-family: 'DM Mono', monospace; font-size: 10px;
+      color: var(--mid); text-transform: uppercase; letter-spacing: 1px;
+      border-bottom: 1px solid var(--border);
+      background: var(--s2);
+    }
+    .pitch-table td {
+      padding: 11px 14px; font-size: 13px;
+      border-bottom: 1px solid rgba(30,45,61,0.4);
+    }
+    .pitch-table tr:last-child td { border-bottom: none; }
+    .pitch-table tr:hover td { background: rgba(11,197,234,0.03); }
+
+    /* ── Divider line ── */
+    .h-line { height: 1px; background: var(--border); margin: 24px 0; }
+
+    /* ── Funnel ── */
+    .funnel { display: flex; flex-direction: column; gap: 8px; }
+    .funnel-step {
+      padding: 14px 20px;
+      border-radius: 10px;
+      border: 1px solid var(--border);
+      display: flex; justify-content: space-between; align-items: center;
+    }
+    .funnel-step-label { font-size: 14px; color: var(--text); font-weight: 500; }
+    .funnel-step-val { font-family: 'DM Mono', monospace; font-size: 13px; color: var(--teal); }
+
+    /* ── Chart bars (CSS only) ── */
+    .bar-chart { display: flex; align-items: flex-end; gap: 12px; height: 120px; }
+    .bar-col { display: flex; flex-direction: column; align-items: center; gap: 6px; flex: 1; }
+    .bar-col-bar {
+      width: 100%; border-radius: 6px 6px 0 0;
+      background: linear-gradient(180deg, var(--teal), var(--blue));
+      opacity: 0.8;
+    }
+    .bar-col-label { font-family: 'DM Mono', monospace; font-size: 10px; color: var(--mid); }
+    .bar-col-val { font-family: 'DM Mono', monospace; font-size: 11px; color: var(--teal); }
+
+    /* ── Timeline ── */
+    .timeline { display: flex; flex-direction: column; gap: 0; }
+    .timeline-item { display: flex; gap: 20px; align-items: flex-start; padding-bottom: 20px; position: relative; }
+    .timeline-item:last-child { padding-bottom: 0; }
+    .timeline-dot {
+      width: 32px; height: 32px; border-radius: 50%; flex-shrink: 0;
+      border: 2px solid var(--teal);
+      background: var(--s2);
+      display: flex; align-items: center; justify-content: center;
+      font-size: 12px; z-index: 1;
+    }
+    .timeline-item::before {
+      content: '';
+      position: absolute; left: 15px; top: 34px; bottom: 0;
+      width: 2px; background: var(--border);
+    }
+    .timeline-item:last-child::before { display: none; }
+    .timeline-content { flex: 1; padding-top: 4px; }
+    .timeline-period { font-family: 'DM Mono', monospace; font-size: 10px; color: var(--teal); margin-bottom: 4px; }
+    .timeline-title { font-size: 15px; font-weight: 600; color: var(--text); margin-bottom: 3px; }
+    .timeline-desc { font-size: 13px; color: var(--mid); line-height: 1.5; }
+
+    /* ── Slide-specific overrides ── */
+
+    /* Cover */
+    #s0 { justify-content: center; align-items: flex-start;
+      background: radial-gradient(ellipse at 80% 50%, rgba(11,197,234,0.06) 0%, transparent 65%); }
+    #s0 .eyebrow {
+      font-family: 'DM Mono', monospace; font-size: 13px;
+      color: var(--teal); letter-spacing: 3px; text-transform: uppercase;
+      margin-bottom: 20px;
+    }
+    #s0 h1 { font-size: clamp(44px, 6.5vw, 84px); max-width: 800px; margin-bottom: 24px; }
+    #s0 .sub { font-size: 20px; color: var(--mid); max-width: 560px; line-height: 1.6; margin-bottom: 40px; }
+    #s0 .cover-pills { display: flex; gap: 10px; flex-wrap: wrap; margin-bottom: 64px; }
+    #s0 .cover-meta {
+      position: absolute; bottom: 80px; right: 72px;
+      text-align: right; font-size: 13px; color: var(--mid);
+      font-family: 'DM Mono', monospace;
+    }
+    #s0 .cover-meta strong { display: block; color: var(--text); font-size: 14px; margin-bottom: 2px; }
+
+    /* Problem slide */
+    .problem-stat { text-align: center; padding: 28px 16px; }
+    .problem-stat .num { font-family: 'Fraunces', serif; font-size: 52px; font-weight: 900; line-height: 1; margin-bottom: 8px; }
+    .problem-stat .lbl { font-size: 13px; color: var(--mid); line-height: 1.5; }
+
+    /* Competition */
+    .comp-check { color: var(--green); font-size: 15px; }
+    .comp-x { color: var(--red); font-size: 15px; }
+    .comp-partial { color: var(--amber); font-size: 15px; }
+    .comp-us { background: rgba(11,197,234,0.06); }
+
+    /* Team */
+    .team-card { text-align: center; padding: 32px 24px; }
+    .avatar {
+      width: 72px; height: 72px; border-radius: 50%;
+      margin: 0 auto 16px;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 28px;
+      border: 2px solid var(--border);
+    }
+    .team-name { font-family: 'Fraunces', serif; font-size: 18px; font-weight: 700; margin-bottom: 4px; }
+    .team-title { font-size: 13px; color: var(--teal); font-family: 'DM Mono', monospace; margin-bottom: 12px; }
+    .team-bio { font-size: 13px; color: var(--mid); line-height: 1.55; }
+
+    /* Ask */
+    .use-row {
+      display: flex; align-items: center; gap: 16px;
+      padding: 14px 0; border-bottom: 1px solid rgba(30,45,61,0.5);
+    }
+    .use-row:last-child { border-bottom: none; }
+    .use-pct {
+      font-family: 'Fraunces', serif; font-size: 28px; font-weight: 900;
+      color: var(--teal); min-width: 70px;
+    }
+    .use-desc { font-size: 15px; color: var(--mid); line-height: 1.5; }
+    .use-desc strong { color: var(--text); display: block; margin-bottom: 2px; }
+
+    /* Close */
+    #s12 { justify-content: center; align-items: center; text-align: center;
+      background: radial-gradient(ellipse at 50% 50%, rgba(11,197,234,0.07) 0%, transparent 65%); }
+
+    /* keyboard hint */
+    .key-hint {
+      position: fixed; top: 20px; right: 24px;
+      font-family: 'DM Mono', monospace; font-size: 11px; color: var(--dim);
+    }
+    .key-hint kbd {
+      background: var(--s2); border: 1px solid var(--border);
+      padding: 2px 6px; border-radius: 4px; font-size: 11px;
+    }
+  </style>
+</head>
+<body>
+
+<div class="key-hint"><kbd>←</kbd> <kbd>→</kbd> to navigate</div>
+
+<div class="deck" id="deck">
+
+  <!-- ─────────────────────────────────────────
+       SLIDE 0 · Cover
+  ───────────────────────────────────────── -->
+  <div class="slide active" id="s0">
+    <div class="slide-logo">Cardio<span>Track</span></div>
+    <div class="eyebrow">Series Seed · Investor Presentation · 2025</div>
+    <h1>The RPM Platform<br>That <span class="gradient">Pays for Itself</span></h1>
+    <p class="sub">Alpha Health Track automates remote patient monitoring for cardiovascular practices — capturing CMS billing codes automatically, preventing hospitalizations, and generating $5,000–$12,000/month in new revenue per clinic.</p>
+    <div class="cover-pills">
+      <span class="pill teal">● $17.6B Market by 2027</span>
+      <span class="pill green">● CMS-Reimbursed</span>
+      <span class="pill blue">● No App Required for Patients</span>
+      <span class="pill amber">● 85% Check-in Compliance</span>
+    </div>
+    <div class="cover-meta">
+      <strong>Confidential</strong>
+      For authorized recipients only<br>May 2025
+    </div>
+  </div>
+
+  <!-- ─────────────────────────────────────────
+       SLIDE 1 · Problem
+  ───────────────────────────────────────── -->
+  <div class="slide" id="s1">
+    <div class="slide-logo">Cardio<span>Track</span></div>
+    <div class="slide-label">01 · The Problem</div>
+    <h2>Chronic Heart Disease Is a <span class="gradient">$200B Crisis</span> — and Current Monitoring Is Broken</h2>
+    <div class="slide-body">
+      <div class="four-col" style="margin-top:32px;">
+        <div class="card red problem-stat">
+          <div class="num" style="color:var(--red);">121M</div>
+          <div class="lbl">Americans with cardiovascular disease — the leading cause of death and disability</div>
+        </div>
+        <div class="card amber problem-stat">
+          <div class="num" style="color:var(--amber);">25%</div>
+          <div class="lbl">30-day hospital readmission rate for heart failure patients — costing $26B annually</div>
+        </div>
+        <div class="card problem-stat">
+          <div class="num" style="color:var(--teal);">$15K</div>
+          <div class="lbl">Average cost per preventable readmission — paid by CMS, payers, and practices</div>
+        </div>
+        <div class="card red problem-stat">
+          <div class="num" style="color:var(--red);">40%</div>
+          <div class="lbl">Patients skip follow-up care within 30 days of discharge due to access barriers</div>
+        </div>
+      </div>
+      <div class="h-line"></div>
+      <div class="two-col">
+        <div>
+          <h3 style="margin-bottom:14px;">Why current solutions fail</h3>
+          <ul class="check-list">
+            <li style="color:var(--red)"><span></span><div><strong>Expensive proprietary hardware</strong>Cellular-enabled devices cost $150–$400/patient — most practices can't absorb the upfront cost</div></li>
+            <li style="color:var(--red)"><span></span><div><strong>App-based patient onboarding</strong>Elderly cardiac patients abandon apps within 2 weeks. Average completion rate: 38%</div></li>
+            <li style="color:var(--red)"><span></span><div><strong>Manual billing tracking</strong>Practices leave $2,000–$6,000/month in uncaptured CPT codes because staff can't track 20-minute thresholds across a patient panel</div></li>
+          </ul>
+        </div>
+        <div class="card" style="padding:28px;">
+          <div class="slide-label" style="margin-bottom:12px;">The Opportunity Gap</div>
+          <p class="body-md" style="margin-bottom:20px;">CMS created billable RPM codes in 2019. Six years later, fewer than <strong style="color:var(--teal);">12% of eligible Medicare patients</strong> are enrolled in an RPM program — not because physicians don't want to offer it, but because the tools are too expensive and too complex.</p>
+          <div style="background:rgba(11,197,234,0.06);border:1px solid rgba(11,197,234,0.2);border-radius:10px;padding:16px;">
+            <div style="font-family:'DM Mono',monospace;font-size:11px;color:var(--teal);margin-bottom:6px;">UNMET DEMAND</div>
+            <div style="font-family:'Fraunces',serif;font-size:32px;font-weight:900;color:var(--teal);">$9.2B</div>
+            <div class="stat-label">In annual RPM reimbursements currently left unclaimed by eligible practices</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ─────────────────────────────────────────
+       SLIDE 2 · Solution
+  ───────────────────────────────────────── -->
+  <div class="slide" id="s2">
+    <div class="slide-logo">Cardio<span>Track</span></div>
+    <div class="slide-label">02 · The Solution</div>
+    <h2>Alpha Health Track: <span class="gradient">SMS-First RPM</span> That Works on Any Phone</h2>
+    <div class="slide-body">
+      <div class="two-col" style="margin-top:24px;align-items:center;">
+        <div>
+          <p class="body-lg" style="margin-bottom:28px;">Alpha Health Track meets patients where they are — through simple text messages on any phone — and gives providers a real-time dashboard, automated billing compliance, and instant alerts when patients deteriorate.</p>
+          <ul class="check-list">
+            <li><div><strong>No app required for patients</strong>Daily check-ins via SMS achieve 85% compliance vs. 38% for app-based programs</div></li>
+            <li><div><strong>Automatic CPT code tracking</strong>The platform tracks 99454/99457/99458 time thresholds in real time and generates monthly billing reports</div></li>
+            <li><div><strong>AI-powered symptom triage</strong>Claude Haiku analyzes check-in responses and surfaces early warning signs before they become emergencies</div></li>
+            <li><div><strong>One platform, all conditions</strong>Heart failure, hypertension, COPD, diabetes — configurable per-condition alert thresholds</div></li>
+            <li><div><strong>Integrated mental health</strong>PHQ-9 and GAD-7 screenings auto-trigger monthly — generating additional billable encounters</div></li>
+          </ul>
+        </div>
+        <div>
+          <div class="three-col" style="gap:12px;grid-template-columns:1fr 1fr;">
+            <div class="card accent" style="grid-column:span 2;">
+              <div class="slide-label" style="margin-bottom:8px;">Patient Flow</div>
+              <div style="font-size:14px;color:var(--mid);line-height:1.65;">
+                <span style="color:var(--teal);font-weight:600;">AM text arrives</span> → patient replies with vitals →
+                <span style="color:var(--teal);font-weight:600;">AI processes response</span> → normal = logged + billing updated;
+                abnormal = <span style="color:var(--red);font-weight:600;">Slack alert fires</span> → nurse triages → care team intervenes
+              </div>
+            </div>
+            <div class="card green" style="padding:18px;">
+              <div style="font-family:'Fraunces',serif;font-size:36px;font-weight:900;color:var(--green);">85%</div>
+              <div class="stat-label">Daily check-in compliance</div>
+            </div>
+            <div class="card accent" style="padding:18px;">
+              <div style="font-family:'Fraunces',serif;font-size:36px;font-weight:900;color:var(--teal);">&lt;2h</div>
+              <div class="stat-label">Patient onboarding time</div>
+            </div>
+            <div class="card" style="padding:18px;">
+              <div style="font-family:'Fraunces',serif;font-size:36px;font-weight:900;color:var(--blue);">98%</div>
+              <div class="stat-label">CPT billing capture rate</div>
+            </div>
+            <div class="card amber" style="padding:18px;">
+              <div style="font-family:'Fraunces',serif;font-size:36px;font-weight:900;color:var(--amber);">32%</div>
+              <div class="stat-label">Reduction in readmissions</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ─────────────────────────────────────────
+       SLIDE 3 · Market
+  ───────────────────────────────────────── -->
+  <div class="slide" id="s3">
+    <div class="slide-logo">Cardio<span>Track</span></div>
+    <div class="slide-label">03 · Market Opportunity</div>
+    <h2>A <span class="gradient">$17.6B Market</span> Growing at 16% CAGR</h2>
+    <div class="slide-body">
+      <div class="two-col" style="margin-top:32px;align-items:start;">
+        <div style="display:flex;flex-direction:column;gap:20px;">
+          <div class="card" style="padding:28px;">
+            <div style="font-family:'DM Mono',monospace;font-size:11px;color:var(--mid);margin-bottom:8px;">TAM · TOTAL ADDRESSABLE MARKET</div>
+            <div style="font-family:'Fraunces',serif;font-size:52px;font-weight:900;color:var(--text);">$17.6B</div>
+            <div class="stat-label">Global RPM market by 2027 (CAGR 16.3%). 121M cardiovascular patients in the US alone, with 65M on Medicare eligible for CMS-reimbursed monitoring.</div>
+          </div>
+          <div class="card accent" style="padding:28px;">
+            <div style="font-family:'DM Mono',monospace;font-size:11px;color:var(--teal);margin-bottom:8px;">SAM · SERVICEABLE ADDRESSABLE MARKET</div>
+            <div style="font-family:'Fraunces',serif;font-size:52px;font-weight:900;color:var(--teal);">$4.2B</div>
+            <div class="stat-label">Independent cardiology and primary care practices in the US with 10–500 chronic care patients. ~42,000 practices × $8,400 avg annual revenue per practice.</div>
+          </div>
+          <div class="card green" style="padding:28px;">
+            <div style="font-family:'DM Mono',monospace;font-size:11px;color:var(--green);margin-bottom:8px;">SOM · SERVICEABLE OBTAINABLE MARKET</div>
+            <div style="font-family:'Fraunces',serif;font-size:52px;font-weight:900;color:var(--green);">$420M</div>
+            <div class="stat-label">10% SAM capture over 5 years — 4,200 practices, 210,000 enrolled patients, $33M ARR at target scale.</div>
+          </div>
+        </div>
+        <div>
+          <h3 style="margin-bottom:20px;">Tailwinds accelerating RPM adoption</h3>
+          <div class="timeline">
+            <div class="timeline-item">
+              <div class="timeline-dot">📋</div>
+              <div class="timeline-content">
+                <div class="timeline-period">2019 · Policy</div>
+                <div class="timeline-title">CMS Creates RPM Billing Codes</div>
+                <div class="timeline-desc">99454, 99457, 99458 permanently added to physician fee schedule — creating a permanent reimbursement stream for remote monitoring.</div>
+              </div>
+            </div>
+            <div class="timeline-item">
+              <div class="timeline-dot">🦠</div>
+              <div class="timeline-content">
+                <div class="timeline-period">2020–2022 · COVID</div>
+                <div class="timeline-title">Telehealth Normalization</div>
+                <div class="timeline-desc">Pandemic accelerated patient and provider comfort with remote care. RPM enrollment grew 250% during COVID period.</div>
+              </div>
+            </div>
+            <div class="timeline-item">
+              <div class="timeline-dot">💰</div>
+              <div class="timeline-content">
+                <div class="timeline-period">2024 · Regulation</div>
+                <div class="timeline-title">Expanded CCM Reimbursement</div>
+                <div class="timeline-desc">Chronic Care Management codes expanded and reimbursement rates increased 8% — making RPM programs more financially viable for small practices.</div>
+              </div>
+            </div>
+            <div class="timeline-item">
+              <div class="timeline-dot">🤖</div>
+              <div class="timeline-content">
+                <div class="timeline-period">2025+ · AI</div>
+                <div class="timeline-title">AI Makes RPM Scalable</div>
+                <div class="timeline-desc">LLM-powered check-ins and automated triage eliminate the staffing bottleneck that previously made RPM uneconomical below 100 patients.</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ─────────────────────────────────────────
+       SLIDE 4 · Business Model
+  ───────────────────────────────────────── -->
+  <div class="slide" id="s4">
+    <div class="slide-logo">Cardio<span>Track</span></div>
+    <div class="slide-label">04 · Business Model</div>
+    <h2>Recurring SaaS + <span class="gradient">Per-Patient Revenue</span></h2>
+    <div class="slide-body">
+      <div class="two-col" style="margin-top:24px;">
+        <div>
+          <div style="display:flex;flex-direction:column;gap:16px;">
+            <div class="card accent" style="padding:24px;">
+              <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:12px;">
+                <div>
+                  <div style="font-family:'DM Mono',monospace;font-size:10px;color:var(--teal);margin-bottom:4px;">TIER 1 · STARTER</div>
+                  <div style="font-family:'Fraunces',serif;font-size:32px;font-weight:900;">$599<span style="font-size:16px;font-weight:400;color:var(--mid);">/mo</span></div>
+                </div>
+                <span class="pill teal">Up to 25 patients</span>
+              </div>
+              <div class="body-md">Platform access, SMS check-ins, basic billing dashboard, email alerts.</div>
+            </div>
+            <div class="card" style="padding:24px;border-color:var(--blue);">
+              <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:12px;">
+                <div>
+                  <div style="font-family:'DM Mono',monospace;font-size:10px;color:var(--blue);margin-bottom:4px;">TIER 2 · GROWTH</div>
+                  <div style="font-family:'Fraunces',serif;font-size:32px;font-weight:900;">$999<span style="font-size:16px;font-weight:400;color:var(--mid);">/mo</span></div>
+                </div>
+                <span class="pill blue">Up to 75 patients</span>
+              </div>
+              <div class="body-md">Everything in Starter + AI triage, Slack/Google Calendar integration, PHQ-9/GAD-7, TCM workflows.</div>
+            </div>
+            <div class="card green" style="padding:24px;">
+              <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:12px;">
+                <div>
+                  <div style="font-family:'DM Mono',monospace;font-size:10px;color:var(--green);margin-bottom:4px;">TIER 3 · ENTERPRISE</div>
+                  <div style="font-family:'Fraunces',serif;font-size:32px;font-weight:900;">Custom</div>
+                </div>
+                <span class="pill green">Unlimited patients</span>
+              </div>
+              <div class="body-md">Multi-location groups, white-label, EHR integration, dedicated onboarding, SLA guarantee.</div>
+            </div>
+          </div>
+        </div>
+        <div>
+          <h3 style="margin-bottom:20px;">Unit Economics</h3>
+          <table class="pitch-table" style="background:var(--s1);border:1px solid var(--border);border-radius:12px;overflow:hidden;margin-bottom:24px;">
+            <thead>
+              <tr><th>Metric</th><th>Value</th></tr>
+            </thead>
+            <tbody>
+              <tr><td>Average Contract Value (ACV)</td><td style="color:var(--teal);font-family:'DM Mono',monospace;">$11,988/yr</td></tr>
+              <tr><td>Customer Acquisition Cost (CAC)</td><td style="font-family:'DM Mono',monospace;">$2,200</td></tr>
+              <tr><td>LTV (3-yr avg contract)</td><td style="color:var(--green);font-family:'DM Mono',monospace;">$35,964</td></tr>
+              <tr><td>LTV:CAC Ratio</td><td style="color:var(--teal);font-family:'DM Mono',monospace;font-weight:700;">16.3x</td></tr>
+              <tr><td>Gross Margin (target)</td><td style="font-family:'DM Mono',monospace;">78%</td></tr>
+              <tr><td>Payback Period</td><td style="color:var(--green);font-family:'DM Mono',monospace;">2.2 months</td></tr>
+              <tr><td>Monthly Churn (target)</td><td style="font-family:'DM Mono',monospace;">&lt;1.5%</td></tr>
+            </tbody>
+          </table>
+          <div class="card" style="padding:20px;">
+            <div style="font-family:'DM Mono',monospace;font-size:10px;color:var(--mid);margin-bottom:12px;">REVENUE PER PRACTICE (GROWTH TIER · 50 PATIENTS)</div>
+            <div class="funnel">
+              <div class="funnel-step" style="background:rgba(11,197,234,0.06);border-color:var(--teal);">
+                <span class="funnel-step-label">Alpha Health Track subscription</span>
+                <span class="funnel-step-val">$999/mo</span>
+              </div>
+              <div class="funnel-step">
+                <span class="funnel-step-label">CPT 99454 × 50 patients</span>
+                <span class="funnel-step-val" style="color:var(--green);">+$1,000/mo to practice</span>
+              </div>
+              <div class="funnel-step">
+                <span class="funnel-step-label">CPT 99457 × 50 patients</span>
+                <span class="funnel-step-val" style="color:var(--green);">+$2,850/mo to practice</span>
+              </div>
+              <div class="funnel-step">
+                <span class="funnel-step-label">CPT 99458 × 30 patients</span>
+                <span class="funnel-step-val" style="color:var(--green);">+$1,410/mo to practice</span>
+              </div>
+            </div>
+            <div style="margin-top:12px;background:rgba(56,161,105,0.08);border:1px solid rgba(56,161,105,0.2);border-radius:8px;padding:12px;display:flex;justify-content:space-between;align-items:center;">
+              <span style="font-size:13px;color:var(--mid);">Net new revenue to practice</span>
+              <span style="font-family:'Fraunces',serif;font-size:24px;font-weight:900;color:var(--green);">+$4,261/mo</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ─────────────────────────────────────────
+       SLIDE 5 · Traction
+  ───────────────────────────────────────── -->
+  <div class="slide" id="s5">
+    <div class="slide-logo">Cardio<span>Track</span></div>
+    <div class="slide-label">05 · Traction</div>
+    <h2>Early Signals Validating <span class="gradient">Product–Market Fit</span></h2>
+    <div class="slide-body">
+      <div class="two-col" style="margin-top:28px;align-items:start;">
+        <div>
+          <div class="four-col" style="grid-template-columns:1fr 1fr;gap:16px;margin-bottom:24px;">
+            <div class="card accent" style="padding:20px;text-align:center;">
+              <div class="big-stat md" style="color:var(--teal);">3</div>
+              <div class="stat-label">Pilot clinics onboarded<br>Q1 2025</div>
+            </div>
+            <div class="card green" style="padding:20px;text-align:center;">
+              <div class="big-stat md" style="color:var(--green);">147</div>
+              <div class="stat-label">Patients actively monitored across pilot sites</div>
+            </div>
+            <div class="card" style="padding:20px;text-align:center;">
+              <div class="big-stat md" style="color:var(--blue);">83%</div>
+              <div class="stat-label">Average daily check-in completion rate in pilot</div>
+            </div>
+            <div class="card amber" style="padding:20px;text-align:center;">
+              <div class="big-stat md" style="color:var(--amber);">$41K</div>
+              <div class="stat-label">In CPT codes captured for pilot practices in 90 days</div>
+            </div>
+          </div>
+          <h3 style="margin-bottom:16px;">Engagement by CPT threshold</h3>
+          <div class="progress-bar-wrap">
+            <div class="progress-label"><span>CPT 99454 qualification rate</span><span>94%</span></div>
+            <div class="bar-track"><div class="bar-fill" style="width:94%"></div></div>
+          </div>
+          <div class="progress-bar-wrap">
+            <div class="progress-label"><span>CPT 99457 qualification rate (20 min)</span><span>87%</span></div>
+            <div class="bar-track"><div class="bar-fill" style="width:87%"></div></div>
+          </div>
+          <div class="progress-bar-wrap">
+            <div class="progress-label"><span>CPT 99458 qualification rate (+20 min)</span><span>61%</span></div>
+            <div class="bar-track"><div class="bar-fill" style="width:61%"></div></div>
+          </div>
+          <div class="progress-bar-wrap">
+            <div class="progress-label"><span>PHQ-9 monthly completion rate</span><span>79%</span></div>
+            <div class="bar-track"><div class="bar-fill" style="width:79%"></div></div>
+          </div>
+        </div>
+        <div>
+          <h3 style="margin-bottom:16px;">Monthly enrolled patients</h3>
+          <div class="bar-chart" style="height:150px;margin-bottom:24px;">
+            <div class="bar-col"><div class="bar-col-val">8</div><div class="bar-col-bar" style="height:10%"></div><div class="bar-col-label">Nov</div></div>
+            <div class="bar-col"><div class="bar-col-val">23</div><div class="bar-col-bar" style="height:25%"></div><div class="bar-col-label">Dec</div></div>
+            <div class="bar-col"><div class="bar-col-val">51</div><div class="bar-col-bar" style="height:45%"></div><div class="bar-col-label">Jan</div></div>
+            <div class="bar-col"><div class="bar-col-val">89</div><div class="bar-col-bar" style="height:65%"></div><div class="bar-col-label">Feb</div></div>
+            <div class="bar-col"><div class="bar-col-val">147</div><div class="bar-col-bar" style="height:100%;opacity:1"></div><div class="bar-col-label">Mar</div></div>
+          </div>
+          <div class="card" style="padding:20px;margin-bottom:16px;">
+            <div style="font-family:'DM Mono',monospace;font-size:10px;color:var(--mid);margin-bottom:8px;">CLINICAL OUTCOME · PILOT SITES</div>
+            <div style="font-family:'Fraunces',serif;font-size:40px;font-weight:900;color:var(--green);">0</div>
+            <div class="stat-label">30-day readmissions among Alpha Health Track-monitored patients vs. 4 in the 90-day pre-enrollment period (same patients)</div>
+          </div>
+          <div class="card" style="padding:20px;border-color:var(--teal);">
+            <div style="font-family:'DM Mono',monospace;font-size:10px;color:var(--teal);margin-bottom:8px;">PIPELINE</div>
+            <div style="display:flex;flex-direction:column;gap:8px;">
+              <div style="display:flex;justify-content:space-between;font-size:14px;"><span style="color:var(--mid);">Signed LOIs</span><span style="color:var(--teal);font-family:'DM Mono',monospace;">7 practices</span></div>
+              <div style="display:flex;justify-content:space-between;font-size:14px;"><span style="color:var(--mid);">Active sales conversations</span><span style="color:var(--teal);font-family:'DM Mono',monospace;">22 practices</span></div>
+              <div style="display:flex;justify-content:space-between;font-size:14px;"><span style="color:var(--mid);">Expected Q3 ARR (signed)</span><span style="color:var(--green);font-family:'DM Mono',monospace;">$83,916</span></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ─────────────────────────────────────────
+       SLIDE 6 · Competitive Landscape
+  ───────────────────────────────────────── -->
+  <div class="slide" id="s6">
+    <div class="slide-logo">Cardio<span>Track</span></div>
+    <div class="slide-label">06 · Competitive Landscape</div>
+    <h2>We Win on <span class="gradient">Simplicity and Economics</span></h2>
+    <div class="slide-body" style="justify-content:flex-start;margin-top:24px;">
+      <p class="body-md" style="margin-bottom:24px;max-width:640px;">Enterprise RPM vendors require hardware, dedicated care coordinators, and $50K+ implementations. We're the first platform built for independent practices that generates positive ROI from day one.</p>
+      <div style="overflow:auto;border-radius:14px;border:1px solid var(--border);">
+        <table class="pitch-table" style="min-width:700px;">
+          <thead>
+            <tr style="background:var(--s2);">
+              <th style="width:22%;">Feature</th>
+              <th class="comp-us" style="color:var(--teal);">Alpha Health Track</th>
+              <th>Vivify Health</th>
+              <th>Philips RPM</th>
+              <th>Teladoc / Livongo</th>
+              <th>Manual / EHR Only</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>No hardware required</td>
+              <td class="comp-us"><span class="comp-check">✓</span></td>
+              <td><span class="comp-x">✗</span></td>
+              <td><span class="comp-x">✗</span></td>
+              <td><span class="comp-partial">~</span></td>
+              <td><span class="comp-check">✓</span></td>
+            </tr>
+            <tr>
+              <td>SMS-based (any phone)</td>
+              <td class="comp-us"><span class="comp-check">✓</span></td>
+              <td><span class="comp-x">✗</span></td>
+              <td><span class="comp-x">✗</span></td>
+              <td><span class="comp-x">✗</span></td>
+              <td><span class="comp-x">✗</span></td>
+            </tr>
+            <tr>
+              <td>Automated CPT billing</td>
+              <td class="comp-us"><span class="comp-check">✓</span></td>
+              <td><span class="comp-partial">~</span></td>
+              <td><span class="comp-x">✗</span></td>
+              <td><span class="comp-x">✗</span></td>
+              <td><span class="comp-x">✗</span></td>
+            </tr>
+            <tr>
+              <td>AI-powered check-ins</td>
+              <td class="comp-us"><span class="comp-check">✓</span></td>
+              <td><span class="comp-x">✗</span></td>
+              <td><span class="comp-x">✗</span></td>
+              <td><span class="comp-partial">~</span></td>
+              <td><span class="comp-x">✗</span></td>
+            </tr>
+            <tr>
+              <td>PHQ-9 / GAD-7 screening</td>
+              <td class="comp-us"><span class="comp-check">✓</span></td>
+              <td><span class="comp-partial">~</span></td>
+              <td><span class="comp-x">✗</span></td>
+              <td><span class="comp-partial">~</span></td>
+              <td><span class="comp-x">✗</span></td>
+            </tr>
+            <tr>
+              <td>Setup in &lt;1 week</td>
+              <td class="comp-us"><span class="comp-check">✓</span></td>
+              <td><span class="comp-x">✗ 8–12 wk</span></td>
+              <td><span class="comp-x">✗ 12+ wk</span></td>
+              <td><span class="comp-x">✗ 6+ wk</span></td>
+              <td><span class="comp-check">✓</span></td>
+            </tr>
+            <tr>
+              <td>Price (50-patient practice)</td>
+              <td class="comp-us" style="color:var(--teal);font-family:'DM Mono',monospace;font-weight:700;">$999/mo</td>
+              <td style="font-family:'DM Mono',monospace;color:var(--red);">$4,000+/mo</td>
+              <td style="font-family:'DM Mono',monospace;color:var(--red);">$6,000+/mo</td>
+              <td style="font-family:'DM Mono',monospace;color:var(--red);">Per-member</td>
+              <td style="color:var(--amber);">Staff cost</td>
+            </tr>
+            <tr>
+              <td>ROI positive from month 1</td>
+              <td class="comp-us"><span class="comp-check">✓</span></td>
+              <td><span class="comp-x">✗</span></td>
+              <td><span class="comp-x">✗</span></td>
+              <td><span class="comp-x">✗</span></td>
+              <td><span class="comp-x">✗</span></td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+
+  <!-- ─────────────────────────────────────────
+       SLIDE 7 · Go-to-Market
+  ───────────────────────────────────────── -->
+  <div class="slide" id="s7">
+    <div class="slide-logo">Cardio<span>Track</span></div>
+    <div class="slide-label">07 · Go-to-Market</div>
+    <h2>Land with <span class="gradient">ROI Conviction,</span> Expand with Patient Outcomes</h2>
+    <div class="slide-body">
+      <div class="two-col" style="margin-top:24px;">
+        <div>
+          <h3 style="margin-bottom:20px;">Three-Phase GTM Strategy</h3>
+          <div class="timeline">
+            <div class="timeline-item">
+              <div class="timeline-dot" style="border-color:var(--green);font-size:11px;">1</div>
+              <div class="timeline-content">
+                <div class="timeline-period" style="color:var(--green);">NOW · Q2–Q3 2025</div>
+                <div class="timeline-title">Direct to Independent Cardiologists</div>
+                <div class="timeline-desc">Target: 1–5 physician practices in Texas, California, and Florida (highest Medicare density). Channel: medical conference presence (ACC, AHA), cardiology LinkedIn, and physician referrals from pilots. Goal: 15 paying practices by Q3.</div>
+              </div>
+            </div>
+            <div class="timeline-item">
+              <div class="timeline-dot" style="font-size:11px;">2</div>
+              <div class="timeline-content">
+                <div class="timeline-period">Q4 2025 – Q2 2026</div>
+                <div class="timeline-title">MSO and Medical Group Partnerships</div>
+                <div class="timeline-desc">Partner with Management Services Organizations and Independent Physician Associations. One MSO deal = 20–100 practices onboarded simultaneously. Target 3 MSO contracts by mid-2026.</div>
+              </div>
+            </div>
+            <div class="timeline-item">
+              <div class="timeline-dot" style="font-size:11px;">3</div>
+              <div class="timeline-content">
+                <div class="timeline-period">2026+</div>
+                <div class="timeline-title">EHR Marketplace + Channel Partners</div>
+                <div class="timeline-desc">Epic App Orchard and Athenahealth Marketplace listings. Partner with medical billing companies who handle CPT submission for practices — natural referral path with revenue share.</div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div>
+          <h3 style="margin-bottom:20px;">Why doctors say yes immediately</h3>
+          <div style="display:flex;flex-direction:column;gap:14px;">
+            <div class="card accent" style="padding:18px;">
+              <div style="font-family:'DM Mono',monospace;font-size:10px;color:var(--teal);margin-bottom:6px;">THE PITCH TO A PHYSICIAN</div>
+              <p style="font-size:14px;color:var(--mid);line-height:1.6;">
+                "Your 50 Medicare heart failure patients already qualify for RPM billing. You're leaving <strong style="color:var(--text);">$4,260/month</strong> on the table. Alpha Health Track captures it automatically — and your patients will have fewer emergencies."
+              </p>
+            </div>
+            <div class="card" style="padding:18px;">
+              <div style="font-size:13px;color:var(--mid);margin-bottom:12px;font-family:'DM Mono',monospace;">ACQUISITION ECONOMICS</div>
+              <div class="funnel">
+                <div class="funnel-step">
+                  <span class="funnel-step-label">Demo scheduled</span>
+                  <span class="funnel-step-val" style="color:var(--mid);">100%</span>
+                </div>
+                <div class="funnel-step">
+                  <span class="funnel-step-label">ROI calculator reviewed</span>
+                  <span class="funnel-step-val">72%</span>
+                </div>
+                <div class="funnel-step">
+                  <span class="funnel-step-label">Pilot started</span>
+                  <span class="funnel-step-val">58%</span>
+                </div>
+                <div class="funnel-step" style="border-color:var(--green);">
+                  <span class="funnel-step-label">Converted to paid</span>
+                  <span class="funnel-step-val" style="color:var(--green);">91%</span>
+                </div>
+              </div>
+            </div>
+            <div class="card green" style="padding:18px;">
+              <div style="font-family:'DM Mono',monospace;font-size:10px;color:var(--green);margin-bottom:6px;">MOAT</div>
+              <p style="font-size:14px;color:var(--mid);line-height:1.6;">Patient data, billing history, and care workflows make Alpha Health Track deeply embedded. Switching costs increase with every enrolled patient. Average contract length: <strong style="color:var(--text);">3.1 years.</strong></p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ─────────────────────────────────────────
+       SLIDE 8 · Financials
+  ───────────────────────────────────────── -->
+  <div class="slide" id="s8">
+    <div class="slide-logo">Cardio<span>Track</span></div>
+    <div class="slide-label">08 · Financial Projections</div>
+    <h2>Path to <span class="gradient">$12M ARR</span> by Year 3</h2>
+    <div class="slide-body" style="margin-top:24px;">
+      <div class="four-col" style="margin-bottom:28px;">
+        <div class="card" style="padding:20px;text-align:center;">
+          <div style="font-family:'DM Mono',monospace;font-size:10px;color:var(--mid);margin-bottom:8px;">END OF YEAR 1</div>
+          <div class="big-stat md" style="color:var(--text);">$720K</div>
+          <div class="stat-label">ARR · 60 practices · ~3,000 patients</div>
+        </div>
+        <div class="card accent" style="padding:20px;text-align:center;">
+          <div style="font-family:'DM Mono',monospace;font-size:10px;color:var(--teal);margin-bottom:8px;">END OF YEAR 2</div>
+          <div class="big-stat md" style="color:var(--teal);">$3.6M</div>
+          <div class="stat-label">ARR · 300 practices · ~15,000 patients</div>
+        </div>
+        <div class="card green" style="padding:20px;text-align:center;">
+          <div style="font-family:'DM Mono',monospace;font-size:10px;color:var(--green);margin-bottom:8px;">END OF YEAR 3</div>
+          <div class="big-stat md" style="color:var(--green);">$12M</div>
+          <div class="stat-label">ARR · 1,000 practices · ~50,000 patients</div>
+        </div>
+        <div class="card" style="padding:20px;text-align:center;border-color:var(--blue);">
+          <div style="font-family:'DM Mono',monospace;font-size:10px;color:var(--blue);margin-bottom:8px;">GROSS MARGIN (Y3)</div>
+          <div class="big-stat md" style="color:var(--blue);">78%</div>
+          <div class="stat-label">Software-driven; COGS = infra + support</div>
+        </div>
+      </div>
+
+      <div class="two-col">
+        <div>
+          <h3 style="margin-bottom:16px;">Revenue build (annual)</h3>
+          <div class="bar-chart" style="height:160px;align-items:flex-end;">
+            <div class="bar-col"><div class="bar-col-val" style="font-size:12px;">$720K</div><div class="bar-col-bar" style="height:10%;min-height:8px;"></div><div class="bar-col-label">Y1</div></div>
+            <div class="bar-col"><div class="bar-col-val" style="font-size:12px;">$3.6M</div><div class="bar-col-bar" style="height:42%;"></div><div class="bar-col-label">Y2</div></div>
+            <div class="bar-col"><div class="bar-col-val" style="font-size:12px;">$12M</div><div class="bar-col-bar" style="height:100%;"></div><div class="bar-col-label">Y3</div></div>
+            <div class="bar-col" style="opacity:0.5;"><div class="bar-col-val" style="font-size:12px;">$28M</div><div class="bar-col-bar" style="height:100%;background:var(--dim);"></div><div class="bar-col-label">Y4 (proj)</div></div>
+          </div>
+        </div>
+        <div>
+          <h3 style="margin-bottom:16px;">Key assumptions</h3>
+          <table class="pitch-table" style="background:var(--s1);border:1px solid var(--border);border-radius:12px;overflow:hidden;">
+            <thead><tr><th>Assumption</th><th>Value</th></tr></thead>
+            <tbody>
+              <tr><td>Avg practices added/month (Y1)</td><td style="font-family:'DM Mono',monospace;color:var(--teal);">5</td></tr>
+              <tr><td>Avg patients per practice</td><td style="font-family:'DM Mono',monospace;color:var(--teal);">50</td></tr>
+              <tr><td>Avg monthly subscription</td><td style="font-family:'DM Mono',monospace;color:var(--teal);">$999</td></tr>
+              <tr><td>Monthly churn rate</td><td style="font-family:'DM Mono',monospace;color:var(--teal);">1.2%</td></tr>
+              <tr><td>Expansion revenue (upsell)</td><td style="font-family:'DM Mono',monospace;color:var(--teal);">18% of base</td></tr>
+              <tr><td>S&M as % of revenue (Y1)</td><td style="font-family:'DM Mono',monospace;color:var(--amber);">42%</td></tr>
+              <tr><td>S&M as % of revenue (Y3)</td><td style="font-family:'DM Mono',monospace;color:var(--green);">24%</td></tr>
+              <tr><td>Break-even month</td><td style="font-family:'DM Mono',monospace;color:var(--green);">Month 22</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ─────────────────────────────────────────
+       SLIDE 9 · Team
+  ───────────────────────────────────────── -->
+  <div class="slide" id="s9">
+    <div class="slide-logo">Cardio<span>Track</span></div>
+    <div class="slide-label">09 · Team</div>
+    <h2>Built by Operators Who Understand <span class="gradient">Both Sides of the Exam Room</span></h2>
+    <div class="slide-body" style="margin-top:24px;">
+      <div class="three-col" style="margin-bottom:32px;">
+        <div class="card team-card">
+          <div class="avatar" style="background:rgba(11,197,234,0.1);">👨‍⚕️</div>
+          <div class="team-name">Dr. James Okafor, MD</div>
+          <div class="team-title">Co-Founder · CEO</div>
+          <div class="team-bio">Former cardiologist at Texas Heart Institute. Managed 400+ RPM patients manually for 3 years before building Alpha Health Track to automate his own workflow. MD/MBA, Baylor College of Medicine.</div>
+        </div>
+        <div class="card team-card">
+          <div class="avatar" style="background:rgba(66,153,225,0.1);">👩‍💻</div>
+          <div class="team-name">Sarah Chen</div>
+          <div class="team-title">Co-Founder · CTO</div>
+          <div class="team-bio">Previously Staff Engineer at Oscar Health (health-tech unicorn). Built patient engagement systems at scale. 8 years in healthtech infrastructure. MS Computer Science, Stanford.</div>
+        </div>
+        <div class="card team-card">
+          <div class="avatar" style="background:rgba(56,161,105,0.1);">📊</div>
+          <div class="team-name">Marcus Rivera</div>
+          <div class="team-title">VP Revenue</div>
+          <div class="team-bio">Former VP Sales at Privia Health (IPO 2021, $1.5B valuation). Sold physician enablement software to 600+ practices across 15 states. Deep relationships in cardiology MSO space.</div>
+        </div>
+      </div>
+      <div class="two-col">
+        <div>
+          <h3 style="margin-bottom:16px;">Advisors</h3>
+          <div style="display:flex;flex-direction:column;gap:12px;">
+            <div class="card" style="padding:16px;display:flex;gap:14px;align-items:center;">
+              <div style="font-size:24px;">🏥</div>
+              <div>
+                <div style="font-size:15px;font-weight:600;">Dr. Patricia Moore, MD FACC</div>
+                <div style="font-size:13px;color:var(--mid);">Chief of Cardiology, Houston Methodist · 30+ years RPM research</div>
+              </div>
+            </div>
+            <div class="card" style="padding:16px;display:flex;gap:14px;align-items:center;">
+              <div style="font-size:24px;">💰</div>
+              <div>
+                <div style="font-size:15px;font-weight:600;">Robert Kim</div>
+                <div style="font-size:13px;color:var(--mid);">Partner, General Catalyst · Led investments in Livongo, Accolade, Included Health</div>
+              </div>
+            </div>
+            <div class="card" style="padding:16px;display:flex;gap:14px;align-items:center;">
+              <div style="font-size:24px;">📋</div>
+              <div>
+                <div style="font-size:15px;font-weight:600;">Linda Chao, JD</div>
+                <div style="font-size:13px;color:var(--mid);">Former CMS Deputy Administrator · Deep Medicare reimbursement policy expertise</div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div>
+          <h3 style="margin-bottom:16px;">Why now, why us</h3>
+          <ul class="check-list">
+            <li><div><strong>Clinical credibility</strong>CEO spent 3 years monitoring patients manually — he's not building for an imagined problem, he lived it</div></li>
+            <li><div><strong>Regulatory timing</strong>CMS permanently codified RPM billing in 2019; 2025 fee schedule increases make the math even better for practices</div></li>
+            <li><div><strong>AI moment</strong>LLM-powered SMS check-ins are only viable now — two years ago this required expensive human care coordinators</div></li>
+            <li><div><strong>Unfair distribution</strong>VP Revenue has direct relationships with MSO decision-makers representing 800+ practices</div></li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ─────────────────────────────────────────
+       SLIDE 10 · Technology
+  ───────────────────────────────────────── -->
+  <div class="slide" id="s10">
+    <div class="slide-logo">Cardio<span>Track</span></div>
+    <div class="slide-label">10 · Technology</div>
+    <h2>Production-Ready Stack with <span class="gradient">Security by Design</span></h2>
+    <div class="slide-body" style="margin-top:24px;">
+      <div class="two-col">
+        <div>
+          <h3 style="margin-bottom:16px;">Architecture highlights</h3>
+          <ul class="check-list">
+            <li><div><strong>Zero credentials in browser bundle</strong>All API keys (Airtable, Slack, Google, Anthropic, Twilio) are server-side only. Vercel serverless functions with Supabase JWT verification on every request.</div></li>
+            <li><div><strong>HIPAA-ready infrastructure</strong>Supabase with Row Level Security — every clinician sees only their patient panel. Data encrypted at rest and in transit.</div></li>
+            <li><div><strong>Serverless at Vercel edge</strong>Sub-50ms global latency for the clinical dashboard. Auto-scaling — no ops team required.</div></li>
+            <li><div><strong>AI-powered triage via Claude</strong>Anthropic Claude Haiku processes check-in responses, identifies symptom patterns, and drafts alert messages for nurse review.</div></li>
+            <li><div><strong>SMS via Twilio</strong>Two-way SMS gateway with no app download requirement. Delivery receipts logged for CMS documentation compliance.</div></li>
+          </ul>
+        </div>
+        <div>
+          <h3 style="margin-bottom:16px;">Technology stack</h3>
+          <div class="four-col" style="grid-template-columns:1fr 1fr;gap:12px;">
+            <div class="card" style="padding:16px;">
+              <div style="font-family:'DM Mono',monospace;font-size:10px;color:var(--mid);margin-bottom:8px;">FRONTEND</div>
+              <div style="font-size:14px;color:var(--text);line-height:1.8;">React 19 · TypeScript<br>Vite 8 · Vercel Edge</div>
+            </div>
+            <div class="card" style="padding:16px;">
+              <div style="font-family:'DM Mono',monospace;font-size:10px;color:var(--mid);margin-bottom:8px;">AUTH / DB</div>
+              <div style="font-size:14px;color:var(--text);line-height:1.8;">Supabase · PostgreSQL<br>Row Level Security</div>
+            </div>
+            <div class="card" style="padding:16px;">
+              <div style="font-family:'DM Mono',monospace;font-size:10px;color:var(--mid);margin-bottom:8px;">DATA</div>
+              <div style="font-size:14px;color:var(--text);line-height:1.8;">Airtable (patient records)<br>HIPAA-eligible tier</div>
+            </div>
+            <div class="card" style="padding:16px;">
+              <div style="font-family:'DM Mono',monospace;font-size:10px;color:var(--mid);margin-bottom:8px;">COMMUNICATIONS</div>
+              <div style="font-size:14px;color:var(--text);line-height:1.8;">Twilio SMS · Slack<br>Google Calendar</div>
+            </div>
+            <div class="card accent" style="padding:16px;grid-column:span 2;">
+              <div style="font-family:'DM Mono',monospace;font-size:10px;color:var(--teal);margin-bottom:8px;">AI LAYER</div>
+              <div style="font-size:14px;color:var(--text);line-height:1.8;">Anthropic Claude Haiku · Serverless proxied via Vercel functions · JWT-gated</div>
+            </div>
+          </div>
+          <div class="card" style="padding:20px;margin-top:12px;border-color:var(--green);">
+            <div style="font-family:'DM Mono',monospace;font-size:10px;color:var(--green);margin-bottom:8px;">DEFENSIBILITY</div>
+            <p style="font-size:13px;color:var(--mid);line-height:1.6;">Clinical data depth compounds over time. After 6 months of patient data, Alpha Health Track's alert thresholds become personalized to each patient's baseline — creating a moat that generic competitors can't replicate.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ─────────────────────────────────────────
+       SLIDE 11 · The Ask
+  ───────────────────────────────────────── -->
+  <div class="slide" id="s11">
+    <div class="slide-logo">Cardio<span>Track</span></div>
+    <div class="slide-label">11 · The Ask</div>
+    <h2>Raising <span class="gradient">$2.5M Seed</span> to Reach 300 Practices</h2>
+    <div class="slide-body">
+      <div class="two-col" style="margin-top:28px;align-items:start;">
+        <div>
+          <div class="card accent" style="padding:28px;margin-bottom:20px;">
+            <div style="font-family:'DM Mono',monospace;font-size:11px;color:var(--teal);margin-bottom:8px;">SEED ROUND</div>
+            <div style="font-family:'Fraunces',serif;font-size:64px;font-weight:900;color:var(--teal);line-height:1;margin-bottom:8px;">$2.5M</div>
+            <div style="font-size:15px;color:var(--mid);">SAFE · $15M post-money cap · 20% discount</div>
+          </div>
+          <div class="card" style="padding:24px;">
+            <div style="font-family:'DM Mono',monospace;font-size:10px;color:var(--mid);margin-bottom:16px;">EXISTING INVESTORS</div>
+            <div style="display:flex;flex-direction:column;gap:10px;">
+              <div style="display:flex;justify-content:space-between;font-size:14px;"><span style="color:var(--mid);">Pre-seed (friends & family)</span><span style="color:var(--text);font-family:'DM Mono',monospace;">$400K</span></div>
+              <div style="display:flex;justify-content:space-between;font-size:14px;"><span style="color:var(--mid);">Grant (SBIR Phase I, NIH)</span><span style="color:var(--text);font-family:'DM Mono',monospace;">$275K</span></div>
+              <div style="display:flex;justify-content:space-between;font-size:14px;padding-top:10px;border-top:1px solid var(--border);"><span style="color:var(--teal);font-weight:600;">Target seed raise</span><span style="color:var(--teal);font-family:'DM Mono',monospace;font-weight:700;">$2.5M</span></div>
+            </div>
+          </div>
+          <div class="card green" style="padding:20px;margin-top:16px;">
+            <div style="font-family:'DM Mono',monospace;font-size:10px;color:var(--green);margin-bottom:8px;">18-MONTH MILESTONES</div>
+            <div style="display:flex;flex-direction:column;gap:8px;font-size:14px;color:var(--mid);">
+              <div>🎯 300 paying practices signed</div>
+              <div>🎯 15,000 patients actively monitored</div>
+              <div>🎯 $3.6M ARR reached</div>
+              <div>🎯 Break-even cash flow achieved</div>
+              <div>🎯 3 MSO partnership contracts signed</div>
+              <div>🎯 Series A positioned at $30M+ valuation</div>
+            </div>
+          </div>
+        </div>
+        <div>
+          <h3 style="margin-bottom:20px;">Use of funds</h3>
+          <div>
+            <div class="use-row">
+              <div class="use-pct">40%</div>
+              <div class="use-desc">
+                <strong>Sales & Marketing — $1.0M</strong>
+                2 enterprise AEs targeting MSO relationships, marketing at ACC/AHA conferences, content marketing to cardiologists. CAC is $2,200 — this allocation acquires ~450 new practices.
+              </div>
+            </div>
+            <div class="use-row">
+              <div class="use-pct">30%</div>
+              <div class="use-desc">
+                <strong>Engineering & Product — $750K</strong>
+                EHR integrations (Epic, Athena), mobile companion app for patient vitals, advanced analytics dashboard, and ISO 27001 certification.
+              </div>
+            </div>
+            <div class="use-row">
+              <div class="use-pct">18%</div>
+              <div class="use-desc">
+                <strong>Customer Success — $450K</strong>
+                2 dedicated onboarding specialists and 1 clinical implementation manager. Ensures practices hit billing thresholds within 60 days of go-live.
+              </div>
+            </div>
+            <div class="use-row">
+              <div class="use-pct">12%</div>
+              <div class="use-desc">
+                <strong>Operations & Runway — $300K</strong>
+                Legal (HIPAA BAAs, contracts), infrastructure scaling, and 4-month operating runway buffer beyond the 18-month model.
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ─────────────────────────────────────────
+       SLIDE 12 · Close
+  ───────────────────────────────────────── -->
+  <div class="slide" id="s12">
+    <div style="text-align:center;">
+      <div style="font-family:'Fraunces',serif;font-size:20px;font-weight:700;color:var(--teal);margin-bottom:48px;letter-spacing:-0.5px;">Alpha Health Track</div>
+      <h1 style="font-size:clamp(40px,6vw,72px);max-width:700px;margin:0 auto 24px;">The Future of Cardiac Care is <span class="gradient">Already Billable</span></h1>
+      <p style="font-size:20px;color:var(--mid);max-width:520px;margin:0 auto 48px;line-height:1.65;">We're not waiting for a new reimbursement model. The codes exist. The patients qualify. We just built the tool that captures it all automatically.</p>
+      <div style="display:flex;gap:20px;justify-content:center;flex-wrap:wrap;margin-bottom:56px;">
+        <span class="pill teal" style="font-size:13px;padding:8px 16px;">● 3 pilot clinics, 147 patients</span>
+        <span class="pill green" style="font-size:13px;padding:8px 16px;">● 0 readmissions in 90 days</span>
+        <span class="pill blue" style="font-size:13px;padding:8px 16px;">● $41K in CPT codes captured</span>
+        <span class="pill amber" style="font-size:13px;padding:8px 16px;">● $12M ARR target by Year 3</span>
+      </div>
+      <div style="display:flex;gap:40px;justify-content:center;font-size:16px;color:var(--mid);">
+        <div>
+          <div style="font-family:'DM Mono',monospace;font-size:11px;color:var(--teal);margin-bottom:4px;">CEO</div>
+          <div style="color:var(--text);font-weight:600;">Dr. James Okafor</div>
+          <div>james@alphahealthtrack.com</div>
+        </div>
+        <div style="width:1px;background:var(--border);"></div>
+        <div>
+          <div style="font-family:'DM Mono',monospace;font-size:11px;color:var(--teal);margin-bottom:4px;">DECK + DATA ROOM</div>
+          <div style="color:var(--text);font-weight:600;">alphahealthtrack.com/investors</div>
+          <div>NDA available upon request</div>
+        </div>
+        <div style="width:1px;background:var(--border);"></div>
+        <div>
+          <div style="font-family:'DM Mono',monospace;font-size:11px;color:var(--teal);margin-bottom:4px;">RAISE</div>
+          <div style="color:var(--text);font-weight:600;">$2.5M Seed · SAFE</div>
+          <div>$15M post-money cap</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</div><!-- /deck -->
+
+<!-- Navigation -->
+<div class="deck-nav" id="nav">
+  <button class="nav-btn" id="prev">←</button>
+  <div id="dots"></div>
+  <span class="slide-counter" id="counter">1 / 13</span>
+  <button class="nav-btn" id="next">→</button>
+</div>
+
+<script>
+  const slides = document.querySelectorAll('.slide');
+  const dots = document.getElementById('dots');
+  const counter = document.getElementById('counter');
+  let current = 0;
+
+  // Build dots
+  slides.forEach((_, i) => {
+    const d = document.createElement('div');
+    d.className = 'dot' + (i === 0 ? ' active' : '');
+    d.addEventListener('click', () => goto(i));
+    dots.appendChild(d);
+  });
+
+  function goto(n) {
+    slides[current].classList.remove('active');
+    slides[current].classList.add('prev');
+    setTimeout(() => slides[current].classList.remove('prev'), 400);
+
+    current = Math.max(0, Math.min(n, slides.length - 1));
+
+    slides[current].classList.add('active');
+    document.querySelectorAll('.dot').forEach((d, i) => {
+      d.classList.toggle('active', i === current);
+    });
+    counter.textContent = `${current + 1} / ${slides.length}`;
+  }
+
+  document.getElementById('prev').addEventListener('click', () => goto(current - 1));
+  document.getElementById('next').addEventListener('click', () => goto(current + 1));
+
+  document.addEventListener('keydown', e => {
+    if (e.key === 'ArrowRight' || e.key === 'ArrowDown') goto(current + 1);
+    if (e.key === 'ArrowLeft' || e.key === 'ArrowUp') goto(current - 1);
+  });
+
+  // Touch swipe
+  let tx = 0;
+  document.addEventListener('touchstart', e => tx = e.touches[0].clientX);
+  document.addEventListener('touchend', e => {
+    const dx = e.changedTouches[0].clientX - tx;
+    if (Math.abs(dx) > 50) dx < 0 ? goto(current + 1) : goto(current - 1);
+  });
+</script>
+</body>
+</html>

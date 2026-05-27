@@ -1,3 +1,22 @@
+-- =============================================================
+-- ARCHIVED: Alpha Health Track v1 Schema (schema.sql)
+-- Status: SUPERSEDED — do not apply to any database
+-- Superseded by: migrations/001_v3_foundation.sql +
+--                migrations/002_alerts_table.sql +
+--                migrations/003_v3_extension.sql
+-- Reason: v1 flat schema has no Row Level Security (RLS), no profiles
+--   table, and no multi-condition support. It was the original MVP
+--   schema. v3 replaces it with RLS on every table, a profiles table
+--   (linking auth.users to roles), and a patient_conditions join table
+--   for multi-condition RPM. The chatbot_sessions and chatbot_messages
+--   tables defined here are recreated in v3 via 001 and 003 respectively.
+-- Kept for: Reference — the v1 column names (first_name, last_name,
+--   condition, provider_name, risk_level, active on patients;
+--   checkin_date, breathlessness_score, swelling_score,
+--   medications_taken, patient_notes on checkins) are the canonical
+--   reference for what application code in src/api/supabase.ts queries.
+-- =============================================================
+
 -- Alpha Health Track MVP Schema
 -- Run in: Supabase dashboard > SQL Editor
 
