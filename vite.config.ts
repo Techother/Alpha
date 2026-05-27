@@ -14,6 +14,7 @@ export default defineConfig({
     environment: 'node',
     globals: true,
     env: { TZ: 'UTC' },
+    exclude: ['**/node_modules/**', '**/dist/**', '.claude/**'],
     coverage: {
       provider: 'v8',
       include: ['src/api/billing.ts', 'src/api/screening.ts', 'src/api/tcm.ts'],
