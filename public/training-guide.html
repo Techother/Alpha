@@ -1,0 +1,1483 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Alpha Health Track — Employee & Admin Training Guide</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link href="https://fonts.googleapis.com/css2?family=Fraunces:wght@400;600;700;900&family=DM+Sans:wght@400;500;600;700&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet" />
+  <style>
+    /* ── Reset ── */
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    /* ── Tokens ── */
+    :root {
+      --teal:    #0BC5EA;
+      --blue:    #2B6CB0;
+      --dark:    #1A202C;
+      --mid:     #4A5568;
+      --light:   #718096;
+      --border:  #CBD5E0;
+      --bg:      #FFFFFF;
+      --bg-alt:  #F7FAFC;
+      --bg-teal: #EBF8FF;
+      --green:   #276749;
+      --bg-green:#F0FFF4;
+      --amber:   #744210;
+      --bg-amber:#FFFBEB;
+      --red:     #9B2335;
+      --bg-red:  #FFF5F5;
+      --purple:  #44337A;
+      --bg-purple:#FAF5FF;
+      --display: 'Fraunces', serif;
+      --body:    'DM Sans', sans-serif;
+      --mono:    'DM Mono', monospace;
+    }
+
+    /* ── Base ── */
+    html { font-size: 16px; }
+    body {
+      background: var(--bg);
+      color: var(--dark);
+      font-family: var(--body);
+      font-size: 15px;
+      line-height: 1.7;
+      -webkit-print-color-adjust: exact;
+      print-color-adjust: exact;
+    }
+
+    /* ── Print page setup ── */
+    @page {
+      size: letter;
+      margin: 0.75in 0.85in;
+    }
+
+    @media print {
+      body { font-size: 13px; }
+      .cover-page { page-break-after: always; }
+      .toc-page   { page-break-after: always; }
+      .section-break { page-break-before: always; }
+      .no-break { page-break-inside: avoid; }
+      .step-block { page-break-inside: avoid; }
+      nav { display: none; }
+      .pdf-note { display: none; }
+    }
+
+    /* ── Screen nav ── */
+    nav {
+      position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+      background: #fff; border-bottom: 1px solid var(--border);
+      padding: 10px 40px;
+      display: flex; align-items: center; justify-content: space-between;
+      font-size: 13px;
+    }
+    nav .nav-brand {
+      font-family: var(--display); font-weight: 700;
+      color: var(--teal); font-size: 16px;
+    }
+    nav .nav-links { display: flex; gap: 20px; }
+    nav .nav-links a { color: var(--mid); text-decoration: none; }
+    nav .nav-links a:hover { color: var(--teal); }
+    .pdf-note {
+      background: var(--bg-teal); border: 1px solid var(--teal);
+      border-radius: 6px; padding: 10px 16px; font-size: 13px;
+      color: var(--blue); margin: 80px 40px 0;
+      display: flex; align-items: center; gap: 8px;
+    }
+    @media (min-width: 1px) {
+      .page-wrapper { margin-top: 52px; }
+    }
+
+    /* ── Cover page ── */
+    .cover-page {
+      min-height: 100vh;
+      display: flex; flex-direction: column; justify-content: center;
+      padding: 80px 80px 60px;
+      border-bottom: 4px solid var(--teal);
+    }
+    .cover-label {
+      font-family: var(--mono); font-size: 11px; color: var(--teal);
+      text-transform: uppercase; letter-spacing: 3px;
+      margin-bottom: 24px;
+    }
+    .cover-title {
+      font-family: var(--display);
+      font-size: clamp(36px, 5vw, 60px);
+      font-weight: 900; line-height: 1.05;
+      letter-spacing: -1.5px; color: var(--dark);
+      margin-bottom: 20px;
+    }
+    .cover-title em {
+      font-style: normal; color: var(--teal);
+    }
+    .cover-sub {
+      font-size: 18px; color: var(--mid);
+      max-width: 560px; line-height: 1.65;
+      margin-bottom: 60px;
+    }
+    .cover-meta {
+      display: grid; grid-template-columns: repeat(3, 1fr);
+      gap: 32px; max-width: 600px;
+    }
+    .cover-meta-item label {
+      font-family: var(--mono); font-size: 10px; color: var(--light);
+      text-transform: uppercase; letter-spacing: 2px; display: block;
+      margin-bottom: 4px;
+    }
+    .cover-meta-item strong {
+      font-size: 15px; color: var(--dark);
+    }
+    .cover-divider {
+      width: 48px; height: 4px; background: var(--teal);
+      border-radius: 2px; margin-bottom: 32px;
+    }
+    .cover-logo-row {
+      margin-top: auto; padding-top: 40px;
+      border-top: 1px solid var(--border);
+      display: flex; align-items: center; gap: 16px;
+    }
+    .cover-logo {
+      font-family: var(--display); font-weight: 700; font-size: 20px;
+      color: var(--teal);
+    }
+    .cover-logo-sub { font-size: 13px; color: var(--light); }
+
+    /* ── TOC page ── */
+    .toc-page {
+      padding: 60px 80px;
+    }
+    .toc-section-head {
+      font-family: var(--display); font-size: 28px; font-weight: 700;
+      color: var(--dark); margin-bottom: 32px;
+      padding-bottom: 12px; border-bottom: 2px solid var(--teal);
+    }
+    .toc-group { margin-bottom: 28px; }
+    .toc-group-title {
+      font-family: var(--mono); font-size: 10px; color: var(--teal);
+      text-transform: uppercase; letter-spacing: 3px;
+      margin-bottom: 12px;
+    }
+    .toc-entry {
+      display: flex; align-items: baseline; gap: 0;
+      padding: 6px 0;
+      border-bottom: 1px dotted var(--border);
+      font-size: 14px;
+    }
+    .toc-entry .toc-num {
+      font-family: var(--mono); font-size: 11px;
+      color: var(--teal); width: 36px; flex-shrink: 0;
+    }
+    .toc-entry .toc-text { flex: 1; color: var(--dark); }
+    .toc-entry .toc-role {
+      font-size: 11px; color: var(--light);
+      background: var(--bg-alt);
+      padding: 2px 8px; border-radius: 10px;
+      margin-left: 8px; flex-shrink: 0;
+    }
+
+    /* ── Content pages ── */
+    .content {
+      max-width: 900px; margin: 0 auto; padding: 60px 80px;
+    }
+
+    /* ── Section header ── */
+    .section-header {
+      margin-bottom: 40px;
+    }
+    .section-eyebrow {
+      font-family: var(--mono); font-size: 11px;
+      color: var(--teal); text-transform: uppercase; letter-spacing: 3px;
+      margin-bottom: 8px;
+    }
+    .section-h1 {
+      font-family: var(--display);
+      font-size: clamp(28px, 4vw, 40px);
+      font-weight: 800; line-height: 1.1; letter-spacing: -0.8px;
+      color: var(--dark); margin-bottom: 12px;
+    }
+    .section-desc {
+      font-size: 16px; color: var(--mid); max-width: 620px; line-height: 1.65;
+    }
+    .section-divider {
+      height: 3px; width: 48px; background: var(--teal);
+      border-radius: 2px; margin: 20px 0 36px;
+    }
+
+    /* ── Role badge ── */
+    .role-badge {
+      display: inline-flex; align-items: center; gap: 6px;
+      padding: 4px 12px; border-radius: 20px;
+      font-family: var(--mono); font-size: 11px; font-weight: 500;
+      text-transform: uppercase; letter-spacing: 1.5px;
+      margin-bottom: 8px;
+    }
+    .role-badge.patient { background: var(--bg-green); color: var(--green); }
+    .role-badge.clinician { background: var(--bg-teal); color: var(--blue); }
+    .role-badge.admin { background: var(--bg-purple); color: var(--purple); }
+
+    /* ── Workflow heading ── */
+    h2.wf-title {
+      font-family: var(--display); font-size: 22px; font-weight: 700;
+      color: var(--dark); margin: 40px 0 6px; letter-spacing: -0.4px;
+    }
+    h2.wf-title .wf-num {
+      font-family: var(--mono); font-size: 13px; color: var(--teal);
+      margin-right: 10px; vertical-align: 2px;
+    }
+    .wf-desc {
+      font-size: 14px; color: var(--mid); margin-bottom: 20px;
+      max-width: 620px;
+    }
+
+    /* ── Step block ── */
+    .step-block {
+      background: var(--bg-alt);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 20px 24px;
+      margin-bottom: 16px;
+    }
+    .step-block h3 {
+      font-size: 14px; font-weight: 700; color: var(--dark);
+      margin-bottom: 10px; display: flex; align-items: flex-start; gap: 10px;
+    }
+    .step-num {
+      flex-shrink: 0;
+      width: 24px; height: 24px; border-radius: 50%;
+      background: var(--teal); color: #fff;
+      font-family: var(--mono); font-size: 11px; font-weight: 700;
+      display: flex; align-items: center; justify-content: center;
+    }
+    .step-block ul {
+      list-style: none; padding-left: 34px;
+    }
+    .step-block ul li {
+      font-size: 13.5px; color: var(--mid);
+      padding: 3px 0; position: relative;
+    }
+    .step-block ul li::before {
+      content: '→'; position: absolute; left: -18px;
+      color: var(--teal); font-size: 12px;
+    }
+    .step-block p {
+      font-size: 13.5px; color: var(--mid); padding-left: 34px; line-height: 1.6;
+    }
+    .step-block .note {
+      margin-top: 10px; padding: 8px 12px;
+      background: var(--bg-teal); border-left: 3px solid var(--teal);
+      border-radius: 4px; font-size: 12px; color: var(--blue);
+      padding-left: 12px;
+    }
+
+    /* ── Info callout boxes ── */
+    .callout {
+      border-radius: 8px; padding: 16px 20px;
+      margin: 20px 0; font-size: 14px;
+    }
+    .callout-label {
+      font-family: var(--mono); font-size: 10px; font-weight: 700;
+      text-transform: uppercase; letter-spacing: 2px;
+      margin-bottom: 6px; display: block;
+    }
+    .callout.info { background: var(--bg-teal); border: 1px solid #BEE3F8; }
+    .callout.info .callout-label { color: var(--blue); }
+    .callout.info p { color: #2C5282; }
+    .callout.warning { background: var(--bg-amber); border: 1px solid #FCEFC7; }
+    .callout.warning .callout-label { color: var(--amber); }
+    .callout.warning p { color: #7B341E; }
+    .callout.success { background: var(--bg-green); border: 1px solid #C6F6D5; }
+    .callout.success .callout-label { color: var(--green); }
+    .callout.success p { color: #22543D; }
+    .callout.danger { background: var(--bg-red); border: 1px solid #FED7D7; }
+    .callout.danger .callout-label { color: var(--red); }
+    .callout.danger p { color: #742A2A; }
+
+    /* ── Data table ── */
+    table {
+      width: 100%; border-collapse: collapse;
+      font-size: 13px; margin: 20px 0;
+    }
+    thead { background: var(--dark); color: #fff; }
+    thead th {
+      padding: 10px 14px; text-align: left;
+      font-family: var(--mono); font-size: 11px;
+      text-transform: uppercase; letter-spacing: 1px;
+    }
+    tbody tr:nth-child(even) { background: var(--bg-alt); }
+    tbody td {
+      padding: 9px 14px; color: var(--dark);
+      border-bottom: 1px solid var(--border);
+      vertical-align: top;
+    }
+    tbody td:first-child { font-weight: 600; }
+    .code-pill {
+      font-family: var(--mono); font-size: 11px;
+      background: var(--bg-teal); color: var(--blue);
+      padding: 2px 8px; border-radius: 4px; display: inline-block;
+    }
+
+    /* ── Flowchart ── */
+    .flow {
+      display: flex; flex-direction: column; gap: 0;
+      margin: 20px 0;
+    }
+    .flow-row {
+      display: flex; align-items: stretch; gap: 0;
+    }
+    .flow-node {
+      flex: 1;
+      background: var(--bg-alt); border: 1px solid var(--border);
+      border-radius: 8px; padding: 12px 16px;
+      font-size: 13px; font-weight: 600; color: var(--dark);
+      text-align: center;
+    }
+    .flow-node.teal { background: var(--bg-teal); border-color: #90CDF4; color: var(--blue); }
+    .flow-node.green { background: var(--bg-green); border-color: #9AE6B4; color: var(--green); }
+    .flow-node.amber { background: var(--bg-amber); border-color: #FCEFC7; color: var(--amber); }
+    .flow-node.red { background: var(--bg-red); border-color: #FEB2B2; color: var(--red); }
+    .flow-arrow {
+      width: 30px; flex-shrink: 0;
+      display: flex; align-items: center; justify-content: center;
+      color: var(--teal); font-size: 18px; font-weight: 700;
+    }
+    .flow-connector {
+      display: flex; justify-content: center;
+      color: var(--teal); font-size: 18px; padding: 2px 0;
+    }
+    .flow-node sub { font-size: 11px; color: var(--light); font-weight: 400; display: block; margin-top: 2px; }
+
+    /* ── CPT table ── */
+    .cpt-grid {
+      display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px;
+      margin: 20px 0;
+    }
+    .cpt-card {
+      background: var(--bg-alt); border: 1px solid var(--border);
+      border-radius: 10px; padding: 18px;
+    }
+    .cpt-code {
+      font-family: var(--mono); font-size: 14px; font-weight: 700;
+      color: var(--teal); margin-bottom: 6px;
+    }
+    .cpt-rate {
+      font-family: var(--display); font-size: 22px; font-weight: 700;
+      color: var(--dark); margin-bottom: 6px; line-height: 1;
+    }
+    .cpt-desc { font-size: 12px; color: var(--mid); margin-bottom: 12px; line-height: 1.5; }
+    .cpt-req { font-size: 11px; color: var(--light); border-top: 1px solid var(--border); padding-top: 10px; }
+    .cpt-req strong { color: var(--dark); display: block; margin-bottom: 2px; }
+
+    /* ── Screening scoring table ── */
+    .score-band {
+      display: flex; gap: 0; margin: 16px 0; border-radius: 8px; overflow: hidden;
+    }
+    .score-cell {
+      flex: 1; padding: 10px; text-align: center; font-size: 12px;
+    }
+    .score-cell .score-range { font-family: var(--mono); font-size: 13px; font-weight: 700; display: block; }
+    .score-cell .score-label { font-size: 11px; display: block; }
+    .band-none { background: #E6FFFA; color: #234E52; }
+    .band-mild { background: #EBF8FF; color: #2A4365; }
+    .band-mod  { background: #FFFBEB; color: #744210; }
+    .band-sev  { background: #FFF5F5; color: #9B2335; }
+
+    /* ── Page break helpers ── */
+    .pb-before { page-break-before: always; }
+    .pb-after  { page-break-after: always; }
+    hr.section-rule {
+      border: none; border-top: 2px solid var(--border);
+      margin: 48px 0;
+    }
+  </style>
+</head>
+<body>
+
+<!-- ── Screen nav (hidden in print) ── -->
+<nav>
+  <div class="nav-brand">Alpha Health Track</div>
+  <div class="nav-links">
+    <a href="#patient">Patient</a>
+    <a href="#clinician">Clinician</a>
+    <a href="#admin">Admin</a>
+    <a href="#appendix">Appendix</a>
+  </div>
+</nav>
+
+<div class="pdf-note">
+  📄 To save as PDF: File → Print → Change destination to "Save as PDF" → Save
+</div>
+
+<div class="page-wrapper">
+
+<!-- ════════════════════════════════════════════════════════════
+     COVER PAGE
+════════════════════════════════════════════════════════════ -->
+<div class="cover-page">
+  <div class="cover-label">Internal Document · Confidential</div>
+  <div class="cover-divider"></div>
+  <div class="cover-title">Employee &amp; Admin<br><em>Training Guide</em></div>
+  <div class="cover-sub">
+    Role-based workflows for Patients, Clinicians, and Admins.
+    This guide covers onboarding, daily operations, clinical protocols,
+    billing, and system administration for Alpha Health Track.
+  </div>
+  <div class="cover-meta">
+    <div class="cover-meta-item">
+      <label>Document Type</label>
+      <strong>Internal Training</strong>
+    </div>
+    <div class="cover-meta-item">
+      <label>Version</label>
+      <strong>1.0 — May 2026</strong>
+    </div>
+    <div class="cover-meta-item">
+      <label>Classification</label>
+      <strong>Confidential</strong>
+    </div>
+    <div class="cover-meta-item">
+      <label>Audience</label>
+      <strong>All Staff &amp; Admins</strong>
+    </div>
+    <div class="cover-meta-item">
+      <label>Owner</label>
+      <strong>Larry Ennis Goode</strong>
+    </div>
+    <div class="cover-meta-item">
+      <label>Contact</label>
+      <strong>larry@techother.com</strong>
+    </div>
+  </div>
+  <div class="cover-logo-row">
+    <div class="cover-logo">Alpha Health Track</div>
+    <div class="cover-logo-sub">Remote Patient Monitoring · Albany, CA</div>
+  </div>
+</div>
+
+<!-- ════════════════════════════════════════════════════════════
+     TABLE OF CONTENTS
+════════════════════════════════════════════════════════════ -->
+<div class="toc-page">
+  <div class="toc-section-head">Table of Contents</div>
+
+  <div class="toc-group">
+    <div class="toc-group-title">Overview</div>
+    <div class="toc-entry"><span class="toc-num">01</span><span class="toc-text">System Overview &amp; Architecture</span></div>
+    <div class="toc-entry"><span class="toc-num">02</span><span class="toc-text">User Roles &amp; Access Levels</span></div>
+    <div class="toc-entry"><span class="toc-num">03</span><span class="toc-text">Signing In &amp; Authentication</span></div>
+  </div>
+
+  <div class="toc-group">
+    <div class="toc-group-title">Section A — Patient Workflows</div>
+    <div class="toc-entry"><span class="toc-num">A1</span><span class="toc-text">Patient Enrollment &amp; Onboarding</span><span class="toc-role">Clinician</span></div>
+    <div class="toc-entry"><span class="toc-num">A2</span><span class="toc-text">Daily SMS Check-In Flow</span><span class="toc-role">Patient</span></div>
+    <div class="toc-entry"><span class="toc-num">A3</span><span class="toc-text">Medication Tracking</span><span class="toc-role">Patient</span></div>
+    <div class="toc-entry"><span class="toc-num">A4</span><span class="toc-text">Viewing Vitals &amp; Trends</span><span class="toc-role">Patient</span></div>
+    <div class="toc-entry"><span class="toc-num">A5</span><span class="toc-text">Alert Escalation &amp; Emergency Guidance</span><span class="toc-role">Patient</span></div>
+  </div>
+
+  <div class="toc-group">
+    <div class="toc-group-title">Section B — Clinician Workflows</div>
+    <div class="toc-entry"><span class="toc-num">B1</span><span class="toc-text">Dashboard &amp; Daily Monitoring</span><span class="toc-role">Clinician</span></div>
+    <div class="toc-entry"><span class="toc-num">B2</span><span class="toc-text">Patient Management &amp; Records</span><span class="toc-role">Clinician</span></div>
+    <div class="toc-entry"><span class="toc-num">B3</span><span class="toc-text">Alert Response Protocol</span><span class="toc-role">Clinician</span></div>
+    <div class="toc-entry"><span class="toc-num">B4</span><span class="toc-text">Mental Health Screening (PHQ-9 / GAD-7)</span><span class="toc-role">Clinician</span></div>
+    <div class="toc-entry"><span class="toc-num">B5</span><span class="toc-text">Care Programs — CCM &amp; TCM</span><span class="toc-role">Clinician</span></div>
+    <div class="toc-entry"><span class="toc-num">B6</span><span class="toc-text">RPM Billing &amp; CPT Code Capture</span><span class="toc-role">Clinician</span></div>
+    <div class="toc-entry"><span class="toc-num">B7</span><span class="toc-text">Calendar &amp; Appointment Management</span><span class="toc-role">Clinician</span></div>
+    <div class="toc-entry"><span class="toc-num">B8</span><span class="toc-text">Team Messaging via Slack</span><span class="toc-role">Clinician</span></div>
+  </div>
+
+  <div class="toc-group">
+    <div class="toc-group-title">Section C — Admin Workflows</div>
+    <div class="toc-entry"><span class="toc-num">C1</span><span class="toc-text">User Provisioning &amp; Access Control</span><span class="toc-role">Admin</span></div>
+    <div class="toc-entry"><span class="toc-num">C2</span><span class="toc-text">System Setup &amp; Integration Configuration</span><span class="toc-role">Admin</span></div>
+    <div class="toc-entry"><span class="toc-num">C3</span><span class="toc-text">Airtable &amp; Backlog Management</span><span class="toc-role">Admin</span></div>
+    <div class="toc-entry"><span class="toc-num">C4</span><span class="toc-text">Slack Channel &amp; Alert Configuration</span><span class="toc-role">Admin</span></div>
+    <div class="toc-entry"><span class="toc-num">C5</span><span class="toc-text">Billing Oversight &amp; CSV Export</span><span class="toc-role">Admin</span></div>
+    <div class="toc-entry"><span class="toc-num">C6</span><span class="toc-text">Compliance, Audit Logs &amp; HIPAA</span><span class="toc-role">Admin</span></div>
+  </div>
+
+  <div class="toc-group">
+    <div class="toc-group-title">Appendix</div>
+    <div class="toc-entry"><span class="toc-num">I</span><span class="toc-text">CPT Code Quick Reference (99454 / 99457 / 99458)</span></div>
+    <div class="toc-entry"><span class="toc-num">II</span><span class="toc-text">PHQ-9 &amp; GAD-7 Scoring Reference</span></div>
+    <div class="toc-entry"><span class="toc-num">III</span><span class="toc-text">Alert Severity Definitions</span></div>
+    <div class="toc-entry"><span class="toc-num">IV</span><span class="toc-text">Escalation Contact List</span></div>
+  </div>
+</div>
+
+<!-- ════════════════════════════════════════════════════════════
+     SYSTEM OVERVIEW
+════════════════════════════════════════════════════════════ -->
+<div class="content section-break" id="overview">
+  <div class="section-header">
+    <div class="section-eyebrow">Overview</div>
+    <h1 class="section-h1">System Overview &amp; Architecture</h1>
+    <div class="section-divider"></div>
+    <p class="section-desc">
+      Alpha Health Track is a cloud-based Remote Patient Monitoring (RPM) platform
+      designed for cardiovascular practices managing chronic-care patients.
+      It automates CMS billing compliance, collects daily vitals via SMS,
+      and surfaces clinical alerts before they become crises.
+    </p>
+  </div>
+
+  <h2 class="wf-title"><span class="wf-num">01</span>Core Technology Stack</h2>
+  <table class="no-break">
+    <thead><tr><th>Component</th><th>Technology</th><th>Purpose</th></tr></thead>
+    <tbody>
+      <tr><td>Frontend App</td><td>React 19 + Vite · TypeScript</td><td>Clinical dashboard, patient management, billing</td></tr>
+      <tr><td>Authentication &amp; Database</td><td>Supabase (PostgreSQL)</td><td>Secure login, patient records, check-ins, alerts</td></tr>
+      <tr><td>Patient Communications</td><td>Twilio SMS</td><td>Daily check-in messages sent to patient phones</td></tr>
+      <tr><td>Team Notifications</td><td>Slack</td><td>Real-time clinical alerts pushed to care team channels</td></tr>
+      <tr><td>Appointments</td><td>Google Calendar</td><td>Patient scheduling, follow-up appointments</td></tr>
+      <tr><td>Project Tracking</td><td>Airtable</td><td>Backlog stories, sprint management</td></tr>
+      <tr><td>Hosting &amp; API</td><td>Vercel (serverless)</td><td>All API proxy functions, HIPAA-ready infrastructure</td></tr>
+    </tbody>
+  </table>
+
+  <h2 class="wf-title"><span class="wf-num">02</span>User Roles &amp; Access Levels</h2>
+  <table class="no-break">
+    <thead><tr><th>Role</th><th>Access</th><th>Primary Responsibilities</th></tr></thead>
+    <tbody>
+      <tr>
+        <td><span class="role-badge patient">Patient</span></td>
+        <td>SMS interface only — no dashboard login</td>
+        <td>Respond to daily check-ins, track medications, receive SMS reminders</td>
+      </tr>
+      <tr>
+        <td><span class="role-badge clinician">Clinician</span></td>
+        <td>Full dashboard (read + write on own patients)</td>
+        <td>Monitor vitals, respond to alerts, run screenings, manage care programs, log RPM time</td>
+      </tr>
+      <tr>
+        <td><span class="role-badge admin">Admin</span></td>
+        <td>Full dashboard + Setup panel + all configuration</td>
+        <td>User provisioning, integration keys, billing oversight, Slack routing, system health</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <h2 class="wf-title"><span class="wf-num">03</span>Signing In &amp; Authentication</h2>
+  <p class="wf-desc">Alpha Health Track uses Supabase authentication with email + password. All API calls carry a short-lived JWT verified server-side — credentials never reach the browser bundle.</p>
+
+  <div class="step-block no-break">
+    <h3><span class="step-num">1</span> Navigate to the application URL</h3>
+    <p>Open <strong>https://cardiotrack-three.vercel.app</strong> in Chrome, Safari, or Firefox. The app redirects unauthenticated users to the sign-in screen.</p>
+  </div>
+  <div class="step-block no-break">
+    <h3><span class="step-num">2</span> Enter credentials</h3>
+    <ul>
+      <li>Enter your work email address</li>
+      <li>Enter the password provided by your Admin (change it on first login)</li>
+      <li>Click <strong>Sign In</strong></li>
+    </ul>
+  </div>
+  <div class="step-block no-break">
+    <h3><span class="step-num">3</span> Session management</h3>
+    <ul>
+      <li>Sessions last until you explicitly sign out</li>
+      <li>Click your initials / avatar in the top-right → <strong>Sign Out</strong></li>
+      <li>Do not share credentials — each clinician must have a unique login</li>
+    </ul>
+    <div class="note">⚠ HIPAA Requirement: Always sign out when leaving an unattended workstation.</div>
+  </div>
+</div>
+
+<!-- ════════════════════════════════════════════════════════════
+     SECTION A — PATIENT WORKFLOWS
+════════════════════════════════════════════════════════════ -->
+<div class="content section-break" id="patient">
+  <div class="section-header">
+    <span class="role-badge patient">● Patient</span>
+    <h1 class="section-h1">Section A<br>Patient Workflows</h1>
+    <div class="section-divider"></div>
+    <p class="section-desc">
+      Patients interact with Alpha Health Track entirely through SMS — no app download required.
+      All phone-based workflows are described here. Clinician-side enrollment steps are noted where relevant.
+    </p>
+  </div>
+
+  <!-- A1 -->
+  <h2 class="wf-title"><span class="wf-num">A1</span>Patient Enrollment &amp; Onboarding</h2>
+  <p class="wf-desc">Enrollment is performed by a clinician in the Patients section of the dashboard. The patient receives an SMS confirmation once enrolled.</p>
+
+  <div class="step-block no-break">
+    <h3><span class="step-num">1</span> Clinician creates the patient record</h3>
+    <ul>
+      <li>Navigate to <strong>Patients</strong> → click <strong>Add Patient</strong></li>
+      <li>Enter: full name, date of birth, cell phone number, primary diagnosis (ICD-10), assigned provider</li>
+      <li>Enable RPM, CCM, or TCM enrollment as appropriate</li>
+    </ul>
+  </div>
+  <div class="step-block no-break">
+    <h3><span class="step-num">2</span> Obtain written consent</h3>
+    <ul>
+      <li>Print or email the RPM consent form from the Setup panel</li>
+      <li>Patient (or guardian) must sign before first SMS is sent</li>
+      <li>Upload signed consent document to the patient's chart</li>
+    </ul>
+    <div class="note">⚠ CMS requires documented patient consent before billing CPT 99454.</div>
+  </div>
+  <div class="step-block no-break">
+    <h3><span class="step-num">3</span> Send welcome SMS</h3>
+    <ul>
+      <li>In the patient record → click <strong>Send Test SMS</strong> to verify the phone number</li>
+      <li>The patient receives: "Alpha Health Track: This is a test message from your care team. Reply STOP to unsubscribe."</li>
+      <li>If the patient replies STOP, flag the chart and use an alternate contact method</li>
+    </ul>
+  </div>
+  <div class="step-block no-break">
+    <h3><span class="step-num">4</span> Patient orientation call (recommended)</h3>
+    <ul>
+      <li>Call the patient to explain: daily check-ins start tomorrow at 9 AM</li>
+      <li>Explain the response format: they reply with numbers or short answers</li>
+      <li>Confirm they can receive and reply to texts on their phone</li>
+    </ul>
+  </div>
+
+  <!-- A2 -->
+  <h2 class="wf-title"><span class="wf-num">A2</span>Daily SMS Check-In Flow</h2>
+  <p class="wf-desc">Every enrolled patient receives an automated SMS check-in each morning. The platform collects responses and creates a check-in record in Supabase.</p>
+
+  <div class="flow no-break">
+    <div class="flow-row">
+      <div class="flow-node teal">9:00 AM<sub>Automated SMS sent to patient</sub></div>
+      <div class="flow-arrow">→</div>
+      <div class="flow-node">Patient replies<sub>Wellness score (1–5) + weight in lbs</sub></div>
+      <div class="flow-arrow">→</div>
+      <div class="flow-node green">Check-in recorded<sub>Stored in Supabase</sub></div>
+    </div>
+    <div class="flow-connector">↓</div>
+    <div class="flow-row">
+      <div class="flow-node amber">Threshold exceeded?<sub>BP &gt; 180, weight ↑ &gt; 3 lbs, score 4–5</sub></div>
+      <div class="flow-arrow">→</div>
+      <div class="flow-node red">Alert created<sub>Pushed to Slack + Alerts panel</sub></div>
+      <div class="flow-arrow">→</div>
+      <div class="flow-node teal">Clinician notified<sub>Real-time Slack message</sub></div>
+    </div>
+  </div>
+
+  <div class="step-block no-break">
+    <h3><span class="step-num">1</span> Patient receives morning SMS</h3>
+    <p>Example message: <em>"Good morning, Maria 👋 Time for your daily Alpha Health Track check-in. How are you feeling today? Reply 1 (great) through 5 (very unwell)."</em></p>
+  </div>
+  <div class="step-block no-break">
+    <h3><span class="step-num">2</span> Patient responds to prompts</h3>
+    <ul>
+      <li>Reply with a number 1–5 for wellness score</li>
+      <li>Follow-up prompt asks for today's weight in lbs</li>
+      <li>Optional: additional prompts for blood pressure readings (systolic/diastolic)</li>
+    </ul>
+  </div>
+  <div class="step-block no-break">
+    <h3><span class="step-num">3</span> Response confirmation</h3>
+    <p>Patient receives: <em>"✅ Got it. Your nurse has been notified. Keep it up, Maria!"</em></p>
+  </div>
+  <div class="step-block no-break">
+    <h3><span class="step-num">4</span> Missed check-in handling</h3>
+    <ul>
+      <li>If no response by 11 AM, the system flags the patient as "no response today"</li>
+      <li>Clinician reviews the Alerts panel for missed check-ins exceeding 2 days</li>
+      <li>A phone call outreach is logged as an RPM interaction (counts toward CPT minutes)</li>
+    </ul>
+  </div>
+
+  <callout class="callout info">
+    <span class="callout-label">Patient Tip</span>
+    <p>Patients can reply STOP at any time to opt out of SMS. If this occurs, notify the care team immediately so the provider can establish an alternative monitoring method before billing is affected.</p>
+  </callout>
+
+  <!-- A3 -->
+  <h2 class="wf-title"><span class="wf-num">A3</span>Medication Tracking</h2>
+  <p class="wf-desc">Patients receive daily medication reminders. Adherence data feeds into the patient's clinical record and is visible to clinicians.</p>
+
+  <div class="step-block no-break">
+    <h3><span class="step-num">1</span> Clinician adds medications</h3>
+    <ul>
+      <li>In the patient record → <strong>Medications</strong> tab → <strong>Add Medication</strong></li>
+      <li>Enter: drug name, dose, frequency, start date</li>
+    </ul>
+  </div>
+  <div class="step-block no-break">
+    <h3><span class="step-num">2</span> Patient receives daily reminder</h3>
+    <p>SMS example: <em>"Alpha Health Track reminder: Did you take your Lisinopril 10mg today? Reply YES or NO."</em></p>
+  </div>
+  <div class="step-block no-break">
+    <h3><span class="step-num">3</span> Adherence recorded</h3>
+    <ul>
+      <li>YES → marks dose as taken for the day</li>
+      <li>NO → marks as missed; flags for clinician review if 3+ consecutive missed doses</li>
+      <li>Clinician views adherence percentage in the Medications section of the patient chart</li>
+    </ul>
+  </div>
+
+  <!-- A4 -->
+  <h2 class="wf-title"><span class="wf-num">A4</span>Viewing Vitals &amp; Trends</h2>
+  <p class="wf-desc">Patients do not have a dashboard login. Clinicians review trends on their behalf. This section describes what clinicians see when reviewing patient vitals.</p>
+
+  <div class="step-block no-break">
+    <h3><span class="step-num">1</span> Open the patient chart</h3>
+    <ul>
+      <li>Go to <strong>Patients</strong> → search by name or MRN</li>
+      <li>Click the patient row to open the full chart</li>
+    </ul>
+  </div>
+  <div class="step-block no-break">
+    <h3><span class="step-num">2</span> Review check-in history</h3>
+    <ul>
+      <li>The chart shows the last 30 days of check-in data in a trend graph</li>
+      <li>Green = within normal range · Amber = borderline · Red = threshold exceeded</li>
+    </ul>
+  </div>
+  <div class="step-block no-break">
+    <h3><span class="step-num">3</span> Share summary with patient</h3>
+    <ul>
+      <li>During follow-up calls, verbally share trend data from the chart</li>
+      <li>Example: "Your weight has been stable for 3 weeks — great progress."</li>
+    </ul>
+  </div>
+
+  <!-- A5 -->
+  <h2 class="wf-title"><span class="wf-num">A5</span>Alert Escalation &amp; Emergency Guidance</h2>
+  <p class="wf-desc">Critical readings trigger an immediate alert. Patients are instructed to call 911 if they are in distress — the platform does not replace emergency services.</p>
+
+  <div class="callout danger no-break">
+    <span class="callout-label">⚠ Emergency Protocol</span>
+    <p>If a patient reports a wellness score of 5, or critical BP readings (&gt;180/110), the system sends an alert AND a clinician must call the patient within 30 minutes. If the patient cannot be reached, follow your practice's emergency escalation protocol and consider contacting EMS.</p>
+  </div>
+
+  <div class="step-block no-break">
+    <h3><span class="step-num">1</span> System detects threshold breach</h3>
+    <ul>
+      <li>Blood pressure systolic &gt; 180 mmHg or diastolic &gt; 110 mmHg</li>
+      <li>Weight gain &gt; 3 lbs in 24 hours or &gt; 5 lbs in 7 days</li>
+      <li>Wellness score of 4 or 5 two days in a row</li>
+    </ul>
+  </div>
+  <div class="step-block no-break">
+    <h3><span class="step-num">2</span> Alert is created and pushed to Slack</h3>
+    <p>The care team channel receives a formatted Slack alert with the patient name, MRN, alert type, recorded value, and threshold. The Alerts panel in the dashboard also shows the alert in red.</p>
+  </div>
+  <div class="step-block no-break">
+    <h3><span class="step-num">3</span> Clinician calls patient</h3>
+    <ul>
+      <li>Call the patient's phone directly (not SMS)</li>
+      <li>Assess: is the patient in distress? do they need EMS?</li>
+      <li>Log the call time in the patient chart (this counts as RPM time)</li>
+    </ul>
+  </div>
+  <div class="step-block no-break">
+    <h3><span class="step-num">4</span> Acknowledge alert</h3>
+    <ul>
+      <li>In the Alerts panel → click the alert → <strong>Acknowledge</strong></li>
+      <li>Add a note describing action taken (e.g., "Called patient. BP resolved. Continue monitoring.")</li>
+    </ul>
+  </div>
+</div>
+
+<!-- ════════════════════════════════════════════════════════════
+     SECTION B — CLINICIAN WORKFLOWS
+════════════════════════════════════════════════════════════ -->
+<div class="content section-break" id="clinician">
+  <div class="section-header">
+    <span class="role-badge clinician">● Clinician</span>
+    <h1 class="section-h1">Section B<br>Clinician Workflows</h1>
+    <div class="section-divider"></div>
+    <p class="section-desc">
+      Clinicians use the Alpha Health Track dashboard daily to monitor patients,
+      respond to alerts, conduct screenings, manage care programs, and ensure
+      all qualifying RPM interactions are captured for billing.
+    </p>
+  </div>
+
+  <!-- B1 -->
+  <h2 class="wf-title"><span class="wf-num">B1</span>Dashboard &amp; Daily Monitoring</h2>
+  <p class="wf-desc">The Dashboard is the first screen after login. It provides a real-time snapshot of the patient panel: alerts, check-in compliance, and billing status.</p>
+
+  <div class="step-block no-break">
+    <h3><span class="step-num">1</span> Review the morning summary card</h3>
+    <ul>
+      <li><strong>Open Alerts</strong> — number of unacknowledged critical alerts (red badge)</li>
+      <li><strong>Check-ins Today</strong> — % of patients who completed morning check-in</li>
+      <li><strong>Patients Near CPT Threshold</strong> — patients within 5 minutes of qualifying for 99457/99458</li>
+    </ul>
+  </div>
+  <div class="step-block no-break">
+    <h3><span class="step-num">2</span> Prioritize work order</h3>
+    <ul>
+      <li>Address red (critical) alerts first</li>
+      <li>Follow up on patients with missed check-ins</li>
+      <li>Log time for patients near billing thresholds</li>
+    </ul>
+  </div>
+  <div class="step-block no-break">
+    <h3><span class="step-num">3</span> End-of-day check</h3>
+    <ul>
+      <li>Ensure all open alerts are acknowledged with a note</li>
+      <li>Verify any RPM time logged during outreach calls</li>
+      <li>Review TCM episodes with approaching deadlines</li>
+    </ul>
+  </div>
+
+  <!-- B2 -->
+  <h2 class="wf-title"><span class="wf-num">B2</span>Patient Management &amp; Records</h2>
+  <p class="wf-desc">The Patients section lists all enrolled patients. Clinicians can search, filter, and drill into individual patient charts.</p>
+
+  <div class="step-block no-break">
+    <h3><span class="step-num">1</span> Search &amp; filter</h3>
+    <ul>
+      <li>Use the search bar to find by name, MRN, or phone number</li>
+      <li>Filter by: diagnosis, enrollment type (RPM/CCM/TCM), alert status</li>
+    </ul>
+  </div>
+  <div class="step-block no-break">
+    <h3><span class="step-num">2</span> Open a patient chart</h3>
+    <ul>
+      <li>Click the patient row → full chart opens</li>
+      <li>Tabs available: Overview, Check-ins, Medications, Alerts, Screenings, Billing, TCM, Notes</li>
+    </ul>
+  </div>
+  <div class="step-block no-break">
+    <h3><span class="step-num">3</span> Log a patient interaction</h3>
+    <ul>
+      <li>After any call, video visit, or message: click <strong>Log Interaction</strong></li>
+      <li>Enter: date, duration in minutes, interaction type (call, SMS review, in-person)</li>
+      <li>Minutes accumulate toward CPT 99457 and 99458 thresholds</li>
+    </ul>
+  </div>
+  <div class="step-block no-break">
+    <h3><span class="step-num">4</span> Add or update clinical notes</h3>
+    <ul>
+      <li>Use the Notes tab to add free-text clinical observations</li>
+      <li>Notes are timestamped and associated with your provider ID</li>
+      <li>Do not record PHI in Slack messages — use the Notes tab for clinical documentation</li>
+    </ul>
+  </div>
+
+  <!-- B3 -->
+  <h2 class="wf-title"><span class="wf-num">B3</span>Alert Response Protocol</h2>
+  <p class="wf-desc">Open alerts appear in the Alerts panel and are simultaneously pushed to Slack. All alerts must be acknowledged before end of shift.</p>
+
+  <table class="no-break">
+    <thead><tr><th>Severity</th><th>Color</th><th>Examples</th><th>Response Time</th></tr></thead>
+    <tbody>
+      <tr><td>Critical</td><td>🔴 Red</td><td>BP &gt; 180/110, acute distress score 5</td><td>&lt; 30 minutes</td></tr>
+      <tr><td>Warning</td><td>🟡 Amber</td><td>Weight ↑ 3 lbs, 2 missed check-ins, score 4</td><td>&lt; 4 hours</td></tr>
+      <tr><td>Info</td><td>🔵 Blue</td><td>Medication missed 1 day, slight BP elevation</td><td>Same business day</td></tr>
+    </tbody>
+  </table>
+
+  <div class="step-block no-break">
+    <h3><span class="step-num">1</span> Navigate to Alerts</h3>
+    <p>Click <strong>Alerts</strong> in the sidebar. Critical alerts are sorted to the top.</p>
+  </div>
+  <div class="step-block no-break">
+    <h3><span class="step-num">2</span> Review alert details</h3>
+    <ul>
+      <li>Patient name, MRN, alert type, recorded value vs. threshold, timestamp</li>
+      <li>Click <strong>View Patient</strong> to open the full chart in context</li>
+    </ul>
+  </div>
+  <div class="step-block no-break">
+    <h3><span class="step-num">3</span> Take action and acknowledge</h3>
+    <ul>
+      <li>Take clinical action (call patient, adjust care plan, notify provider)</li>
+      <li>Click <strong>Acknowledge</strong> → add a mandatory resolution note</li>
+      <li>Alert moves from Open → Resolved; stays visible in chart history</li>
+    </ul>
+  </div>
+
+  <!-- B4 -->
+  <h2 class="wf-title"><span class="wf-num">B4</span>Mental Health Screening (PHQ-9 / GAD-7)</h2>
+  <p class="wf-desc">The Screening panel administers and scores validated depression and anxiety screenings. Conduct PHQ-9 at enrollment and every 90 days; GAD-7 as indicated.</p>
+
+  <div class="step-block no-break">
+    <h3><span class="step-num">1</span> Identify patients due for screening</h3>
+    <ul>
+      <li>Navigate to <strong>Screening</strong></li>
+      <li>The panel shows patients flagged as "Overdue" (no screening in 90+ days)</li>
+    </ul>
+  </div>
+  <div class="step-block no-break">
+    <h3><span class="step-num">2</span> Administer the questionnaire</h3>
+    <ul>
+      <li>Select the patient → choose <strong>PHQ-9</strong> or <strong>GAD-7</strong></li>
+      <li>Read each question aloud (or have patient self-complete) and enter responses 0–3</li>
+      <li>Click <strong>Calculate Score</strong> — the system scores and risk-stratifies automatically</li>
+    </ul>
+  </div>
+  <div class="step-block no-break">
+    <h3><span class="step-num">3</span> Review result and document</h3>
+    <ul>
+      <li>Score, severity band, and recommended actions appear immediately</li>
+      <li>For PHQ-9 ≥ 10 (moderate): initiate stepped-care protocol per practice guidelines</li>
+      <li>For PHQ-9 question 9 (suicidality) &gt; 0: follow your practice's safety protocol immediately</li>
+      <li>Click <strong>Save Result</strong> — stored in the patient's screening history</li>
+    </ul>
+    <div class="note">See Appendix II for full PHQ-9 and GAD-7 scoring reference.</div>
+  </div>
+
+  <!-- B5 -->
+  <h2 class="wf-title"><span class="wf-num">B5</span>Care Programs — CCM &amp; TCM</h2>
+  <p class="wf-desc">The Care Programs panel manages Chronic Care Management (CCM) and Transitional Care Management (TCM) episodes for qualifying patients.</p>
+
+  <div class="step-block no-break">
+    <h3><span class="step-num">1</span> CCM — Chronic Care Management</h3>
+    <ul>
+      <li>Eligible: patients with 2+ chronic conditions</li>
+      <li>Minimum 20 min/month of care coordination — the system tracks automatically</li>
+      <li>Navigate to <strong>Care Programs</strong> → <strong>CCM</strong> tab → select patient → <strong>Log CCM Time</strong></li>
+      <li>Enter date, duration, and type of coordination activity</li>
+    </ul>
+  </div>
+  <div class="step-block no-break">
+    <h3><span class="step-num">2</span> TCM — Transitional Care Management</h3>
+    <ul>
+      <li>Triggered when a patient is discharged from inpatient or observation stay</li>
+      <li>Navigate to <strong>Care Programs</strong> → <strong>TCM</strong> → <strong>New Episode</strong></li>
+      <li>Enter: hospital discharge date, admission type, diagnosis</li>
+      <li>System calculates: contact-required dates, face-to-face visit deadline</li>
+    </ul>
+  </div>
+  <div class="step-block no-break">
+    <h3><span class="step-num">3</span> TCM milestone deadlines</h3>
+    <table>
+      <thead><tr><th>Milestone</th><th>CPT 99495</th><th>CPT 99496</th></tr></thead>
+      <tbody>
+        <tr><td>Interactive contact</td><td>Within 14 business days</td><td>Within 7 business days</td></tr>
+        <tr><td>Face-to-face visit</td><td>Within 14 calendar days</td><td>Within 7 calendar days</td></tr>
+        <tr><td>Medical decision making</td><td>Moderate complexity</td><td>High complexity</td></tr>
+      </tbody>
+    </table>
+    <div class="note">The system displays overdue TCM episodes in red on the Care Programs panel.</div>
+  </div>
+
+  <!-- B6 -->
+  <h2 class="wf-title"><span class="wf-num">B6</span>RPM Billing &amp; CPT Code Capture</h2>
+  <p class="wf-desc">Alpha Health Track automates tracking of CMS RPM billing thresholds. Navigate to <strong>Billing</strong> to view each patient's monthly status.</p>
+
+  <div class="cpt-grid no-break">
+    <div class="cpt-card">
+      <div class="cpt-code">CPT 99454</div>
+      <div class="cpt-rate">~$65/mo</div>
+      <div class="cpt-desc">Device supply and data transmission. Automatic when patient completes ≥ 16 days of check-ins in a calendar month.</div>
+      <div class="cpt-req">
+        <strong>Requirement</strong>
+        ≥ 16 days of device readings in 30-day period. Patient consent on file.
+      </div>
+    </div>
+    <div class="cpt-card">
+      <div class="cpt-code">CPT 99457</div>
+      <div class="cpt-rate">~$54/mo</div>
+      <div class="cpt-desc">First 20 minutes of RPM treatment management. Requires live interactive communication with patient or caregiver.</div>
+      <div class="cpt-req">
+        <strong>Requirement</strong>
+        ≥ 20 min/month clinical staff time. Must include ≥ 1 interactive contact.
+      </div>
+    </div>
+    <div class="cpt-card">
+      <div class="cpt-code">CPT 99458</div>
+      <div class="cpt-rate">~$41/unit</div>
+      <div class="cpt-desc">Each additional 20-minute increment. Billed in units — up to 2 additional units per month (99458 × 1 and 99458 × 2).</div>
+      <div class="cpt-req">
+        <strong>Requirement</strong>
+        Each additional 20 min of clinical time after first 99457.
+      </div>
+    </div>
+  </div>
+
+  <div class="step-block no-break">
+    <h3><span class="step-num">1</span> View billing dashboard</h3>
+    <ul>
+      <li>Navigate to <strong>Billing</strong> → view current month's summary</li>
+      <li>Each patient row shows: days enrolled, minutes logged, CPT codes met (✓ or pending)</li>
+    </ul>
+  </div>
+  <div class="step-block no-break">
+    <h3><span class="step-num">2</span> Log RPM interaction time</h3>
+    <ul>
+      <li>Open a patient chart → <strong>Log RPM Time</strong></li>
+      <li>Enter: date, minutes, type (data review, care coordination, patient communication)</li>
+      <li>System updates CPT qualification status in real time</li>
+    </ul>
+  </div>
+  <div class="step-block no-break">
+    <h3><span class="step-num">3</span> Export billing data</h3>
+    <ul>
+      <li>At month end: Billing → <strong>Export CSV</strong></li>
+      <li>CSV contains all qualifying encounters, CPT codes, patient identifiers, and provider NPI</li>
+      <li>Submit to your billing team or EHR for claim submission</li>
+    </ul>
+  </div>
+
+  <!-- B7 -->
+  <h2 class="wf-title"><span class="wf-num">B7</span>Calendar &amp; Appointment Management</h2>
+  <p class="wf-desc">The Calendar panel syncs with Google Calendar to surface upcoming patient appointments alongside RPM monitoring data.</p>
+
+  <div class="step-block no-break">
+    <h3><span class="step-num">1</span> Connect Google Calendar</h3>
+    <ul>
+      <li>First-time setup: navigate to <strong>Calendar</strong> → click <strong>Connect Google Calendar</strong></li>
+      <li>Authorize with your work Google account</li>
+    </ul>
+  </div>
+  <div class="step-block no-break">
+    <h3><span class="step-num">2</span> View upcoming appointments</h3>
+    <ul>
+      <li>Calendar shows the next 30 days of events from your connected calendar</li>
+      <li>Patient appointments appear alongside internal care team meetings</li>
+    </ul>
+  </div>
+  <div class="step-block no-break">
+    <h3><span class="step-num">3</span> Create a follow-up appointment</h3>
+    <ul>
+      <li>In a patient chart → <strong>Schedule Follow-up</strong></li>
+      <li>Select date/time → the event is created in Google Calendar and linked to the patient record</li>
+    </ul>
+  </div>
+
+  <!-- B8 -->
+  <h2 class="wf-title"><span class="wf-num">B8</span>Team Messaging via Slack</h2>
+  <p class="wf-desc">The Slack panel lets you view the care team channel and send messages without leaving the dashboard. Clinical alerts are automatically posted here.</p>
+
+  <div class="callout warning no-break">
+    <span class="callout-label">⚠ HIPAA Notice</span>
+    <p>Do not post patient names, MRNs, dates of birth, or clinical details in Slack messages. Use patient initials + MRN last 4 digits only. All detailed clinical notes belong in the patient's chart Notes tab.</p>
+  </div>
+
+  <div class="step-block no-break">
+    <h3><span class="step-num">1</span> View care team messages</h3>
+    <ul>
+      <li>Navigate to <strong>Slack</strong> → the panel shows the last 20 messages in the configured channel</li>
+      <li>Auto-generated alerts appear with 🚨 header and red formatting</li>
+    </ul>
+  </div>
+  <div class="step-block no-break">
+    <h3><span class="step-num">2</span> Send a team message</h3>
+    <ul>
+      <li>Type in the message field → press <strong>Send</strong></li>
+      <li>Messages appear in the Slack channel immediately</li>
+    </ul>
+  </div>
+</div>
+
+<!-- ════════════════════════════════════════════════════════════
+     SECTION C — ADMIN WORKFLOWS
+════════════════════════════════════════════════════════════ -->
+<div class="content section-break" id="admin">
+  <div class="section-header">
+    <span class="role-badge admin">● Admin</span>
+    <h1 class="section-h1">Section C<br>Admin Workflows</h1>
+    <div class="section-divider"></div>
+    <p class="section-desc">
+      Admins configure and maintain the Alpha Health Track environment.
+      All admin functions are accessed through the <strong>Setup</strong> panel
+      (sidebar → Setup) and the Vercel dashboard for infrastructure-level changes.
+    </p>
+  </div>
+
+  <!-- C1 -->
+  <h2 class="wf-title"><span class="wf-num">C1</span>User Provisioning &amp; Access Control</h2>
+  <p class="wf-desc">User accounts are managed through Supabase Authentication. Admins create, deactivate, and assign roles directly in the Supabase dashboard.</p>
+
+  <div class="step-block no-break">
+    <h3><span class="step-num">1</span> Create a new clinician account</h3>
+    <ul>
+      <li>Log in to <strong>supabase.com</strong> → select the Alpha Health Track project</li>
+      <li>Go to <strong>Authentication → Users → Invite User</strong></li>
+      <li>Enter the clinician's work email address → click <strong>Send Invite</strong></li>
+      <li>The clinician receives an email with a magic link to set their password</li>
+    </ul>
+  </div>
+  <div class="step-block no-break">
+    <h3><span class="step-num">2</span> Assign a role</h3>
+    <ul>
+      <li>In Supabase → <strong>Authentication → Users</strong> → find the new user</li>
+      <li>Edit the user metadata: set <code>role</code> field to <code>clinician</code> or <code>admin</code></li>
+      <li>The app reads this role at login to control access to Setup and admin-only features</li>
+    </ul>
+  </div>
+  <div class="step-block no-break">
+    <h3><span class="step-num">3</span> Deactivate a departing user</h3>
+    <ul>
+      <li>In Supabase → <strong>Authentication → Users</strong> → find the user</li>
+      <li>Click <strong>Ban User</strong> to immediately revoke access</li>
+      <li>Rotate any shared API keys the departing user had access to</li>
+    </ul>
+    <div class="note">⚠ HIPAA Requirement: Deactivate accounts on the last day of employment, not retroactively.</div>
+  </div>
+
+  <!-- C2 -->
+  <h2 class="wf-title"><span class="wf-num">C2</span>System Setup &amp; Integration Configuration</h2>
+  <p class="wf-desc">All environment variables and API keys live in the Vercel dashboard — never in the codebase. Access: vercel.com → techothers-projects → cardiotrack → Settings → Environment Variables.</p>
+
+  <table class="no-break">
+    <thead><tr><th>Variable</th><th>Service</th><th>Required For</th></tr></thead>
+    <tbody>
+      <tr><td><span class="code-pill">SUPABASE_URL</span></td><td>Supabase</td><td>Database connection (all features)</td></tr>
+      <tr><td><span class="code-pill">SUPABASE_SERVICE_ROLE_KEY</span></td><td>Supabase</td><td>Server-side JWT verification</td></tr>
+      <tr><td><span class="code-pill">SUPABASE_JWT_SECRET</span></td><td>Supabase</td><td>Auth token validation</td></tr>
+      <tr><td><span class="code-pill">AIRTABLE_API_KEY</span></td><td>Airtable</td><td>Backlog / sprint management</td></tr>
+      <tr><td><span class="code-pill">AIRTABLE_BASE_ID</span></td><td>Airtable</td><td>Backlog / sprint management</td></tr>
+      <tr><td><span class="code-pill">SLACK_BOT_TOKEN</span></td><td>Slack</td><td>Team alerts &amp; messaging</td></tr>
+      <tr><td><span class="code-pill">SLACK_CHANNEL_ID</span></td><td>Slack</td><td>Default care team channel</td></tr>
+      <tr><td><span class="code-pill">TWILIO_ACCOUNT_SID</span></td><td>Twilio</td><td>Patient SMS check-ins</td></tr>
+      <tr><td><span class="code-pill">TWILIO_AUTH_TOKEN</span></td><td>Twilio</td><td>Patient SMS check-ins</td></tr>
+      <tr><td><span class="code-pill">TWILIO_FROM_NUMBER</span></td><td>Twilio</td><td>Outbound SMS phone number</td></tr>
+      <tr><td><span class="code-pill">GCAL_SERVICE_ACCOUNT_JSON</span></td><td>Google Calendar</td><td>Appointment sync</td></tr>
+      <tr><td><span class="code-pill">GCAL_CALENDAR_ID</span></td><td>Google Calendar</td><td>Appointment sync</td></tr>
+    </tbody>
+  </table>
+
+  <div class="step-block no-break">
+    <h3><span class="step-num">1</span> Add or rotate an API key</h3>
+    <ul>
+      <li>Log in to <strong>vercel.com</strong> → select the project → <strong>Settings → Environment Variables</strong></li>
+      <li>Click <strong>Edit</strong> next to the variable to update (or <strong>Add New</strong>)</li>
+      <li>Set for <strong>Production</strong> and <strong>Preview</strong> environments</li>
+      <li>Click <strong>Save</strong> → trigger a redeployment for changes to take effect</li>
+    </ul>
+    <div class="note">Never paste API keys into Slack, email, or code comments. Keys must only be stored in Vercel environment variables.</div>
+  </div>
+  <div class="step-block no-break">
+    <h3><span class="step-num">2</span> Verify integrations are working</h3>
+    <ul>
+      <li>Navigate to <strong>Setup</strong> in the app → each integration shows a status indicator</li>
+      <li>Slack: send a test message → confirm it appears in the Slack channel</li>
+      <li>SMS: use <strong>Send Test SMS</strong> on a test patient record → confirm delivery</li>
+      <li>Airtable: navigate to Backlog → confirm stories load</li>
+    </ul>
+  </div>
+
+  <!-- C3 -->
+  <h2 class="wf-title"><span class="wf-num">C3</span>Airtable &amp; Backlog Management</h2>
+  <p class="wf-desc">The Backlog panel connects to Airtable to display development stories and sprint status. Admins and product managers use this for internal project tracking.</p>
+
+  <div class="step-block no-break">
+    <h3><span class="step-num">1</span> Create a new story</h3>
+    <ul>
+      <li>Navigate to <strong>Backlog</strong> → click <strong>New Story</strong></li>
+      <li>Enter: title, description, story points, type (feature/bug/chore)</li>
+      <li>Story is created in the linked Airtable base immediately</li>
+    </ul>
+  </div>
+  <div class="step-block no-break">
+    <h3><span class="step-num">2</span> Manage sprints</h3>
+    <ul>
+      <li>Click <strong>New Sprint</strong> to create a sprint with a start/end date</li>
+      <li>Drag stories into the sprint from the backlog</li>
+      <li>The active sprint displays on the Backlog panel's Sprint view</li>
+    </ul>
+  </div>
+  <div class="step-block no-break">
+    <h3><span class="step-num">3</span> Update Airtable base configuration</h3>
+    <ul>
+      <li>To change which Airtable base the backlog reads from, update <span class="code-pill">AIRTABLE_BASE_ID</span> in Vercel</li>
+      <li>Table names must match the expected schema: "Stories" and "Sprints" tables with standard field names</li>
+    </ul>
+  </div>
+
+  <!-- C4 -->
+  <h2 class="wf-title"><span class="wf-num">C4</span>Slack Channel &amp; Alert Configuration</h2>
+  <p class="wf-desc">All clinical alerts route to the Slack channel specified by SLACK_CHANNEL_ID. Admins configure which alerts fire and where they route.</p>
+
+  <div class="step-block no-break">
+    <h3><span class="step-num">1</span> Change the alert destination channel</h3>
+    <ul>
+      <li>In Slack: right-click the target channel → <strong>View channel details</strong> → copy the Channel ID from the bottom of the About section</li>
+      <li>In Vercel: update <span class="code-pill">SLACK_CHANNEL_ID</span> → redeploy</li>
+    </ul>
+  </div>
+  <div class="step-block no-break">
+    <h3><span class="step-num">2</span> Verify the Slack bot has channel access</h3>
+    <ul>
+      <li>In Slack: go to the target channel → <strong>Integrations</strong> → confirm the Alpha Health Track bot is a member</li>
+      <li>If not: type <code>/invite @Alpha Health Track Bot</code> in the channel</li>
+    </ul>
+  </div>
+  <div class="step-block no-break">
+    <h3><span class="step-num">3</span> Test alert delivery</h3>
+    <ul>
+      <li>In the app Setup panel: click <strong>Send Test Alert</strong></li>
+      <li>Confirm the formatted alert appears in the Slack channel within 30 seconds</li>
+    </ul>
+  </div>
+
+  <!-- C5 -->
+  <h2 class="wf-title"><span class="wf-num">C5</span>Billing Oversight &amp; CSV Export</h2>
+  <p class="wf-desc">Admins review the monthly billing summary across all providers and export data for the billing department or EHR submission.</p>
+
+  <div class="step-block no-break">
+    <h3><span class="step-num">1</span> Review monthly billing dashboard</h3>
+    <ul>
+      <li>Navigate to <strong>Billing</strong> → select month from the dropdown</li>
+      <li>Top cards: total qualifying patients per CPT code, projected revenue</li>
+      <li>Table: per-patient breakdown (provider, CPT codes met, days enrolled, minutes logged)</li>
+    </ul>
+  </div>
+  <div class="step-block no-break">
+    <h3><span class="step-num">2</span> Export billing CSV</h3>
+    <ul>
+      <li>Click <strong>Export CSV</strong> — downloads a file named <code>rpm-billing-YYYY-MM.csv</code></li>
+      <li>Columns: Patient ID, Patient Name, Provider NPI, CPT Codes, Units, Days Enrolled, Minutes Logged, Period</li>
+      <li>Send to your billing team by the 3rd of the following month</li>
+    </ul>
+  </div>
+  <div class="step-block no-break">
+    <h3><span class="step-num">3</span> Investigate discrepancies</h3>
+    <ul>
+      <li>If a patient shows fewer days than expected: check for missed check-ins in the patient chart</li>
+      <li>If minutes are low: remind providers to log all RPM interaction time including data review and coordination calls</li>
+    </ul>
+  </div>
+
+  <!-- C6 -->
+  <h2 class="wf-title"><span class="wf-num">C6</span>Compliance, Audit Logs &amp; HIPAA</h2>
+  <p class="wf-desc">Alpha Health Track is designed for HIPAA-adjacent operation. The following controls are in place; Admins are responsible for enforcing operational compliance.</p>
+
+  <table class="no-break">
+    <thead><tr><th>Control</th><th>How It's Implemented</th><th>Admin Action</th></tr></thead>
+    <tbody>
+      <tr><td>Access Control</td><td>Role-based Supabase auth; JWT on every API call</td><td>Provision and deprovision users promptly</td></tr>
+      <tr><td>Encryption in transit</td><td>HTTPS enforced by Vercel on all routes</td><td>Verify SSL cert is valid; Vercel auto-renews</td></tr>
+      <tr><td>Encryption at rest</td><td>Supabase PostgreSQL with AES-256</td><td>No action required; confirm in Supabase settings</td></tr>
+      <tr><td>Audit logging</td><td>Supabase logs all DB read/write with user ID + timestamp</td><td>Export logs quarterly; retain 6 years minimum</td></tr>
+      <tr><td>PHI minimization in Slack</td><td>Policy; not technically enforced</td><td>Train staff; review Slack messages weekly for PHI violations</td></tr>
+      <tr><td>BAA coverage</td><td>Supabase offers a BAA (paid plan); Vercel BAA available on Enterprise</td><td>Ensure BAAs are signed before going live with patient data</td></tr>
+    </tbody>
+  </table>
+
+  <div class="step-block no-break">
+    <h3><span class="step-num">1</span> Quarterly audit log review</h3>
+    <ul>
+      <li>Log in to Supabase → <strong>Logs → API logs</strong></li>
+      <li>Filter by date range → export to CSV</li>
+      <li>Review for: unauthorized access patterns, unusual data volumes, off-hours access</li>
+      <li>Retain logs per your practice's retention policy (minimum 6 years under HIPAA)</li>
+    </ul>
+  </div>
+  <div class="step-block no-break">
+    <h3><span class="step-num">2</span> Security incident response</h3>
+    <ul>
+      <li>Suspected breach: immediately ban affected user accounts in Supabase</li>
+      <li>Rotate all API keys in Vercel environment variables</li>
+      <li>Notify your HIPAA Privacy Officer within 24 hours</li>
+      <li>Document the incident: timeline, affected data, remediation steps</li>
+    </ul>
+    <div class="note">HIPAA Breach Notification Rule: notify affected patients within 60 days; notify HHS if &gt; 500 individuals affected.</div>
+  </div>
+</div>
+
+<!-- ════════════════════════════════════════════════════════════
+     APPENDIX
+════════════════════════════════════════════════════════════ -->
+<div class="content section-break" id="appendix">
+  <div class="section-header">
+    <div class="section-eyebrow">Appendix</div>
+    <h1 class="section-h1">Reference Tables</h1>
+    <div class="section-divider"></div>
+  </div>
+
+  <!-- Appendix I: CPT -->
+  <h2 class="wf-title"><span class="wf-num">I</span>CPT Code Quick Reference</h2>
+  <table class="no-break">
+    <thead>
+      <tr>
+        <th>Code</th><th>Description</th><th>Threshold</th><th>~Reimbursement</th><th>Key Rules</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="code-pill">99454</span></td>
+        <td>Device supply, data collection &amp; transmission</td>
+        <td>≥ 16 days of readings in 30-day period</td>
+        <td>~$65/month</td>
+        <td>Written consent required; one device per patient</td>
+      </tr>
+      <tr>
+        <td><span class="code-pill">99457</span></td>
+        <td>RPM treatment management, first 20 min</td>
+        <td>≥ 20 cumulative minutes/month</td>
+        <td>~$54/month</td>
+        <td>Must include interactive communication (not just data review)</td>
+      </tr>
+      <tr>
+        <td><span class="code-pill">99458 ×1</span></td>
+        <td>RPM treatment management, add-on 20 min</td>
+        <td>≥ 40 cumulative minutes/month</td>
+        <td>~$41/unit</td>
+        <td>Billed after 99457; max 2 add-on units per month</td>
+      </tr>
+      <tr>
+        <td><span class="code-pill">99458 ×2</span></td>
+        <td>RPM treatment management, second add-on</td>
+        <td>≥ 60 cumulative minutes/month</td>
+        <td>~$41/unit</td>
+        <td>Combined 99457 + 99458 ×2 = ~$136/month max RPM</td>
+      </tr>
+      <tr>
+        <td><span class="code-pill">99495</span></td>
+        <td>TCM — moderate complexity</td>
+        <td>Contact within 14 business days; visit within 14 calendar days</td>
+        <td>~$175</td>
+        <td>Cannot bill in same month as certain E&amp;M codes</td>
+      </tr>
+      <tr>
+        <td><span class="code-pill">99496</span></td>
+        <td>TCM — high complexity</td>
+        <td>Contact within 7 business days; visit within 7 calendar days</td>
+        <td>~$238</td>
+        <td>Requires high-complexity medical decision making</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <!-- Appendix II: PHQ-9 / GAD-7 -->
+  <h2 class="wf-title pb-before"><span class="wf-num">II</span>PHQ-9 &amp; GAD-7 Scoring Reference</h2>
+
+  <p style="font-size:13px;color:var(--mid);margin-bottom:16px;"><strong>PHQ-9</strong> — Patient Health Questionnaire (Depression). 9 items, each scored 0–3. Total range: 0–27.</p>
+
+  <div class="score-band no-break">
+    <div class="score-cell band-none">
+      <span class="score-range">0–4</span>
+      <span class="score-label">Minimal / None</span>
+    </div>
+    <div class="score-cell band-mild">
+      <span class="score-range">5–9</span>
+      <span class="score-label">Mild</span>
+    </div>
+    <div class="score-cell band-mod">
+      <span class="score-range">10–14</span>
+      <span class="score-label">Moderate</span>
+    </div>
+    <div class="score-cell band-sev">
+      <span class="score-range">15–27</span>
+      <span class="score-label">Severe</span>
+    </div>
+  </div>
+
+  <table class="no-break">
+    <thead><tr><th>Score</th><th>Severity</th><th>Recommended Action</th></tr></thead>
+    <tbody>
+      <tr><td>0–4</td><td>Minimal</td><td>Watchful waiting; repeat PHQ-9 at follow-up</td></tr>
+      <tr><td>5–9</td><td>Mild</td><td>Support and monitor; discuss contributing factors</td></tr>
+      <tr><td>10–14</td><td>Moderate</td><td>Initiate stepped-care protocol; consider counseling referral</td></tr>
+      <tr><td>15–19</td><td>Moderately Severe</td><td>Active treatment: therapy, medication evaluation</td></tr>
+      <tr><td>20–27</td><td>Severe</td><td>Immediate psychiatric referral; safety planning</td></tr>
+    </tbody>
+  </table>
+
+  <div class="callout danger no-break" style="margin:16px 0;">
+    <span class="callout-label">⚠ Safety Alert — PHQ-9 Question 9</span>
+    <p>If the patient responds &gt; 0 to item 9 ("Thoughts that you would be better off dead or of hurting yourself"), follow your practice's suicide risk protocol immediately. Do not dismiss this as incidental to the check-in score.</p>
+  </div>
+
+  <p style="font-size:13px;color:var(--mid);margin:24px 0 16px;"><strong>GAD-7</strong> — Generalized Anxiety Disorder scale. 7 items, each scored 0–3. Total range: 0–21.</p>
+
+  <div class="score-band no-break">
+    <div class="score-cell band-none">
+      <span class="score-range">0–4</span>
+      <span class="score-label">Minimal</span>
+    </div>
+    <div class="score-cell band-mild">
+      <span class="score-range">5–9</span>
+      <span class="score-label">Mild</span>
+    </div>
+    <div class="score-cell band-mod">
+      <span class="score-range">10–14</span>
+      <span class="score-label">Moderate</span>
+    </div>
+    <div class="score-cell band-sev">
+      <span class="score-range">15–21</span>
+      <span class="score-label">Severe</span>
+    </div>
+  </div>
+
+  <!-- Appendix III: Alert Severity -->
+  <h2 class="wf-title" style="margin-top:36px;"><span class="wf-num">III</span>Alert Severity Definitions</h2>
+  <table class="no-break">
+    <thead><tr><th>Level</th><th>Trigger Condition</th><th>Response SLA</th><th>Auto-Notifies</th></tr></thead>
+    <tbody>
+      <tr>
+        <td>🔴 Critical</td>
+        <td>SBP &gt; 180 mmHg · DBP &gt; 110 mmHg · Weight ↑ &gt; 5 lbs/7 days · Wellness score 5 (consecutive)</td>
+        <td>30 minutes</td>
+        <td>Slack + Alerts panel</td>
+      </tr>
+      <tr>
+        <td>🟡 Warning</td>
+        <td>SBP 160–179 · Weight ↑ 3–5 lbs/24h · Wellness score 4 · 2 missed check-ins</td>
+        <td>4 hours</td>
+        <td>Alerts panel</td>
+      </tr>
+      <tr>
+        <td>🔵 Info</td>
+        <td>Medication missed 1 day · SBP 140–159 · 1 missed check-in · PHQ-9 5–9</td>
+        <td>Same business day</td>
+        <td>Alerts panel</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <!-- Appendix IV: Contacts -->
+  <h2 class="wf-title" style="margin-top:36px;"><span class="wf-num">IV</span>Escalation Contact List</h2>
+  <table class="no-break">
+    <thead><tr><th>Role</th><th>Name</th><th>Contact</th><th>When to Contact</th></tr></thead>
+    <tbody>
+      <tr>
+        <td>Founder / CEO</td>
+        <td>Larry Ennis Goode</td>
+        <td>larry@techother.com</td>
+        <td>Compliance issues, security incidents, strategic decisions</td>
+      </tr>
+      <tr>
+        <td>System Admin</td>
+        <td>[Your Practice Admin]</td>
+        <td>[Add contact]</td>
+        <td>Integration failures, user provisioning, Vercel issues</td>
+      </tr>
+      <tr>
+        <td>HIPAA Privacy Officer</td>
+        <td>[Designated Officer]</td>
+        <td>[Add contact]</td>
+        <td>Suspected PHI breach, patient data requests, audit</td>
+      </tr>
+      <tr>
+        <td>On-Call Clinician</td>
+        <td>[Rotating schedule]</td>
+        <td>[Practice paging system]</td>
+        <td>After-hours critical alerts requiring clinical judgment</td>
+      </tr>
+      <tr>
+        <td>Supabase Support</td>
+        <td>—</td>
+        <td>supabase.com/support</td>
+        <td>Database outages, auth failures</td>
+      </tr>
+      <tr>
+        <td>Vercel Support</td>
+        <td>—</td>
+        <td>vercel.com/support</td>
+        <td>Deployment failures, function timeouts</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <!-- Footer -->
+  <hr class="section-rule" />
+  <div style="display:flex;justify-content:space-between;align-items:center;padding:20px 0;">
+    <div>
+      <div style="font-family:var(--display);font-size:16px;font-weight:700;color:var(--teal);">Alpha Health Track</div>
+      <div style="font-size:12px;color:var(--light);">Internal Training Guide · v1.0 · May 2026 · Confidential</div>
+    </div>
+    <div style="text-align:right;">
+      <div style="font-size:12px;color:var(--mid);">Questions? Contact larry@techother.com</div>
+      <div style="font-size:11px;color:var(--light);">© 2026 Alpha Health Track · Albany, CA</div>
+    </div>
+  </div>
+</div>
+
+</div><!-- /page-wrapper -->
+</body>
+</html>
