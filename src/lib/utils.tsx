@@ -2,7 +2,6 @@
 // Utility functions extracted from App.tsx lines 166–184
 // ComingSoon uses JSX → .tsx extension required
 
-import React from 'react'
 import { T, F } from '@/lib/tokens'
 
 // TagT is defined here (not imported from primitives) to avoid circular dependency.
