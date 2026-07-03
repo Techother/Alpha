@@ -87,13 +87,13 @@ GROUP BY table_name
 ORDER BY table_name;
 ```
 
-If `profiles`, `patients`, `checkins` (with `checkin_date`), `alerts` (with `status`), `chatbot_sessions` (with `completed`), and `chatbot_messages` all appear in the result, migrations 001 + 002 + 003 have been applied successfully.
+If `profiles`, `patients`, `checkins` (with `checked_in_at`), `alerts` (with `status`), `chatbot_sessions` (with `completed`), and `chatbot_messages` all appear in the result, migrations 001 + 002 + 003 have been applied successfully.
 
 ---
 
-## Known Column Duality Gap
+## Column Duality Gap — RESOLVED
 
-**This is a known architectural gap that will be resolved in Phase 7 (Component Decomposition).**
+**Resolved in Phase 7 (Component Decomposition) — 2026-05-29.**
 
 The v3 schema (migration 001) defined `checkins` with v3-style column names:
 
@@ -101,22 +101,25 @@ The v3 schema (migration 001) defined `checkins` with v3-style column names:
 breathlessness, swelling, medications, free_text, checked_in_at
 ```
 
-However, application code in `src/api/supabase.ts` queries v1-style column names:
+Migration 003 had added v1-style aliases (`breathlessness_score`, `swelling_score`, `medications_taken`, `patient_notes`, `checkin_date`) to bridge the gap while application code was migrated. All application query sites have now been updated to use v3-style column names exclusively:
 
+- `src/api/supabase.ts` — `createCheckin`, `getPatientCheckins`, `getTodayCheckin`, `getDashboardStats`
+- `src/App.tsx` — vitals display, check-in log, chatbot answer mapping, alert triggers, weight-delta comparison
+
+The `checkin_date` → `checked_in_at` migration required changing date equality queries (`.eq('checkin_date', dateStr)`) to timestamp range queries (`.gte('checked_in_at', dayStart).lt('checked_in_at', dayEnd)`) because `checked_in_at` is `timestamptz NOT NULL DEFAULT now()`, not a `date` column.
+
+**The v1-style columns added by migration 003 are now dead weight.** They can be dropped in a future migration once confirmed unused:
+
+```sql
+ALTER TABLE checkins
+  DROP COLUMN IF EXISTS checkin_date,
+  DROP COLUMN IF EXISTS breathlessness_score,
+  DROP COLUMN IF EXISTS swelling_score,
+  DROP COLUMN IF EXISTS medications_taken,
+  DROP COLUMN IF EXISTS patient_notes;
 ```
-breathlessness_score, swelling_score, medications_taken, patient_notes, checkin_date
-```
 
-Migration 003 adds the v1-style columns alongside the v3 columns. **Both column sets coexist in the live database.**
-
-The impact by code path:
-
-- **v3 chatbot write path** — uses v3-style column names (matches 001 definitions)
-- **Application query path** (`getPatientCheckins`, `createCheckin`, `getTodayCheckin`) — uses v1-style names (added by 003)
-
-The same duality exists for `patients`: the v3 schema defined a minimal patients table, while `src/api/supabase.ts` queries `first_name`, `last_name`, `condition`, `provider_name`, `risk_level`, and `active`. Migration 003 adds all six columns to bridge the gap.
-
-**Resolution:** Phase 7 (Component Decomposition) will update `src/api/supabase.ts` and all query sites to use v3-style column names exclusively. At that point, the v1-style columns added by 003 become candidates for deprecation.
+Do not run this drop until after confirming no external integrations (Airtable sync scripts, reporting queries) still reference the old column names.
 
 ---
 

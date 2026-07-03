@@ -97,3 +97,70 @@ Clinical logic requires 100% branch coverage before any structural changes:
 ## Current Status
 
 See `.planning/STATE.md` for live progress.
+See `wiki/current-status.md` for the compiled wiki status.
+
+---
+
+## Knowledge System
+
+This project uses a wiki-first knowledge system. Knowledge lives in `wiki/`, not in chat history.
+
+### Directory Structure
+
+```
+cardiotrack/
+├── raw/          # Drop source documents here (PDFs, exports, screenshots) — never modify
+├── wiki/         # Synthesized markdown wiki pages
+├── manifests/
+│   └── raw_sources.csv  # Index of all raw files (stays in Git)
+├── index.md      # Master index of all wiki pages and relationships
+└── log.md        # Chronological log of ingest and lint operations
+```
+
+### Session Start (auto, no confirmation needed)
+
+1. Read `index.md` — get the full page list
+2. Read `wiki/current-status.md` — know where things stand
+3. Read `log.md` — understand recent session history
+4. Read additional wiki pages **only as needed** for the current task
+
+### During Work
+
+- New decision made → update the relevant wiki page immediately; use `[[Page Name]]` wikilinks to connect concepts
+- Any file received, referenced, or saved → check `manifests/raw_sources.csv` first; register before proceeding; for batches drop into `raw/`
+- Task completed → update `wiki/current-status.md`
+- Update `index.md` when a new page is added or a concept relationship changes
+
+### Session End
+
+1. Append one line to `log.md`: `YYYY-MM-DD | OPERATION | key outcomes`
+2. Update `wiki/current-status.md` with latest state
+3. If context is running low → generate `CONTINUATION-SUMMARY.md`
+
+### Operations
+
+- **INGEST** — Read a file from `raw/`. Synthesize into a new `wiki/*.md` page. Add bi-directional `[[wikilinks]]`. Update `index.md`.
+- **QUERY** — Search `wiki/` for answers to the user's questions.
+- **LINT** — Check for orphan pages (no incoming/outgoing links), broken wikilinks, pages >2000 words, or missing frontmatter. Log findings to `log.md`.
+
+### Rules
+
+- **NEVER modify files in `raw/`**
+- Summarize and synthesize into `wiki/` — never paste verbatim
+- All `wiki/` pages (except `index.md` and `log.md`) require frontmatter
+- Raw files (PDFs, exports, images) stay outside Git; only `manifests/` goes in
+
+### Frontmatter
+
+Every wiki page must start with:
+
+```yaml
+---
+title: Page Title
+source: <raw/ path, URL, or "session">
+compiled_at: 2026-05-28T00:00:00Z
+created: 2026-05-28
+tags: [relevant, tags]
+status: current
+---
+```

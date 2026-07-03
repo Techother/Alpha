@@ -1,0 +1,5 @@
+id,filename,type,description,path_hint,registered_at,status,compiled_to
+src_training_guide_v1,training-guide.html,html,Employee & Admin Training Guide v1.0 May 2026 — role workflows / HIPAA / CPT reference,https://cardiotrack-three.vercel.app/training-guide.html,2026-05-28,compiled,"wiki/training-guide.md,wiki/clinical-reference.md"
+src_landing_page_v1,landing.html,html,Public landing page — marketing claims / ROI model / patient experience / provider features,https://cardiotrack-three.vercel.app/landing.html,2026-05-28,compiled,wiki/landing-page.md
+src_pitch_deck_v1,pitch.html,html,Investor pitch deck — market sizing / business model / traction / financials / team / seed ask,https://cardiotrack-three.vercel.app/pitch.html,2026-05-28,compiled,wiki/pitch-deck.md
+src_dashboard_app,dashboard,html,React SPA dashboard — JS-rendered; content not fetchable via static fetch,https://cardiotrack-three.vercel.app/dashboard,2026-05-28,skipped,

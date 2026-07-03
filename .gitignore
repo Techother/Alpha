@@ -15,6 +15,14 @@ dist-ssr
 # Git worktrees
 .worktrees
 
+# Test coverage
+coverage
+
+# Tool outputs
+.agents
+.impeccable
+graphify-out
+
 # Editor directories and files
 .vscode/*
 !.vscode/extensions.json

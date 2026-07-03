@@ -52,32 +52,33 @@ export async function getPatientCheckins(patientId: string, days = 7) {
     .from('checkins')
     .select('*')
     .eq('patient_id', patientId)
-    .gte('checkin_date', since.toISOString().slice(0, 10))
-    .order('checkin_date', { ascending: false })
+    .gte('checked_in_at', since.toISOString())
+    .order('checked_in_at', { ascending: false })
   if (error) throw error
   return data ?? []
 }
 
 export async function getTodayCheckin(patientId: string) {
-  const today = new Date().toISOString().slice(0, 10)
+  const start = new Date(); start.setHours(0, 0, 0, 0)
+  const end = new Date(start); end.setDate(end.getDate() + 1)
   const { data } = await supabase
     .from('checkins')
     .select('*')
     .eq('patient_id', patientId)
-    .eq('checkin_date', today)
+    .gte('checked_in_at', start.toISOString())
+    .lt('checked_in_at', end.toISOString())
     .maybeSingle()
   return data
 }
 
 export async function createCheckin(payload: {
   patient_id: string
-  checkin_date: string
   weight_lbs: number | null
   heart_rate: number | null
-  breathlessness_score: number | null
-  swelling_score: number | null
-  medications_taken: boolean | null
-  patient_notes: string | null
+  breathlessness: number | null
+  swelling: number | null
+  medications: boolean | null
+  free_text: string | null
 }) {
   const { data, error } = await supabase
     .from('checkins')
@@ -138,12 +139,13 @@ export async function createAlert(payload: {
 // ── Dashboard stats ───────────────────────────────────────────
 
 export async function getDashboardStats() {
-  const today = new Date().toISOString().slice(0, 10)
+  const dayStart = new Date(); dayStart.setHours(0, 0, 0, 0)
+  const dayEnd = new Date(dayStart); dayEnd.setDate(dayEnd.getDate() + 1)
   const [patientsRes, alertsRes, highRiskRes, checkinsRes] = await Promise.all([
     supabase.from('patients').select('id', { count: 'exact', head: true }).eq('active', true),
     supabase.from('alerts').select('id', { count: 'exact', head: true }).eq('status', 'open'),
     supabase.from('patients').select('id', { count: 'exact', head: true }).eq('risk_level', 'high').eq('active', true),
-    supabase.from('checkins').select('id', { count: 'exact', head: true }).eq('checkin_date', today),
+    supabase.from('checkins').select('id', { count: 'exact', head: true }).gte('checked_in_at', dayStart.toISOString()).lt('checked_in_at', dayEnd.toISOString()),
   ])
   return {
     totalPatients: patientsRes.count ?? 0,
