@@ -1,106 +1,395 @@
 // cardiotrack/src/components/layout/LandingPage.tsx
-// Extracted from App.tsx lines 209–297
-// Clinical white design — institutional blue replaces neon teal
+// /impeccable bolder — editorial typographic structure, orange committed accent (#F25623),
+// clinical white canvas. Removed: stats bar (hero-metric ban), card grid (identical-card ban),
+// emoji icons. Added: <main>, skip-nav, 44px+ touch targets, editorial feature rows.
 
-import { T, F } from '@/lib/tokens'
-import { Btn } from '@/components/ui/primitives'
+import { F } from '@/lib/tokens'
+
+// Landing page uses a committed accent palette distinct from the clinical app shell.
+// Orange (#F25623) replaces institutional blue as the sole CTA / accent color on this surface.
+const B = {
+  canvas:      '#FDFCFB',   // near-white, barely warm toward orange hue
+  surface:     '#F8F7F5',   // off-white surface, same warm tint
+  strip:       '#F0EFED',   // slightly darker strip
+  ink:         '#111827',
+  body:        '#374151',
+  muted:       '#6B7280',
+  border:      '#E5E7EB',
+  borderStrong:'#D1D5DB',
+  orange:      '#F25623',
+  orangeHover: '#D94B1F',
+} as const
+
+const features = [
+  { tag: 'Monitoring',  title: 'Real-time Vital Tracking',   desc: 'Vital signs tracked across your full roster. Weight gain, breathlessness spikes, and missed medications surface to the alert queue automatically.' },
+  { tag: 'AI',         title: 'Daily Check-ins',             desc: 'Structured conversational check-ins powered by Claude, logged, transcribed, and flagged for clinician review within the shift.' },
+  { tag: 'Alerts',     title: 'Smart Alert Routing',         desc: 'Threshold crossings trigger care team notifications via Slack within 60 seconds. Configurable severity levels per patient, per protocol.' },
+  { tag: 'Scheduling', title: 'Calendar Integration',        desc: 'Google Calendar sync for appointments and follow-up visits. No manual entry, no double-booking between your RPM platform and your clinic schedule.' },
+  { tag: 'Billing',    title: 'CPT Eligibility Tracking',    desc: 'Automatic tracking of 99454, 99457, and 99458 per patient per billing period: auditable, exportable, and always current.' },
+  { tag: 'Analytics',  title: 'Risk-Stratified Roster',      desc: '7-day trend analysis with sparklines, PHQ-9 and GAD-7 scores, and priority flags. The highest-risk patients are always at the top.' },
+]
+
+const roles = [
+  { label: 'Patients', desc: 'Daily symptom check-ins, weight logging, care team messaging, and appointment reminders.' },
+  { label: 'Clinicians', desc: 'Full monitoring dashboard, alert review, check-in history, screening scores, and billing eligibility.' },
+  { label: 'Admins', desc: 'Care team management, patient enrollment, audit log access, and system configuration.' },
+]
+
+function OrangeBtn({
+  onClick,
+  children,
+  style: extra,
+}: {
+  onClick: () => void
+  children: React.ReactNode
+  style?: React.CSSProperties
+}) {
+  return (
+    <button
+      onClick={onClick}
+      onMouseEnter={e => { (e.currentTarget as HTMLButtonElement).style.background = B.orangeHover }}
+      onMouseLeave={e => { (e.currentTarget as HTMLButtonElement).style.background = B.orange }}
+      style={{
+        background: B.orange,
+        color: '#FFF8F5',   // tinted white — slight orange lean
+        border: 'none',
+        borderRadius: 6,
+        padding: '13px 26px',
+        minHeight: 48,
+        fontSize: 15,
+        fontFamily: F.body,
+        fontWeight: 600,
+        cursor: 'pointer',
+        letterSpacing: '0.01em',
+        transition: 'background 150ms ease-out',
+        ...extra,
+      }}
+    >
+      {children}
+    </button>
+  )
+}
+
+function GhostBtn({
+  onClick,
+  children,
+}: {
+  onClick: () => void
+  children: React.ReactNode
+}) {
+  return (
+    <button
+      onClick={onClick}
+      onMouseEnter={e => {
+        const el = e.currentTarget as HTMLButtonElement
+        el.style.borderColor = B.body
+        el.style.color = B.ink
+      }}
+      onMouseLeave={e => {
+        const el = e.currentTarget as HTMLButtonElement
+        el.style.borderColor = B.borderStrong
+        el.style.color = B.body
+      }}
+      style={{
+        background: 'transparent',
+        color: B.body,
+        border: `1px solid ${B.borderStrong}`,
+        borderRadius: 6,
+        padding: '13px 26px',
+        minHeight: 48,
+        fontSize: 15,
+        fontFamily: F.body,
+        fontWeight: 400,
+        cursor: 'pointer',
+        transition: 'border-color 150ms ease-out, color 150ms ease-out',
+      }}
+    >
+      {children}
+    </button>
+  )
+}
 
 export function LandingPage({ onSignIn }: { onSignIn: () => void }) {
-  const features = [
-    { icon: '♡', title: 'Real-time Monitoring', desc: 'Daily vital signs tracked across your entire patient roster with instant alert escalation.' },
-    { icon: '⚠', title: 'Smart Alerts', desc: 'Automatic alerts for weight gain, breathlessness spikes, and missed medications.' },
-    { icon: '🤖', title: 'AI Check-ins', desc: 'Conversational daily check-ins powered by Claude — compassionate, structured, clinical.' },
-    { icon: '◷', title: 'Scheduling', desc: 'Google Calendar integration for appointments synced directly with your practice.' },
-    { icon: '✦', title: 'Team Messaging', desc: 'Slack integration for instant care team alerts and communication.' },
-    { icon: '▦', title: 'Clinical Dashboard', desc: 'Risk-stratified roster with trend analysis, sparklines, and KPI overview.' },
-  ]
-
   return (
-    <div style={{ minHeight: '100dvh', background: T.bg, fontFamily: F.body }}>
-      {/* Nav */}
-      <nav style={{
-        position: 'sticky', top: 0, zIndex: 10,
-        background: T.nav, borderBottom: `1px solid ${T.border}`,
-        padding: '0 20px', height: 56, display: 'flex', alignItems: 'center', gap: 12,
-      }}>
-        <div style={{ fontFamily: F.display, fontSize: 20, color: T.blue, flex: 1 }}>Alpha Health Track</div>
-        <Btn onClick={onSignIn} style={{ padding: '8px 20px', minHeight: 38, fontSize: 13 }}>Sign In</Btn>
-      </nav>
+    <>
+      {/* Skip navigation — keyboard and screen reader users */}
+      <a
+        href="#main-content"
+        style={{
+          position: 'absolute',
+          left: -9999,
+          top: 8,
+          zIndex: 9999,
+          padding: '8px 16px',
+          background: B.orange,
+          color: '#FFF8F5',
+          fontFamily: F.mono,
+          fontSize: 12,
+          textDecoration: 'none',
+          borderRadius: 4,
+        }}
+        onFocus={e => { (e.currentTarget as HTMLAnchorElement).style.left = '8px' }}
+        onBlur={e => { (e.currentTarget as HTMLAnchorElement).style.left = '-9999px' }}
+      >
+        Skip to main content
+      </a>
 
-      {/* Hero */}
-      <div style={{ textAlign: 'center', padding: '64px 24px 48px', maxWidth: 640, margin: '0 auto' }}>
-        <div style={{
-          display: 'inline-block',
-          background: T.blueSurface, border: `1px solid ${T.blue}30`,
-          borderRadius: 20, padding: '4px 14px',
-          fontFamily: F.mono, fontSize: 11, color: T.blue,
-          marginBottom: 24, letterSpacing: 1,
-        }}>
-          CARDIAC REMOTE MONITORING
-        </div>
-        <h1 style={{ fontFamily: F.display, fontSize: 'clamp(32px, 8vw, 56px)', color: T.text, lineHeight: 1.1, marginBottom: 20 }}>
-          Heart failure care,<br /><span style={{ color: T.blue }}>from anywhere.</span>
-        </h1>
-        <p style={{ fontSize: 16, color: T.textSec, lineHeight: 1.7, marginBottom: 36, maxWidth: 480, margin: '0 auto 36px' }}>
-          Alpha Health Track gives cardiac care teams real-time patient monitoring, AI-powered daily check-ins, and instant alerting — in one clinical-grade dashboard.
-        </p>
-        <div style={{ display: 'flex', gap: 12, justifyContent: 'center', flexWrap: 'wrap' }}>
-          <Btn onClick={onSignIn} style={{ fontSize: 15, padding: '12px 28px' }}>Get Started →</Btn>
-          <Btn variant="ghost" onClick={onSignIn} style={{ fontSize: 15, padding: '12px 28px' }}>Provider Login</Btn>
-        </div>
-      </div>
+      <div style={{ minHeight: '100dvh', background: B.surface, fontFamily: F.body }}>
 
-      {/* Stats bar */}
-      <div style={{ background: T.nav, borderTop: `1px solid ${T.border}`, borderBottom: `1px solid ${T.border}`, padding: '24px 20px', margin: '0 0 48px' }}>
-        <div style={{ display: 'flex', justifyContent: 'center', gap: 'clamp(24px, 6vw, 64px)', flexWrap: 'wrap' }}>
-          {[['< 2 min', 'daily check-in time'], ['60s', 'alert polling interval'], ['7-day', 'weight trend window'], ['4', 'integrations']].map(([val, label]) => (
-            <div key={label} style={{ textAlign: 'center' }}>
-              <div style={{ fontFamily: F.display, fontSize: 28, color: T.blue }}>{val}</div>
-              <div style={{ fontFamily: F.mono, fontSize: 11, color: T.textTert, marginTop: 4, textTransform: 'uppercase', letterSpacing: 1 }}>{label}</div>
-            </div>
-          ))}
-        </div>
-      </div>
+        {/* Nav */}
+        <nav
+          aria-label="Site navigation"
+          style={{
+            position: 'sticky',
+            top: 0,
+            zIndex: 10,
+            background: B.canvas,
+            borderBottom: `1px solid ${B.border}`,
+            padding: '0 24px',
+            height: 56,
+            display: 'flex',
+            alignItems: 'center',
+            gap: 12,
+          }}
+        >
+          <div style={{
+            fontFamily: F.display,
+            fontSize: 18,
+            color: B.ink,
+            flex: 1,
+            letterSpacing: '-0.01em',
+            fontWeight: 700,
+          }}>
+            Alpha Health Track
+          </div>
+          <OrangeBtn onClick={onSignIn} style={{ padding: '9px 18px', minHeight: 44, fontSize: 13 }}>
+            Sign In
+          </OrangeBtn>
+        </nav>
 
-      {/* Features */}
-      <div style={{ maxWidth: 880, margin: '0 auto', padding: '0 20px 64px' }}>
-        <div style={{ textAlign: 'center', marginBottom: 36 }}>
-          <h2 style={{ fontFamily: F.display, fontSize: 28, color: T.text }}>Everything your care team needs</h2>
-        </div>
-        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(260px, 1fr))', gap: 16 }}>
-          {features.map(f => (
-            <div key={f.title} style={{ background: T.card, border: `1px solid ${T.border}`, borderRadius: 12, padding: 24 }}>
-              <div style={{ fontSize: 28, marginBottom: 12 }}>{f.icon}</div>
-              <div style={{ fontFamily: F.body, fontSize: 15, fontWeight: 600, color: T.text, marginBottom: 8 }}>{f.title}</div>
-              <div style={{ fontFamily: F.body, fontSize: 13, color: T.textSec, lineHeight: 1.6 }}>{f.desc}</div>
-            </div>
-          ))}
-        </div>
-      </div>
+        <main id="main-content">
 
-      {/* Roles */}
-      <div style={{ background: T.nav, borderTop: `1px solid ${T.border}`, padding: '48px 20px' }}>
-        <div style={{ maxWidth: 640, margin: '0 auto', textAlign: 'center' }}>
-          <h2 style={{ fontFamily: F.display, fontSize: 24, color: T.text, marginBottom: 8 }}>Built for every role</h2>
-          <p style={{ color: T.textSec, fontSize: 14, marginBottom: 32 }}>One platform, tailored access for patients, clinicians, and administrators.</p>
-          <div style={{ display: 'flex', gap: 12, justifyContent: 'center', flexWrap: 'wrap' }}>
-            {[['Patients', 'Daily check-ins, symptom tracking, care team messaging'], ['Clinicians', 'Full monitoring dashboard, alerts, check-in history'], ['Admins', 'Backlog management, sprint tracking, system setup']].map(([role, desc]) => (
-              <div key={role} style={{ flex: '1 1 180px', background: T.card, border: `1px solid ${T.border}`, borderRadius: 10, padding: '20px 16px', textAlign: 'left' }}>
-                <div style={{ fontFamily: F.mono, fontSize: 11, color: T.blue, textTransform: 'uppercase', letterSpacing: 1, marginBottom: 8 }}>{role}</div>
-                <div style={{ fontSize: 13, color: T.textSec, lineHeight: 1.6 }}>{desc}</div>
+          {/* Hero */}
+          <div style={{ background: B.canvas, padding: '72px 24px 80px' }}>
+            <div style={{ maxWidth: 680, margin: '0 auto' }}>
+
+              <div style={{
+                display: 'inline-flex',
+                alignItems: 'center',
+                gap: 8,
+                marginBottom: 32,
+              }}>
+                <div style={{
+                  width: 8,
+                  height: 8,
+                  borderRadius: '50%',
+                  background: B.orange,
+                  flexShrink: 0,
+                }} />
+                <span style={{
+                  fontFamily: F.mono,
+                  fontSize: 11,
+                  color: B.muted,
+                  letterSpacing: '0.1em',
+                  textTransform: 'uppercase',
+                }}>
+                  Cardiac Remote Monitoring Platform
+                </span>
               </div>
-            ))}
-          </div>
-          <div style={{ marginTop: 36 }}>
-            <Btn onClick={onSignIn} full style={{ maxWidth: 320, margin: '0 auto', fontSize: 15 }}>Sign In to Alpha Health Track →</Btn>
-          </div>
-        </div>
-      </div>
 
-      {/* Footer */}
-      <div style={{ borderTop: `1px solid ${T.border}`, padding: '20px', textAlign: 'center', fontFamily: F.mono, fontSize: 11, color: T.textTert }}>
-        Alpha Health Track · Clinical Remote Monitoring · For authorized care teams only
+              <h1 style={{
+                fontFamily: F.display,
+                fontSize: 'clamp(40px, 7vw, 68px)',
+                color: B.ink,
+                lineHeight: 1.06,
+                letterSpacing: '-0.025em',
+                marginBottom: 28,
+                fontWeight: 700,
+              }}>
+                Heart failure care,{' '}
+                <span style={{ color: B.orange }}>from anywhere.</span>
+              </h1>
+
+              <p style={{
+                fontFamily: F.body,
+                fontSize: 17,
+                color: B.body,
+                lineHeight: 1.7,
+                maxWidth: 520,
+                marginBottom: 40,
+              }}>
+                Alpha Health Track gives cardiac care teams real-time patient monitoring,
+                AI-powered daily check-ins, and instant alerting: one clinical-grade dashboard.
+              </p>
+
+              <div style={{ display: 'flex', gap: 12, flexWrap: 'wrap', alignItems: 'center' }}>
+                <OrangeBtn onClick={onSignIn}>
+                  Request Access →
+                </OrangeBtn>
+                <GhostBtn onClick={onSignIn}>
+                  Provider Login
+                </GhostBtn>
+              </div>
+
+            </div>
+          </div>
+
+          {/* Features — editorial typographic rows, not card grid */}
+          <div style={{ background: B.surface, borderTop: `1px solid ${B.border}` }}>
+            <div style={{ maxWidth: 760, margin: '0 auto', padding: '64px 24px 0' }}>
+
+              <div style={{ marginBottom: 48 }}>
+                <h2 style={{
+                  fontFamily: F.display,
+                  fontSize: 'clamp(26px, 4vw, 36px)',
+                  fontWeight: 700,
+                  color: B.ink,
+                  letterSpacing: '-0.02em',
+                  lineHeight: 1.1,
+                  marginBottom: 10,
+                }}>
+                  Everything your care team needs
+                </h2>
+                <p style={{
+                  fontFamily: F.body,
+                  fontSize: 15,
+                  color: B.muted,
+                  lineHeight: 1.6,
+                }}>
+                  Purpose-built for cardiac RPM. Not adapted from a general-purpose template.
+                </p>
+              </div>
+
+              <ul style={{ listStyle: 'none', padding: 0, margin: 0 }}>
+                {features.map((f, i) => (
+                  <li
+                    key={f.tag}
+                    style={{
+                      display: 'grid',
+                      gridTemplateColumns: '88px 1fr',
+                      gap: '0 28px',
+                      padding: '26px 0',
+                      borderTop: `1px solid ${B.border}`,
+                      ...(i === features.length - 1 ? { borderBottom: `1px solid ${B.border}` } : {}),
+                    }}
+                  >
+                    <div style={{
+                      fontFamily: F.mono,
+                      fontSize: 10,
+                      color: B.orange,
+                      letterSpacing: '0.08em',
+                      textTransform: 'uppercase',
+                      paddingTop: 3,
+                    }}>
+                      {f.tag}
+                    </div>
+                    <div>
+                      <div style={{
+                        fontFamily: F.display,
+                        fontSize: 18,
+                        fontWeight: 700,
+                        color: B.ink,
+                        letterSpacing: '-0.015em',
+                        lineHeight: 1.25,
+                        marginBottom: 7,
+                      }}>
+                        {f.title}
+                      </div>
+                      <div style={{
+                        fontFamily: F.body,
+                        fontSize: 14,
+                        color: B.body,
+                        lineHeight: 1.75,
+                      }}>
+                        {f.desc}
+                      </div>
+                    </div>
+                  </li>
+                ))}
+              </ul>
+
+            </div>
+          </div>
+
+          {/* Roles */}
+          <div style={{
+            background: B.strip,
+            borderTop: `1px solid ${B.border}`,
+            padding: '64px 24px 72px',
+          }}>
+            <div style={{ maxWidth: 760, margin: '0 auto' }}>
+
+              <h2 style={{
+                fontFamily: F.display,
+                fontSize: 'clamp(24px, 3.5vw, 32px)',
+                fontWeight: 700,
+                color: B.ink,
+                letterSpacing: '-0.02em',
+                lineHeight: 1.1,
+                marginBottom: 40,
+              }}>
+                Built for every role
+              </h2>
+
+              <div style={{
+                display: 'grid',
+                gridTemplateColumns: 'repeat(auto-fill, minmax(200px, 1fr))',
+                gap: '32px 48px',
+                marginBottom: 48,
+              }}>
+                {roles.map(r => (
+                  <div key={r.label}>
+                    <div style={{
+                      fontFamily: F.mono,
+                      fontSize: 10,
+                      color: B.orange,
+                      textTransform: 'uppercase',
+                      letterSpacing: '0.12em',
+                      marginBottom: 10,
+                    }}>
+                      {r.label}
+                    </div>
+                    <div style={{
+                      fontFamily: F.body,
+                      fontSize: 14,
+                      color: B.body,
+                      lineHeight: 1.7,
+                    }}>
+                      {r.desc}
+                    </div>
+                  </div>
+                ))}
+              </div>
+
+              <OrangeBtn onClick={onSignIn} style={{ minWidth: 240 }}>
+                Sign In to Alpha Health Track →
+              </OrangeBtn>
+
+            </div>
+          </div>
+
+        </main>
+
+        {/* Footer */}
+        <footer style={{
+          borderTop: `1px solid ${B.border}`,
+          padding: '18px 24px',
+          background: B.canvas,
+          display: 'flex',
+          justifyContent: 'space-between',
+          alignItems: 'center',
+          flexWrap: 'wrap',
+          gap: 8,
+        }}>
+          <span style={{ fontFamily: F.mono, fontSize: 11, color: B.muted }}>
+            Alpha Health Track · Clinical Remote Monitoring
+          </span>
+          <span style={{ fontFamily: F.mono, fontSize: 11, color: B.muted }}>
+            For authorized care teams only
+          </span>
+        </footer>
+
       </div>
-    </div>
+    </>
   )
 }
