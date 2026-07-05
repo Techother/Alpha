@@ -16,8 +16,9 @@ const B = {
   muted:       '#6B7280',
   border:      '#E5E7EB',
   borderStrong:'#D1D5DB',
-  orange:      '#F25623',
-  orangeHover: '#D94B1F',
+  orange:      '#F25623',   // display accent — large text (3:1+) and decorative marks only
+  orangeDeep:  '#C63F10',   // interactive accent — 5.1:1 on white; buttons, small labels
+  orangeHover: '#A83409',
 } as const
 
 const features = [
@@ -48,9 +49,9 @@ function OrangeBtn({
     <button
       onClick={onClick}
       onMouseEnter={e => { (e.currentTarget as HTMLButtonElement).style.background = B.orangeHover }}
-      onMouseLeave={e => { (e.currentTarget as HTMLButtonElement).style.background = B.orange }}
+      onMouseLeave={e => { (e.currentTarget as HTMLButtonElement).style.background = B.orangeDeep }}
       style={{
-        background: B.orange,
+        background: B.orangeDeep,
         color: '#FFF8F5',   // tinted white — slight orange lean
         border: 'none',
         borderRadius: 6,
@@ -121,7 +122,7 @@ export function LandingPage({ onSignIn }: { onSignIn: () => void }) {
           top: 8,
           zIndex: 9999,
           padding: '8px 16px',
-          background: B.orange,
+          background: B.orangeDeep,
           color: '#FFF8F5',
           fontFamily: F.mono,
           fontSize: 12,
@@ -275,8 +276,8 @@ export function LandingPage({ onSignIn }: { onSignIn: () => void }) {
                   >
                     <div style={{
                       fontFamily: F.mono,
-                      fontSize: 10,
-                      color: B.orange,
+                      fontSize: 11,
+                      color: B.orangeDeep,
                       letterSpacing: '0.08em',
                       textTransform: 'uppercase',
                       paddingTop: 3,
@@ -341,8 +342,8 @@ export function LandingPage({ onSignIn }: { onSignIn: () => void }) {
                   <div key={r.label}>
                     <div style={{
                       fontFamily: F.mono,
-                      fontSize: 10,
-                      color: B.orange,
+                      fontSize: 11,
+                      color: B.orangeDeep,
                       textTransform: 'uppercase',
                       letterSpacing: '0.12em',
                       marginBottom: 10,
