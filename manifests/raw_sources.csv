@@ -3,3 +3,4 @@ src_training_guide_v1,training-guide.html,html,Employee & Admin Training Guide v
 src_landing_page_v1,landing.html,html,Public landing page — marketing claims / ROI model / patient experience / provider features,https://cardiotrack-three.vercel.app/landing.html,2026-05-28,compiled,wiki/landing-page.md
 src_pitch_deck_v1,pitch.html,html,Investor pitch deck — market sizing / business model / traction / financials / team / seed ask,https://cardiotrack-three.vercel.app/pitch.html,2026-05-28,compiled,wiki/pitch-deck.md
 src_dashboard_app,dashboard,html,React SPA dashboard — JS-rendered; content not fetchable via static fetch,https://cardiotrack-three.vercel.app/dashboard,2026-05-28,skipped,
+src_mkl_health_prd_v1,MKL_Health_PRD.md,pdf-transcript,MKL Health PRD v1.0 — repositioning CardioTrack to diabetes/CKD/medication-outcomes RPM platform; chat-first landing, Warm Clinical design, new DB schema,user-supplied PDF,2026-07-08,pending,
