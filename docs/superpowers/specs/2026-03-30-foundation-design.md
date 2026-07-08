@@ -1,7 +1,7 @@
-# CardioTrack Foundation Design
+# MKL Health Foundation Design
 **Date:** 2026-03-30
 **Scope:** Schema + Auth + Routing (Phase 1 of v3.0 build)
-**PRD Reference:** CardioTrack PRD v3.0 — Parts 1, 2, 4 (auth), 10 (file structure)
+**PRD Reference:** MKL Health PRD v3.0 — Parts 1, 2, 4 (auth), 10 (file structure)
 
 ---
 

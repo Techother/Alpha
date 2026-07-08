@@ -9,7 +9,7 @@ status: current
 
 # Training Guide — Roles & Workflows
 
-Compiled from the internal Alpha Health Track Employee & Admin Training Guide v1.0 (May 2026, Confidential).
+Compiled from the internal MKL Health Employee & Admin Training Guide v1.0 (May 2026, Confidential).
 
 ## User Roles
 

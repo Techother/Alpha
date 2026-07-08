@@ -1,8 +1,8 @@
-# Alpha Health Track — GSD Workflow Guide
+# MKL Health — GSD Workflow Guide
 
 ## Project
 
-**Alpha Health Track — Security Hardening & Production Readiness**
+**MKL Health — Security Hardening & Production Readiness**
 
 Clinical RPM web app. This milestone hardens the app for production: moves all third-party API secrets server-side via Vercel proxy functions, adds clinical test coverage, resolves schema ambiguity, decomposes the monolithic App.tsx, wires up react-router-dom v7, and deploys to Vercel.
 

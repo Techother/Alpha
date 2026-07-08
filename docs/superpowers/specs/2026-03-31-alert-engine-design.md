@@ -1,7 +1,7 @@
-# CardioTrack — Alert Engine Design
+# MKL Health — Alert Engine Design
 **Date:** 2026-03-31
 **Scope:** Sub-project C — Client-side alert evaluation engine
-**PRD Reference:** CardioTrack PRD v3.0 — Heart failure alert rules
+**PRD Reference:** MKL Health PRD v3.0 — Heart failure alert rules
 
 ---
 

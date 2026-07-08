@@ -1,7 +1,7 @@
-# CardioTrack — Chatbot Check-In Flow Design
+# MKL Health — Chatbot Check-In Flow Design
 **Date:** 2026-03-30
 **Scope:** Sub-project A — Patient chatbot check-in (PortalCheckin)
-**PRD Reference:** Parts 3, 6, 8 of CardioTrack PRD v3.0
+**PRD Reference:** Parts 3, 6, 8 of MKL Health PRD v3.0
 
 ---
 

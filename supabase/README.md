@@ -2,7 +2,7 @@
 
 **Active Schema: v3.2 | Applied via: migrations 001 + 002 + 003 + 004 + 005**
 
-This directory contains the authoritative Supabase schema for Alpha Health Track. The v3 schema uses Row Level Security (RLS) with a provider/patient role model, multi-condition patient structure, and a chatbot session architecture.
+This directory contains the authoritative Supabase schema for MKL Health. The v3 schema uses Row Level Security (RLS) with a provider/patient role model, multi-condition patient structure, and a chatbot session architecture.
 
 ---
 

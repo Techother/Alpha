@@ -9,7 +9,7 @@ status: current
 
 # Pitch Deck — Market, Business Model & Financials
 
-Compiled from the Alpha Health Track investor pitch deck. Internal reference for market context and business model decisions.
+Compiled from the MKL Health investor pitch deck. Internal reference for market context and business model decisions.
 
 ---
 

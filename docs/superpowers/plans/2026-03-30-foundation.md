@@ -1,4 +1,4 @@
-# CardioTrack Foundation Implementation Plan
+# MKL Health Foundation Implementation Plan
 
 > **For agentic workers:** REQUIRED SUB-SKILL: Use superpowers:subagent-driven-development (recommended) or superpowers:executing-plans to implement this plan task-by-task. Steps use checkbox (`- [ ]`) syntax for tracking.
 
@@ -186,7 +186,7 @@ Create `supabase/migrations/001_v3_foundation.sql` with the full contents below.
 
 ```sql
 -- =============================================================
--- CardioTrack v3.0 Foundation Migration
+-- MKL Health v3.0 Foundation Migration
 -- Apply in: Supabase dashboard > SQL Editor
 -- Project: wtjotacchiurbjcizdws
 -- =============================================================
@@ -536,7 +536,7 @@ Replace the `<head>` section's `<title>` line — add the font link just before 
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
-    <title>CardioTrack</title>
+    <title>MKL Health</title>
   </head>
   <body>
     <div id="root"></div>
@@ -548,7 +548,7 @@ Replace the `<head>` section's `<title>` line — add the font link just before 
 - [ ] **Step 2: Create src/styles/variables.css**
 
 ```css
-/* CardioTrack Design Tokens — KP.org inspired */
+/* MKL Health Design Tokens — KP.org inspired */
 :root {
   /* ── Brand blues ───────────────────────────── */
   --color-primary:        #003087;
@@ -641,7 +641,7 @@ Replace the `<head>` section's `<title>` line — add the font link just before 
 - [ ] **Step 3: Create src/styles/global.css**
 
 ```css
-/* CardioTrack Global Styles */
+/* MKL Health Global Styles */
 @import './variables.css';
 
 *, *::before, *::after {
@@ -839,7 +839,7 @@ git commit -m "feat: add KP-inspired CSS design token system"
 - [ ] **Step 1: Create src/api/supabase.types.ts**
 
 ```typescript
-// Manual type definitions for CardioTrack v3 database schema
+// Manual type definitions for MKL Health v3 database schema
 
 export type Role = 'provider' | 'patient'
 
@@ -1370,7 +1370,7 @@ export function AdminLogin() {
             <span style={{ color: '#fff', fontSize: 22, fontWeight: 700 }}>C</span>
           </div>
           <h1 style={{ fontSize: 'var(--font-size-xl)', marginBottom: 'var(--space-1)' }}>
-            CardioTrack
+            MKL Health
           </h1>
           <p style={{ color: 'var(--color-text-muted)', fontSize: 'var(--font-size-sm)' }}>
             Care Coordinator Portal
@@ -1491,7 +1491,7 @@ export function AdminLayout() {
               flexShrink: 0,
             }}>C</div>
             <span style={{ fontWeight: 'var(--font-weight-semibold)', fontSize: 'var(--font-size-md)' }}>
-              CardioTrack
+              MKL Health
             </span>
           </div>
         </div>
@@ -1744,7 +1744,7 @@ export function PortalLogin() {
           textAlign: 'center',
           lineHeight: 'var(--line-height-relaxed)',
         }}>
-          CardioTrack is a wellness tracking tool. It is not a medical device and does not provide medical advice.
+          MKL Health is a wellness tracking tool. It is not a medical device and does not provide medical advice.
         </p>
       </div>
     </div>
@@ -1961,7 +1961,7 @@ export const PATIENT_COPY = {
   conditionLabel: 'Heart Failure',
   weightUnit: 'lbs',
   weightWarning: 'Contact your care team if your weight increases by 2 or more pounds in 3 days.',
-  disclaimer: 'CardioTrack is a wellness tracking tool. It does not provide medical advice.',
+  disclaimer: 'MKL Health is a wellness tracking tool. It does not provide medical advice.',
 } as const
 ```
 
@@ -2064,7 +2064,7 @@ cd /Users/larrygoode/cardiotrack && npm run dev
 
 Manual verification checklist:
 - [ ] `http://localhost:5173/` → redirects to `/admin/login`
-- [ ] `/admin/login` → renders login form with CardioTrack branding
+- [ ] `/admin/login` → renders login form with MKL Health branding
 - [ ] `/my-health/login` → renders login form with "My Health Portal" heading
 - [ ] `/admin` (unauthenticated) → redirects to `/admin/login`
 - [ ] `/my-health` (unauthenticated) → redirects to `/my-health/login`

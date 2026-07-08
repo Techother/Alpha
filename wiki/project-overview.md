@@ -9,7 +9,7 @@ status: current
 
 # Project Overview
 
-CardioTrack is a clinical remote patient monitoring (RPM) web app for healthcare providers managing patients with cardiovascular and chronic conditions. Clinicians monitor vitals, track billing CPT codes, run clinical screenings, manage medications, and coordinate transitional care.
+MKL Health is a clinical remote patient monitoring (RPM) web app for healthcare providers managing patients with cardiovascular and chronic conditions. Clinicians monitor vitals, track billing CPT codes, run clinical screenings, manage medications, and coordinate transitional care.
 
 **Core value:** Sensitive API credentials never reach the browser or public internet.
 

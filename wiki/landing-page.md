@@ -9,7 +9,7 @@ status: current
 
 # Landing Page — Marketing Claims & ROI Model
 
-Compiled from the Alpha Health Track public landing page. Reflects public-facing positioning and the ROI model shown to prospective practices.
+Compiled from the MKL Health public landing page. Reflects public-facing positioning and the ROI model shown to prospective practices.
 
 ---
 
