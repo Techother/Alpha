@@ -3,23 +3,7 @@
 // clinical white canvas. Removed: stats bar (hero-metric ban), card grid (identical-card ban),
 // emoji icons. Added: <main>, skip-nav, 44px+ touch targets, editorial feature rows.
 
-import { F } from '@/lib/tokens'
-
-// Landing page uses a committed accent palette distinct from the clinical app shell.
-// Orange (#F25623) replaces institutional blue as the sole CTA / accent color on this surface.
-const B = {
-  canvas:      '#FDFCFB',   // near-white, barely warm toward orange hue
-  surface:     '#F8F7F5',   // off-white surface, same warm tint
-  strip:       '#F0EFED',   // slightly darker strip
-  ink:         '#111827',
-  body:        '#374151',
-  muted:       '#6B7280',
-  border:      '#E5E7EB',
-  borderStrong:'#D1D5DB',
-  orange:      '#F25623',   // display accent — large text (3:1+) and decorative marks only
-  orangeDeep:  '#C63F10',   // interactive accent — 5.1:1 on white; buttons, small labels
-  orangeHover: '#A83409',
-} as const
+import { P, F } from '@/lib/tokens'
 
 const features = [
   { tag: 'Monitoring',  title: 'Real-time Vital Tracking',   desc: 'Vital signs tracked across your full roster. Weight gain, breathlessness spikes, and missed medications surface to the alert queue automatically.' },
@@ -36,7 +20,7 @@ const roles = [
   { label: 'Admins', desc: 'Care team management, patient enrollment, audit log access, and system configuration.' },
 ]
 
-function OrangeBtn({
+function ClayBtn({
   onClick,
   children,
   style: extra,
@@ -48,10 +32,10 @@ function OrangeBtn({
   return (
     <button
       onClick={onClick}
-      onMouseEnter={e => { (e.currentTarget as HTMLButtonElement).style.background = B.orangeHover }}
-      onMouseLeave={e => { (e.currentTarget as HTMLButtonElement).style.background = B.orangeDeep }}
+      onMouseEnter={e => { (e.currentTarget as HTMLButtonElement).style.background = P.clayHover }}
+      onMouseLeave={e => { (e.currentTarget as HTMLButtonElement).style.background = P.clayDeep }}
       style={{
-        background: B.orangeDeep,
+        background: P.clayDeep,
         color: '#FFF8F5',   // tinted white — slight orange lean
         border: 'none',
         borderRadius: 6,
@@ -83,18 +67,18 @@ function GhostBtn({
       onClick={onClick}
       onMouseEnter={e => {
         const el = e.currentTarget as HTMLButtonElement
-        el.style.borderColor = B.body
-        el.style.color = B.ink
+        el.style.borderColor = P.body
+        el.style.color = P.ink
       }}
       onMouseLeave={e => {
         const el = e.currentTarget as HTMLButtonElement
-        el.style.borderColor = B.borderStrong
-        el.style.color = B.body
+        el.style.borderColor = P.borderStrong
+        el.style.color = P.body
       }}
       style={{
         background: 'transparent',
-        color: B.body,
-        border: `1px solid ${B.borderStrong}`,
+        color: P.body,
+        border: `1px solid ${P.borderStrong}`,
         borderRadius: 6,
         padding: '13px 26px',
         minHeight: 48,
@@ -122,7 +106,7 @@ export function LandingPage({ onSignIn }: { onSignIn: () => void }) {
           top: 8,
           zIndex: 9999,
           padding: '8px 16px',
-          background: B.orangeDeep,
+          background: P.clayDeep,
           color: '#FFF8F5',
           fontFamily: F.mono,
           fontSize: 12,
@@ -135,7 +119,7 @@ export function LandingPage({ onSignIn }: { onSignIn: () => void }) {
         Skip to main content
       </a>
 
-      <div style={{ minHeight: '100dvh', background: B.surface, fontFamily: F.body }}>
+      <div style={{ minHeight: '100dvh', background: P.surface, fontFamily: F.body }}>
 
         {/* Nav */}
         <nav
@@ -144,8 +128,8 @@ export function LandingPage({ onSignIn }: { onSignIn: () => void }) {
             position: 'sticky',
             top: 0,
             zIndex: 10,
-            background: B.canvas,
-            borderBottom: `1px solid ${B.border}`,
+            background: P.canvas,
+            borderBottom: `1px solid ${P.border}`,
             padding: '0 24px',
             height: 56,
             display: 'flex',
@@ -156,22 +140,22 @@ export function LandingPage({ onSignIn }: { onSignIn: () => void }) {
           <div style={{
             fontFamily: F.display,
             fontSize: 18,
-            color: B.ink,
+            color: P.ink,
             flex: 1,
             letterSpacing: '-0.01em',
             fontWeight: 700,
           }}>
             Alpha Health Track
           </div>
-          <OrangeBtn onClick={onSignIn} style={{ padding: '9px 18px', minHeight: 44, fontSize: 13 }}>
+          <ClayBtn onClick={onSignIn} style={{ padding: '9px 18px', minHeight: 44, fontSize: 13 }}>
             Sign In
-          </OrangeBtn>
+          </ClayBtn>
         </nav>
 
         <main id="main-content">
 
           {/* Hero */}
-          <div style={{ background: B.canvas, padding: '72px 24px 80px' }}>
+          <div style={{ background: P.canvas, padding: '72px 24px 80px' }}>
             <div style={{ maxWidth: 680, margin: '0 auto' }}>
 
               <div style={{
@@ -184,13 +168,13 @@ export function LandingPage({ onSignIn }: { onSignIn: () => void }) {
                   width: 8,
                   height: 8,
                   borderRadius: '50%',
-                  background: B.orange,
+                  background: P.clay,
                   flexShrink: 0,
                 }} />
                 <span style={{
                   fontFamily: F.mono,
                   fontSize: 11,
-                  color: B.muted,
+                  color: P.muted,
                   letterSpacing: '0.1em',
                   textTransform: 'uppercase',
                 }}>
@@ -201,20 +185,20 @@ export function LandingPage({ onSignIn }: { onSignIn: () => void }) {
               <h1 style={{
                 fontFamily: F.display,
                 fontSize: 'clamp(40px, 7vw, 68px)',
-                color: B.ink,
+                color: P.ink,
                 lineHeight: 1.06,
                 letterSpacing: '-0.025em',
                 marginBottom: 28,
                 fontWeight: 700,
               }}>
                 Heart failure care,{' '}
-                <span style={{ color: B.orange }}>from anywhere.</span>
+                <span style={{ color: P.clay }}>from anywhere.</span>
               </h1>
 
               <p style={{
                 fontFamily: F.body,
                 fontSize: 17,
-                color: B.body,
+                color: P.body,
                 lineHeight: 1.7,
                 maxWidth: 520,
                 marginBottom: 40,
@@ -224,9 +208,9 @@ export function LandingPage({ onSignIn }: { onSignIn: () => void }) {
               </p>
 
               <div style={{ display: 'flex', gap: 12, flexWrap: 'wrap', alignItems: 'center' }}>
-                <OrangeBtn onClick={onSignIn}>
+                <ClayBtn onClick={onSignIn}>
                   Request Access →
-                </OrangeBtn>
+                </ClayBtn>
                 <GhostBtn onClick={onSignIn}>
                   Provider Login
                 </GhostBtn>
@@ -236,7 +220,7 @@ export function LandingPage({ onSignIn }: { onSignIn: () => void }) {
           </div>
 
           {/* Features — editorial typographic rows, not card grid */}
-          <div style={{ background: B.surface, borderTop: `1px solid ${B.border}` }}>
+          <div style={{ background: P.surface, borderTop: `1px solid ${P.border}` }}>
             <div style={{ maxWidth: 760, margin: '0 auto', padding: '64px 24px 0' }}>
 
               <div style={{ marginBottom: 48 }}>
@@ -244,7 +228,7 @@ export function LandingPage({ onSignIn }: { onSignIn: () => void }) {
                   fontFamily: F.display,
                   fontSize: 'clamp(26px, 4vw, 36px)',
                   fontWeight: 700,
-                  color: B.ink,
+                  color: P.ink,
                   letterSpacing: '-0.02em',
                   lineHeight: 1.1,
                   marginBottom: 10,
@@ -254,7 +238,7 @@ export function LandingPage({ onSignIn }: { onSignIn: () => void }) {
                 <p style={{
                   fontFamily: F.body,
                   fontSize: 15,
-                  color: B.muted,
+                  color: P.muted,
                   lineHeight: 1.6,
                 }}>
                   Purpose-built for cardiac RPM. Not adapted from a general-purpose template.
@@ -270,14 +254,14 @@ export function LandingPage({ onSignIn }: { onSignIn: () => void }) {
                       gridTemplateColumns: '88px 1fr',
                       gap: '0 28px',
                       padding: '26px 0',
-                      borderTop: `1px solid ${B.border}`,
-                      ...(i === features.length - 1 ? { borderBottom: `1px solid ${B.border}` } : {}),
+                      borderTop: `1px solid ${P.border}`,
+                      ...(i === features.length - 1 ? { borderBottom: `1px solid ${P.border}` } : {}),
                     }}
                   >
                     <div style={{
                       fontFamily: F.mono,
                       fontSize: 11,
-                      color: B.orangeDeep,
+                      color: P.clayDeep,
                       letterSpacing: '0.08em',
                       textTransform: 'uppercase',
                       paddingTop: 3,
@@ -289,7 +273,7 @@ export function LandingPage({ onSignIn }: { onSignIn: () => void }) {
                         fontFamily: F.display,
                         fontSize: 18,
                         fontWeight: 700,
-                        color: B.ink,
+                        color: P.ink,
                         letterSpacing: '-0.015em',
                         lineHeight: 1.25,
                         marginBottom: 7,
@@ -299,7 +283,7 @@ export function LandingPage({ onSignIn }: { onSignIn: () => void }) {
                       <div style={{
                         fontFamily: F.body,
                         fontSize: 14,
-                        color: B.body,
+                        color: P.body,
                         lineHeight: 1.75,
                       }}>
                         {f.desc}
@@ -314,8 +298,8 @@ export function LandingPage({ onSignIn }: { onSignIn: () => void }) {
 
           {/* Roles */}
           <div style={{
-            background: B.strip,
-            borderTop: `1px solid ${B.border}`,
+            background: P.strip,
+            borderTop: `1px solid ${P.border}`,
             padding: '64px 24px 72px',
           }}>
             <div style={{ maxWidth: 760, margin: '0 auto' }}>
@@ -324,7 +308,7 @@ export function LandingPage({ onSignIn }: { onSignIn: () => void }) {
                 fontFamily: F.display,
                 fontSize: 'clamp(24px, 3.5vw, 32px)',
                 fontWeight: 700,
-                color: B.ink,
+                color: P.ink,
                 letterSpacing: '-0.02em',
                 lineHeight: 1.1,
                 marginBottom: 40,
@@ -343,7 +327,7 @@ export function LandingPage({ onSignIn }: { onSignIn: () => void }) {
                     <div style={{
                       fontFamily: F.mono,
                       fontSize: 11,
-                      color: B.orangeDeep,
+                      color: P.clayDeep,
                       textTransform: 'uppercase',
                       letterSpacing: '0.12em',
                       marginBottom: 10,
@@ -353,7 +337,7 @@ export function LandingPage({ onSignIn }: { onSignIn: () => void }) {
                     <div style={{
                       fontFamily: F.body,
                       fontSize: 14,
-                      color: B.body,
+                      color: P.body,
                       lineHeight: 1.7,
                     }}>
                       {r.desc}
@@ -362,9 +346,9 @@ export function LandingPage({ onSignIn }: { onSignIn: () => void }) {
                 ))}
               </div>
 
-              <OrangeBtn onClick={onSignIn} style={{ minWidth: 240 }}>
+              <ClayBtn onClick={onSignIn} style={{ minWidth: 240 }}>
                 Sign In to Alpha Health Track →
-              </OrangeBtn>
+              </ClayBtn>
 
             </div>
           </div>
@@ -373,19 +357,19 @@ export function LandingPage({ onSignIn }: { onSignIn: () => void }) {
 
         {/* Footer */}
         <footer style={{
-          borderTop: `1px solid ${B.border}`,
+          borderTop: `1px solid ${P.border}`,
           padding: '18px 24px',
-          background: B.canvas,
+          background: P.canvas,
           display: 'flex',
           justifyContent: 'space-between',
           alignItems: 'center',
           flexWrap: 'wrap',
           gap: 8,
         }}>
-          <span style={{ fontFamily: F.mono, fontSize: 11, color: B.muted }}>
+          <span style={{ fontFamily: F.mono, fontSize: 11, color: P.muted }}>
             Alpha Health Track · Clinical Remote Monitoring
           </span>
-          <span style={{ fontFamily: F.mono, fontSize: 11, color: B.muted }}>
+          <span style={{ fontFamily: F.mono, fontSize: 11, color: P.muted }}>
             For authorized care teams only
           </span>
         </footer>
