@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Alpha Health Track — Employee & Admin Training Guide</title>
+  <title>MKL Health — Employee & Admin Training Guide</title>
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link href="https://fonts.googleapis.com/css2?family=Fraunces:wght@400;600;700;900&family=DM+Sans:wght@400;500;600;700&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet" />
   <style>
@@ -394,7 +394,7 @@
 
 <!-- ── Screen nav (hidden in print) ── -->
 <nav>
-  <div class="nav-brand">Alpha Health Track</div>
+  <div class="nav-brand">MKL Health</div>
   <div class="nav-links">
     <a href="#patient">Patient</a>
     <a href="#clinician">Clinician</a>
@@ -419,7 +419,7 @@
   <div class="cover-sub">
     Role-based workflows for Patients, Clinicians, and Admins.
     This guide covers onboarding, daily operations, clinical protocols,
-    billing, and system administration for Alpha Health Track.
+    billing, and system administration for MKL Health.
   </div>
   <div class="cover-meta">
     <div class="cover-meta-item">
@@ -448,7 +448,7 @@
     </div>
   </div>
   <div class="cover-logo-row">
-    <div class="cover-logo">Alpha Health Track</div>
+    <div class="cover-logo">MKL Health</div>
     <div class="cover-logo-sub">Remote Patient Monitoring · Albany, CA</div>
   </div>
 </div>
@@ -515,7 +515,7 @@
     <h1 class="section-h1">System Overview &amp; Architecture</h1>
     <div class="section-divider"></div>
     <p class="section-desc">
-      Alpha Health Track is a cloud-based Remote Patient Monitoring (RPM) platform
+      MKL Health is a cloud-based Remote Patient Monitoring (RPM) platform
       designed for cardiovascular practices managing chronic-care patients.
       It automates CMS billing compliance, collects daily vitals via SMS,
       and surfaces clinical alerts before they become crises.
@@ -559,7 +559,7 @@
   </table>
 
   <h2 class="wf-title"><span class="wf-num">03</span>Signing In &amp; Authentication</h2>
-  <p class="wf-desc">Alpha Health Track uses Supabase authentication with email + password. All API calls carry a short-lived JWT verified server-side — credentials never reach the browser bundle.</p>
+  <p class="wf-desc">MKL Health uses Supabase authentication with email + password. All API calls carry a short-lived JWT verified server-side — credentials never reach the browser bundle.</p>
 
   <div class="step-block no-break">
     <h3><span class="step-num">1</span> Navigate to the application URL</h3>
@@ -593,7 +593,7 @@
     <h1 class="section-h1">Section A<br>Patient Workflows</h1>
     <div class="section-divider"></div>
     <p class="section-desc">
-      Patients interact with Alpha Health Track entirely through SMS — no app download required.
+      Patients interact with MKL Health entirely through SMS — no app download required.
       All phone-based workflows are described here. Clinician-side enrollment steps are noted where relevant.
     </p>
   </div>
@@ -623,7 +623,7 @@
     <h3><span class="step-num">3</span> Send welcome SMS</h3>
     <ul>
       <li>In the patient record → click <strong>Send Test SMS</strong> to verify the phone number</li>
-      <li>The patient receives: "Alpha Health Track: This is a test message from your care team. Reply STOP to unsubscribe."</li>
+      <li>The patient receives: "MKL Health: This is a test message from your care team. Reply STOP to unsubscribe."</li>
       <li>If the patient replies STOP, flag the chart and use an alternate contact method</li>
     </ul>
   </div>
@@ -660,7 +660,7 @@
 
   <div class="step-block no-break">
     <h3><span class="step-num">1</span> Patient receives morning SMS</h3>
-    <p>Example message: <em>"Good morning, Maria 👋 Time for your daily Alpha Health Track check-in. How are you feeling today? Reply 1 (great) through 5 (very unwell)."</em></p>
+    <p>Example message: <em>"Good morning, Maria 👋 Time for your daily MKL Health check-in. How are you feeling today? Reply 1 (great) through 5 (very unwell)."</em></p>
   </div>
   <div class="step-block no-break">
     <h3><span class="step-num">2</span> Patient responds to prompts</h3>
@@ -701,7 +701,7 @@
   </div>
   <div class="step-block no-break">
     <h3><span class="step-num">2</span> Patient receives daily reminder</h3>
-    <p>SMS example: <em>"Alpha Health Track reminder: Did you take your Lisinopril 10mg today? Reply YES or NO."</em></p>
+    <p>SMS example: <em>"MKL Health reminder: Did you take your Lisinopril 10mg today? Reply YES or NO."</em></p>
   </div>
   <div class="step-block no-break">
     <h3><span class="step-num">3</span> Adherence recorded</h3>
@@ -785,7 +785,7 @@
     <h1 class="section-h1">Section B<br>Clinician Workflows</h1>
     <div class="section-divider"></div>
     <p class="section-desc">
-      Clinicians use the Alpha Health Track dashboard daily to monitor patients,
+      Clinicians use the MKL Health dashboard daily to monitor patients,
       respond to alerts, conduct screenings, manage care programs, and ensure
       all qualifying RPM interactions are captured for billing.
     </p>
@@ -955,7 +955,7 @@
 
   <!-- B6 -->
   <h2 class="wf-title"><span class="wf-num">B6</span>RPM Billing &amp; CPT Code Capture</h2>
-  <p class="wf-desc">Alpha Health Track automates tracking of CMS RPM billing thresholds. Navigate to <strong>Billing</strong> to view each patient's monthly status.</p>
+  <p class="wf-desc">MKL Health automates tracking of CMS RPM billing thresholds. Navigate to <strong>Billing</strong> to view each patient's monthly status.</p>
 
   <div class="cpt-grid no-break">
     <div class="cpt-card">
@@ -1071,7 +1071,7 @@
     <h1 class="section-h1">Section C<br>Admin Workflows</h1>
     <div class="section-divider"></div>
     <p class="section-desc">
-      Admins configure and maintain the Alpha Health Track environment.
+      Admins configure and maintain the MKL Health environment.
       All admin functions are accessed through the <strong>Setup</strong> panel
       (sidebar → Setup) and the Vercel dashboard for infrastructure-level changes.
     </p>
@@ -1084,7 +1084,7 @@
   <div class="step-block no-break">
     <h3><span class="step-num">1</span> Create a new clinician account</h3>
     <ul>
-      <li>Log in to <strong>supabase.com</strong> → select the Alpha Health Track project</li>
+      <li>Log in to <strong>supabase.com</strong> → select the MKL Health project</li>
       <li>Go to <strong>Authentication → Users → Invite User</strong></li>
       <li>Enter the clinician's work email address → click <strong>Send Invite</strong></li>
       <li>The clinician receives an email with a magic link to set their password</li>
@@ -1192,8 +1192,8 @@
   <div class="step-block no-break">
     <h3><span class="step-num">2</span> Verify the Slack bot has channel access</h3>
     <ul>
-      <li>In Slack: go to the target channel → <strong>Integrations</strong> → confirm the Alpha Health Track bot is a member</li>
-      <li>If not: type <code>/invite @Alpha Health Track Bot</code> in the channel</li>
+      <li>In Slack: go to the target channel → <strong>Integrations</strong> → confirm the MKL Health bot is a member</li>
+      <li>If not: type <code>/invite @MKL Health Bot</code> in the channel</li>
     </ul>
   </div>
   <div class="step-block no-break">
@@ -1234,7 +1234,7 @@
 
   <!-- C6 -->
   <h2 class="wf-title"><span class="wf-num">C6</span>Compliance, Audit Logs &amp; HIPAA</h2>
-  <p class="wf-desc">Alpha Health Track is designed for HIPAA-adjacent operation. The following controls are in place; Admins are responsible for enforcing operational compliance.</p>
+  <p class="wf-desc">MKL Health is designed for HIPAA-adjacent operation. The following controls are in place; Admins are responsible for enforcing operational compliance.</p>
 
   <table class="no-break">
     <thead><tr><th>Control</th><th>How It's Implemented</th><th>Admin Action</th></tr></thead>
@@ -1468,12 +1468,12 @@
   <hr class="section-rule" />
   <div style="display:flex;justify-content:space-between;align-items:center;padding:20px 0;">
     <div>
-      <div style="font-family:var(--display);font-size:16px;font-weight:700;color:var(--teal);">Alpha Health Track</div>
+      <div style="font-family:var(--display);font-size:16px;font-weight:700;color:var(--teal);">MKL Health</div>
       <div style="font-size:12px;color:var(--light);">Internal Training Guide · v1.0 · May 2026 · Confidential</div>
     </div>
     <div style="text-align:right;">
       <div style="font-size:12px;color:var(--mid);">Questions? Contact larry@techother.com</div>
-      <div style="font-size:11px;color:var(--light);">© 2026 Alpha Health Track · Albany, CA</div>
+      <div style="font-size:11px;color:var(--light);">© 2026 MKL Health · Albany, CA</div>
     </div>
   </div>
 </div>
