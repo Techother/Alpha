@@ -145,7 +145,7 @@ export function LandingPage({ onSignIn }: { onSignIn: () => void }) {
             letterSpacing: '-0.01em',
             fontWeight: 700,
           }}>
-            Alpha Health Track
+            MKL Health
           </div>
           <ClayBtn onClick={onSignIn} style={{ padding: '9px 18px', minHeight: 44, fontSize: 13 }}>
             Sign In
@@ -178,7 +178,7 @@ export function LandingPage({ onSignIn }: { onSignIn: () => void }) {
                   letterSpacing: '0.1em',
                   textTransform: 'uppercase',
                 }}>
-                  Cardiac Remote Monitoring Platform
+                  Diabetes · CKD · Medication Outcomes
                 </span>
               </div>
 
@@ -191,8 +191,8 @@ export function LandingPage({ onSignIn }: { onSignIn: () => void }) {
                 marginBottom: 28,
                 fontWeight: 700,
               }}>
-                Heart failure care,{' '}
-                <span style={{ color: P.clay }}>from anywhere.</span>
+                See if the medication is working —{' '}
+                <span style={{ color: P.clay }}>before the next visit.</span>
               </h1>
 
               <p style={{
@@ -203,8 +203,9 @@ export function LandingPage({ onSignIn }: { onSignIn: () => void }) {
                 maxWidth: 520,
                 marginBottom: 40,
               }}>
-                Alpha Health Track gives cardiac care teams real-time patient monitoring,
-                AI-powered daily check-ins, and instant alerting: one clinical-grade dashboard.
+                MKL Health links every medication change to the lab values and vitals it's meant to move —
+                real-time monitoring, AI-powered check-ins, and instant alerting for diabetes, CKD, and cardiac
+                comorbidities, in one clinical-grade dashboard.
               </p>
 
               <div style={{ display: 'flex', gap: 12, flexWrap: 'wrap', alignItems: 'center' }}>
@@ -241,7 +242,7 @@ export function LandingPage({ onSignIn }: { onSignIn: () => void }) {
                   color: P.muted,
                   lineHeight: 1.6,
                 }}>
-                  Purpose-built for cardiac RPM. Not adapted from a general-purpose template.
+                  Purpose-built for diabetes, CKD, and medication-outcome tracking. Not adapted from a general-purpose template.
                 </p>
               </div>
 
@@ -347,7 +348,7 @@ export function LandingPage({ onSignIn }: { onSignIn: () => void }) {
               </div>
 
               <ClayBtn onClick={onSignIn} style={{ minWidth: 240 }}>
-                Sign In to Alpha Health Track →
+                Sign In to MKL Health →
               </ClayBtn>
 
             </div>
@@ -367,7 +368,7 @@ export function LandingPage({ onSignIn }: { onSignIn: () => void }) {
           gap: 8,
         }}>
           <span style={{ fontFamily: F.mono, fontSize: 11, color: P.muted }}>
-            Alpha Health Track · Clinical Remote Monitoring
+            MKL Health · Clinical Care Platform for Diabetes, CKD & Medication Outcomes
           </span>
           <span style={{ fontFamily: F.mono, fontSize: 11, color: P.muted }}>
             For authorized care teams only
