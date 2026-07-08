@@ -1,6 +1,6 @@
 # Supabase Schema Documentation
 
-**Active Schema: v3.0 | Applied via: migrations 001 + 002 + 003 + 004**
+**Active Schema: v3.2 | Applied via: migrations 001 + 002 + 003 + 004 + 005**
 
 This directory contains the authoritative Supabase schema for Alpha Health Track. The v3 schema uses Row Level Security (RLS) with a provider/patient role model, multi-condition patient structure, and a chatbot session architecture.
 
@@ -70,6 +70,59 @@ Fixes four RLS and constraint bugs found in code review:
 All statements are idempotent and safe to re-run.
 
 **Requires 001 + 002 + 003** — modifies RLS policies and constraints on tables defined by prior migrations.
+
+### Step 5 — `migrations/005_mkl_health_schema.sql`
+
+Activates MKL Health's dormant v3.2 schema (SCHM2-01 through SCHM2-06) by widening existing tables and closing a pre-existing RLS gap, instead of creating parallel/duplicate tables:
+
+- **`conditions`** — seeds a fourth row, `other` (catch-all primary condition outside diabetes/CKD/heart failure). No `patients.primary_condition` or `patients.conditions` column is added; primary condition stays derived from `patient_conditions.primary_condition` joined to `conditions.slug`.
+- **`medication_regimens.frequency`** — widens the CHECK constraint from 3 values to 7: `once_daily`, `twice_daily`, `three_times_daily`, `four_times_daily`, `weekly`, `as_needed`, `other`.
+- **`medication_events.event_type`** — widens the CHECK constraint from 3 values to 6: `taken`, `missed`, `side_effect`, `start`, `stop`, `dose_change`. The three new values are prescription-change events for Medication Outcome Tracking (Phase 14), distinct from the existing adherence values, on the same table.
+- **`leads`** (new table) — `id`, `name`, `practice_name`, `specialty`, `patient_volume`, `ehr`, `chat_transcript` (jsonb), `requested_slot`, `created_at`. RLS: `public_insert_leads` allows unauthenticated INSERT (landing-page chat writes before a visitor has an account); `providers_read_leads` restricts SELECT to `profiles.role = 'provider'`.
+- **`providers_read_*` policies** — adds a provider-read SELECT policy to five tables that have only had `patient_own_*` policies since migration 001: `providers_read_patient_conditions`, `providers_read_observations`, `providers_read_symptom_reports`, `providers_read_medication_regimens`, `providers_read_medication_events`. These mirror `providers_read_patients` from Step 4 (CR-02) — same predicate, same bug class, closed before Phase 11-14 code reads this data.
+
+All statements are idempotent (`ON CONFLICT ... DO NOTHING`, `DROP CONSTRAINT IF EXISTS` / `ADD CONSTRAINT`, `CREATE TABLE IF NOT EXISTS`, `DROP POLICY IF EXISTS` before `CREATE POLICY`) and safe to re-run.
+
+**Requires 001 + 002 + 003 + 004**
+
+#### Step 5 Verification Query
+
+Run these in the Supabase SQL Editor after applying `005_mkl_health_schema.sql`:
+
+```sql
+-- (a) confirm the leads table has all 9 columns
+SELECT column_name FROM information_schema.columns
+WHERE table_schema = 'public' AND table_name = 'leads'
+ORDER BY column_name;
+
+-- (b) confirm both widened CHECK constraints
+SELECT conname, pg_get_constraintdef(oid)
+FROM pg_constraint
+WHERE conname IN ('medication_regimens_frequency_check', 'medication_events_event_type_check');
+
+-- (c) confirm all provider-read policies exist
+SELECT tablename, policyname
+FROM pg_policies
+WHERE schemaname = 'public' AND policyname LIKE 'providers_read_%'
+ORDER BY tablename;
+```
+
+Expected results: query (a) returns all 9 `leads` columns (`chat_transcript`, `created_at`, `ehr`, `id`, `name`, `patient_volume`, `practice_name`, `requested_slot`, `specialty`); query (b) returns both constraint definitions containing the widened value lists; query (c) returns exactly 7 rows — `patients` (from Step 4), plus `patient_conditions`, `observations`, `symptom_reports`, `medication_regimens`, `medication_events`, and `leads`.
+
+#### Observation Type Conventions
+
+`observations.observation_type` is free text by design (no DB CHECK constraint) — SCHM2-04 needs no migration. The following convention is a code-level/documentation standard for Phase 12/13/14 to follow consistently, not a database-enforced rule:
+
+| Condition | `observation_type` | Unit |
+|-----------|---------------------|------|
+| diabetes | `glucose` | mg/dL |
+| diabetes | `a1c` | % |
+| ckd | `egfr` | mL/min/1.73m² |
+| ckd | `creatinine` | mg/dL |
+| ckd | `potassium` | mEq/L |
+| heart_failure | `weight` | lbs |
+| heart_failure | `heart_rate` | bpm |
+| heart_failure | `blood_pressure` | mmHg |
 
 ---
 
