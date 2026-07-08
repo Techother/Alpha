@@ -62,7 +62,7 @@ export function Sidebar({ section, alertCount, overdueTcm, screeningDue, billing
       <div className={`sidebar-overlay ${open ? 'open' : ''}`} onClick={onClose} />
       <div className={`sidebar ${open ? 'open' : ''}`}>
         <div style={{ padding: '20px 18px 14px', borderBottom: `1px solid ${T.border}` }}>
-          <div style={{ fontFamily: F.display, fontSize: 20, color: T.blue }}>Alpha Health Track</div>
+          <div style={{ fontFamily: F.display, fontSize: 20, color: T.blue }}>MKL Health</div>
           <div style={{ fontFamily: F.mono, fontSize: 10, color: T.textTert, marginTop: 2 }}>Cardiac Monitoring · v2</div>
         </div>
         <nav style={{ flex: 1, padding: '10px 0', overflowY: 'auto' }}>

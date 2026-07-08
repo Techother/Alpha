@@ -34,7 +34,7 @@ export function LoginView({ onBack }: { onBack: () => void }) {
         padding: '0 20px', height: 56, display: 'flex', alignItems: 'center', gap: 12,
       }}>
         <button onClick={onBack} style={{ background: 'none', border: 'none', color: T.textSec, cursor: 'pointer', fontSize: 20, padding: 4 }}>←</button>
-        <div style={{ fontFamily: F.display, fontSize: 18, color: T.blue }}>Alpha Health Track</div>
+        <div style={{ fontFamily: F.display, fontSize: 18, color: T.blue }}>MKL Health</div>
       </nav>
       <div style={{ flex: 1, display: 'flex', alignItems: 'center', justifyContent: 'center', padding: 20 }}>
         <div style={{

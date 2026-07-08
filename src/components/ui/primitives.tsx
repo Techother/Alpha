@@ -1,5 +1,5 @@
 // cardiotrack/src/components/ui/primitives.tsx
-// Shared UI primitives for CardioTrack — clinical white design system
+// Shared UI primitives for MKL Health — clinical white design system
 // All components import T and F from @/lib/tokens
 
 import React from 'react'
