@@ -1,17 +1,17 @@
 ---
-name: CardioTrack
+name: MKL Health
 description: Clinical RPM console for health system care teams — monitoring, billing, and TCM in one authoritative interface
 colors:
   clinical-blue: "#1A5496"
   clinical-blue-hover: "#154279"
   clinical-blue-surface: "#EBF4FF"
-  surface-app: "#F8F9FA"
+  surface-app: "#F7F4EF"
   surface-card: "#FFFFFF"
-  surface-nav: "#ECEEF2"
-  surface-subtle: "#E5E8EE"
-  border-default: "#D0D5DD"
-  border-strong: "#A8B0BE"
-  text-primary: "#1A202C"
+  surface-nav: "#EDE8E0"
+  surface-subtle: "#E8E1D6"
+  border-default: "#D9CFC0"
+  border-strong: "#A0876B"
+  text-primary: "#1F2A37"
   text-secondary: "#2D3748"
   text-tertiary: "#4A5568"
   state-red: "#C53030"
@@ -120,17 +120,17 @@ components:
     padding: "0"
 ---
 
-# Design System: CardioTrack
+# Design System: MKL Health
 
 ## 1. Overview
 
 **Creative North Star: "The Health System Console"**
 
-CardioTrack looks and feels like software that belongs next to Epic on a hospital workstation — not in a startup's pitch deck. Surfaces are warm clinical white — a near-neutral that reads as "clean workstation" not "cold terminal." Typography earns trust through hierarchy, not personality. Space is strategic: dense where data demands it, open where clinical judgment needs room to breathe.
+MKL Health looks and feels like software that belongs next to Epic on a hospital workstation — not in a startup's pitch deck. Surfaces are warm clinical white — a near-neutral that reads as "clean workstation" not "cold terminal." Typography earns trust through hierarchy, not personality. Space is strategic: dense where data demands it, open where clinical judgment needs room to breathe.
 
 The palette is Restrained. White surfaces hold patient data without visual interference. The deep clinical blue (#1A5496) appears only on interactive elements — buttons, links, focus states — at a frequency that mirrors how sparingly a well-run clinical form uses color. Semantic colors (red, amber, green) are reserved exclusively for clinical state: alert severity, billing eligibility, screening urgency. They are never decorative.
 
-This system explicitly rejects the two anti-references named in PRODUCT.md: startup-cool dark mode (neon accents on near-black, designed for investor demos) and consumer health apps (cheery pastels, gamification cues, emotional warmth designed for patients). CardioTrack serves clinicians under time pressure in fluorescent-lit workrooms; the interface must communicate faster than speech, not feel good to look at.
+This system explicitly rejects the two anti-references named in PRODUCT.md: startup-cool dark mode (neon accents on near-black, designed for investor demos) and consumer health apps (cheery pastels, gamification cues, emotional warmth designed for patients). MKL Health serves clinicians under time pressure in fluorescent-lit workrooms; the interface must communicate faster than speech, not feel good to look at.
 
 **Key Characteristics:**
 - Warm clinical white — near-neutral surfaces that reduce fluorescent-lighting eye strain without warmth that reads as "consumer app"
@@ -152,13 +152,13 @@ A restrained institutional palette anchored in deep blue authority and clinical 
 
 ### Neutral
 
-- **App Background** (`#F8F9FA`, oklch ≈ 97% 0.003 0): The application canvas. Near-neutral warm white — not blue-tinted, not cream. The slight warmth reduces eye strain under fluorescent clinic lighting without veering into consumer-app territory.
+- **App Background** (`#F7F4EF`, oklch ≈ 97% 0.003 0): The application canvas. Near-neutral warm white — not blue-tinted, not cream. The slight warmth reduces eye strain under fluorescent clinic lighting without veering into consumer-app territory.
 - **Card Surface** (`#FFFFFF`): Primary content containers — patient cards, data tables, billing rows. Pure white against the warm canvas creates clear figure/ground without shadows.
-- **Nav Surface** (`#ECEEF2`, oklch ≈ 93% 0.007 250): Sidebar, topbar. Neutral gray with the faintest blue origin — reads as "structural gray" not "blue sidebar." The tonal step to card white is the primary elevation signal; no shadow required.
-- **Subtle Surface** (`#E5E8EE`, oklch ≈ 91% 0.008 240): Hover states, selected table rows, input backgrounds on forms. Warm-neutral, not perceptibly blue.
-- **Border Default** (`#D0D5DD`): Standard card borders, dividers, input strokes. Medium-value neutral gray — clearly visible without competing with content.
-- **Border Strong** (`#A8B0BE`): Emphasized separators, active input stroke on focus. Used where the border needs to communicate state.
-- **Text Primary** (`#1A202C`): All clinical data, patient names, values, labels. Deep navy-black — never pure black.
+- **Nav Surface** (`#EDE8E0`, oklch ≈ 93% 0.007 250): Sidebar, topbar. Neutral gray with the faintest blue origin — reads as "structural gray" not "blue sidebar." The tonal step to card white is the primary elevation signal; no shadow required.
+- **Subtle Surface** (`#E8E1D6`, oklch ≈ 91% 0.008 240): Hover states, selected table rows, input backgrounds on forms. Warm-neutral, not perceptibly blue.
+- **Border Default** (`#D9CFC0`): Standard card borders, dividers, input strokes. Medium-value neutral gray — clearly visible without competing with content.
+- **Border Strong** (`#A0876B`): Emphasized separators, active input stroke on focus. Used where the border needs to communicate state.
+- **Text Primary** (`#1F2A37`): All clinical data, patient names, values, labels. Deep navy-black — never pure black.
 - **Text Secondary** (`#2D3748`): Supporting information, metadata, column values.
 - **Text Tertiary** (`#4A5568`): Muted labels, empty-state copy, placeholder text.
 
@@ -195,7 +195,7 @@ A restrained institutional palette anchored in deep blue authority and clinical 
 
 ## 4. Elevation
 
-CardioTrack is flat by default. Surfaces are distinguished by tonal offset, not shadows. The nav (#EDF2F7) is one step darker than the app canvas (#F7F9FC); cards (#FFFFFF) are one step lighter. This creates clear figure-ground hierarchy without a single `box-shadow` on any in-context surface.
+MKL Health is flat by default. Surfaces are distinguished by tonal offset, not shadows. The nav (#EDF2F7) is one step darker than the app canvas (#F7F9FC); cards (#FFFFFF) are one step lighter. This creates clear figure-ground hierarchy without a single `box-shadow` on any in-context surface.
 
 **Shadow Vocabulary**
 
@@ -213,7 +213,7 @@ Clinical utility over visual weight. Buttons telegraph action potential, not bra
 - **Shape:** Gently rounded (8px radius). Not pill-shaped (too consumer-app) and not sharp-cornered (too legacy-EHR).
 - **Primary** (bg #1A5496, text #FFFFFF, padding 10px 18px): For the single most important action in a context — Save, Acknowledge, Submit. One per visible screen area. Minimum height 44px.
 - **Primary Hover:** bg #154279, 150ms ease-out transition. No transform, no shadow lift. The color shift is sufficient.
-- **Ghost / Secondary** (border 1px solid #C8D6E5, bg transparent, text #1A202C): For secondary actions — Cancel, View Details, Export. On hover: bg #E4EDF5.
+- **Ghost / Secondary** (border 1px solid #C8D6E5, bg transparent, text #1F2A37): For secondary actions — Cancel, View Details, Export. On hover: bg #E4EDF5.
 - **Danger** (bg #C53030, text #FFFFFF): For irreversible actions only — delete, revoke, reset. Never used for mere warnings. Requires confirmation step before destructive database operations.
 
 **The One-Per-Zone Rule.** One primary button per visual zone. If two actions both need primary weight, one is wrong.
@@ -234,7 +234,7 @@ The primary vehicle for clinical state on list items and table rows.
 ### Cards / Containers
 
 - **Corner Style:** Gently rounded (10px radius) — approachable enough to not feel like a spreadsheet, restrained enough to feel clinical.
-- **Background:** Pure white (#FFFFFF) against the warm neutral canvas (#F8F9FA).
+- **Background:** Pure white (#FFFFFF) against the warm neutral canvas (#F7F4EF).
 - **Shadow Strategy:** None. Flat surface. Border distinguishes card from canvas.
 - **Border:** 1px solid #C8D6E5 (Border Default). Only strengthened to #9EAEC0 for focus states or interactive card rows on hover.
 - **Internal Padding:** 16px default (md). 12px for compact data rows. 24px for detail panels. Never 0 for text-bearing content.
@@ -257,10 +257,10 @@ Replaces the side-stripe SevBar pattern (prohibited — see Do's and Don'ts). Fo
 
 ### Navigation (Sidebar / BottomNav)
 
-- **Sidebar:** bg #ECEEF2, border-right 1px solid #D0D5DD, width 260px.
+- **Sidebar:** bg #EDE8E0, border-right 1px solid #D9CFC0, width 260px.
 - **Nav items:** DM Sans 14px 500 weight, color #2D3748, padding 10px 16px, radius 8px on hover. Active state: bg #EBF4FF, color #1A5496, font-weight 600.
 - **Badge counts:** DM Mono 11px, bg #C53030, text #FFFFFF, radius 4px, padding 1px 6px. Only visible when count > 0.
-- **Mobile BottomNav:** bg #ECEEF2, border-top 1px solid #D0D5DD. Nav buttons use the same active/inactive states as sidebar.
+- **Mobile BottomNav:** bg #EDE8E0, border-top 1px solid #D9CFC0. Nav buttons use the same active/inactive states as sidebar.
 - **Navigation uses `<button>` elements with `onClick` — not `<a>` or `<Link>`.** This prevents the global link color (#1A5496) from overriding the inactive nav color (#2D3748).
 
 ### Sparkline (Clinical Data Trend)
@@ -292,6 +292,6 @@ Replaces the side-stripe SevBar pattern (prohibited — see Do's and Don'ts). Fo
 - **Don't** use glassmorphism (backdrop-filter blur on decorative card surfaces). Not wrong because it's overdone — wrong because it is not institutional.
 - **Don't** add animation personality to loading states. `<Spin />` is a loading indicator, not a brand moment. No bounces, no elastic easing, no "fun" spinners.
 - **Don't** use cheery UI copy, emoji, gamification cues, or patient-facing warmth. This is a clinician workflow tool. Tone is terse, precise, professional.
-- **Don't** use `#000000` or `#FFFFFF` as background colors at the application canvas level. The canvas is warm neutral (#F8F9FA), not pure white and not blue-tinted.
+- **Don't** use `#000000` or `#FFFFFF` as background colors at the application canvas level. The canvas is warm neutral (#F7F4EF), not pure white and not blue-tinted.
 - **Don't** use color for decoration anywhere. If a color appears and a clinician can't immediately interpret what clinical state it represents, it should not be there.
 - **Don't** apply DM Sans Bold (700) above the headline level. No 800 or 900 weights. Hierarchy through size, not brute weight.

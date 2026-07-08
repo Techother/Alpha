@@ -6,15 +6,15 @@ product
 
 ## Users
 
-Clinicians — physicians, nurses, and care coordinators — managing remote patient monitoring (RPM) panels. They use CardioTrack during clinical workflows: reviewing alert queues, documenting TCM contacts, generating billing data, and tracking screening compliance. Context is high-stakes: decisions affect care quality and billing accuracy. Sessions are often brief (90 seconds per patient) and occur on clinic workstations under ambient fluorescent lighting or at a desk during a busy shift.
+Clinicians — physicians, nurses, and care coordinators — managing remote patient monitoring (RPM) panels. They use MKL Health during clinical workflows: reviewing alert queues, documenting TCM contacts, generating billing data, and tracking screening compliance. Context is high-stakes: decisions affect care quality and billing accuracy. Sessions are often brief (90 seconds per patient) and occur on clinic workstations under ambient fluorescent lighting or at a desk during a busy shift.
 
 ## Product Purpose
 
-CardioTrack enables health system care teams to safely monitor and bill for remote patient care without any sensitive API credentials leaking to the browser or the public internet. It tracks vitals, surfaces alerts, manages TCM episodes, scores PHQ-9/GAD-7 screenings, and produces CPT billing reports — the clinical and operational backbone for an RPM program.
+MKL Health enables health system care teams to safely monitor and bill for remote patient care without any sensitive API credentials leaking to the browser or the public internet. It tracks vitals, surfaces alerts, manages TCM episodes, scores PHQ-9/GAD-7 screenings, and produces CPT billing reports — the clinical and operational backbone for an RPM program.
 
 Success: a care coordinator can review their full patient panel, act on overdue alerts, confirm billing eligibility, and document a TCM contact within 10 minutes, with zero credential exposure risk.
 
-## Brand Personality
+## Brand Personality — Product Register (Clinical Dashboard)
 
 Serious · Evidence-forward · Institutional
 
@@ -26,10 +26,16 @@ The product earns trust through data clarity and structural calm, not through pe
 - **Primary Intelligence AI**: Evidence-forward data presentation, clinical credibility markers, research-citation aesthetic
 - **Sutter Health**: Clean white clinical environment, generous whitespace, hierarchy that makes data scannable under time pressure
 
-## Anti-references
+## Anti-references — Product Register (Clinical Dashboard)
 
-- **Startup-cool dark mode**: Neon teal on near-black, glassmorphism, designed to impress investors not care teams. The current CardioTrack design is in this bucket — the refinement moves away from it.
+- **Startup-cool dark mode**: Neon teal on near-black, glassmorphism, designed to impress investors not care teams. The current MKL Health design is in this bucket — the refinement moves away from it.
 - **Consumer health app**: Cheery pastels, gamification cues, emoji, patient-facing emotional warmth — completely wrong register for a clinician workflow tool.
+
+Anti-references above apply to the clinical dashboard/product register only. The public landing/marketing register intentionally adopts a warmer, approachable register (see 'Brand Personality — Public Register' below), per MKL Health PRD Section 2.
+
+## Brand Personality — Public Register (Landing / Marketing)
+
+Warm Clinical: approachable, editorial, human-forward — credible without being cold. First impression for a prospect evaluating whether this platform understands their practice.
 
 ## Design Principles
 
