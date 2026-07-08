@@ -1,5 +1,5 @@
 -- =============================================================
--- Alpha Health Track v3.0 Foundation Migration
+-- MKL Health v3.0 Foundation Migration
 -- Apply in: Supabase dashboard > SQL Editor
 -- Project: wtjotacchiurbjcizdws
 -- =============================================================

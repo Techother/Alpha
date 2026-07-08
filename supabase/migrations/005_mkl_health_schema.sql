@@ -1,5 +1,5 @@
 -- =============================================================
--- Alpha Health Track 005_mkl_health_schema.sql
+-- MKL Health 005_mkl_health_schema.sql
 -- Activates MKL Health's dormant v3.2 schema (SCHM2-01 through SCHM2-06)
 -- Apply in: Supabase dashboard > SQL Editor
 -- Run AFTER: 004_fix_rls.sql

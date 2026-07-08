@@ -1,5 +1,5 @@
 -- =============================================================
--- ARCHIVED: Alpha Health Track v2 Schema Additions (schema_v2.sql)
+-- ARCHIVED: MKL Health v2 Schema Additions (schema_v2.sql)
 -- Status: SUPERSEDED — do not apply to any database
 -- Superseded by: migrations/001_v3_foundation.sql
 -- Reason: v2 added medications, medication_logs, rpm_time_logs,
@@ -13,7 +13,7 @@
 --   future phases if those features are revisited.
 -- =============================================================
 
--- Alpha Health Track v2 Schema additions
+-- MKL Health v2 Schema additions
 -- Run after schema.sql
 
 CREATE TABLE IF NOT EXISTS medications (

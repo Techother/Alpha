@@ -1,4 +1,4 @@
--- Alpha Health Track MVP Schema
+-- MKL Health MVP Schema
 -- Run in: Supabase dashboard > SQL Editor
 
 -- patients

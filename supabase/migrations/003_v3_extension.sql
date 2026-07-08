@@ -1,5 +1,5 @@
 -- =============================================================
--- Alpha Health Track 003_v3_extension.sql
+-- MKL Health 003_v3_extension.sql
 -- Extends 001+002 to match application column expectations
 -- Run AFTER: 001_v3_foundation.sql, 002_alerts_table.sql
 -- Project: wtjotacchiurbjcizdws

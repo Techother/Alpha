@@ -1,5 +1,5 @@
 -- =============================================================
--- Alpha Health Track 004_fix_rls.sql
+-- MKL Health 004_fix_rls.sql
 -- Fixes RLS gaps and constraint bug found in code review (01-REVIEW.md)
 -- Run AFTER: 003_v3_extension.sql
 -- Project: wtjotacchiurbjcizdws

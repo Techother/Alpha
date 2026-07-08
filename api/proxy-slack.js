@@ -67,7 +67,7 @@ export default async function handler(req, res) {
         const blocks = [
           {
             type: 'header',
-            text: { type: 'plain_text', text: '🚨 Alpha Health Track Alert', emoji: true },
+            text: { type: 'plain_text', text: '🚨 MKL Health Alert', emoji: true },
           },
           {
             type: 'section',
@@ -93,7 +93,7 @@ export default async function handler(req, res) {
           headers: { ...authHeader, 'Content-Type': 'application/json' },
           body: JSON.stringify({
             channel: channelId,
-            text: `Alpha Health Track Alert: ${alertType} for ${patientName} (${mrn})`,
+            text: `MKL Health Alert: ${alertType} for ${patientName} (${mrn})`,
             blocks,
           }),
         })

@@ -1,5 +1,5 @@
 -- =============================================================
--- ARCHIVED: Alpha Health Track v1 Schema (schema.sql)
+-- ARCHIVED: MKL Health v1 Schema (schema.sql)
 -- Status: SUPERSEDED — do not apply to any database
 -- Superseded by: migrations/001_v3_foundation.sql +
 --                migrations/002_alerts_table.sql +
@@ -17,7 +17,7 @@
 --   reference for what application code in src/api/supabase.ts queries.
 -- =============================================================
 
--- Alpha Health Track MVP Schema
+-- MKL Health MVP Schema
 -- Run in: Supabase dashboard > SQL Editor
 
 -- patients

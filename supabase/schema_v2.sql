@@ -1,4 +1,4 @@
--- Alpha Health Track v2 Schema additions
+-- MKL Health v2 Schema additions
 -- Run after schema.sql
 
 CREATE TABLE IF NOT EXISTS medications (
