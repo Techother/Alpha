@@ -1,7 +1,7 @@
 // api/proxy-slack.js
 // Handles 3 Slack operations: GET messages, POST postMessage, POST postPatientAlert.
 // All requests must carry a valid Supabase JWT.
-import { handlePreflight, setCorsHeaders, verifyJwt } from './_lib/auth.js'
+import { handlePreflight, requireProvider, setCorsHeaders } from './_lib/auth.js'
 
 const SLACK_API = 'https://slack.com/api'
 
@@ -9,8 +9,8 @@ export default async function handler(req, res) {
   setCorsHeaders(req, res)
   if (handlePreflight(req, res)) return
 
-  const user = await verifyJwt(req, res)
-  if (!user) return // verifyJwt already sent 401
+  const user = await requireProvider(req, res)
+  if (!user) return
 
   const token = process.env.SLACK_BOT_TOKEN
   const defaultChannelId = process.env.SLACK_CHANNEL_ID
@@ -27,8 +27,9 @@ export default async function handler(req, res) {
       if (action === 'messages') {
         const channelId = req.query.channelId || defaultChannelId
         if (!channelId) return res.status(400).json({ error: 'Missing channelId' })
+        if (channelId !== defaultChannelId) return res.status(403).json({ error: 'Channel not allowed' })
         const r = await fetch(
-          `${SLACK_API}/conversations.history?channel=${channelId}&limit=20`,
+          `${SLACK_API}/conversations.history?channel=${encodeURIComponent(channelId)}&limit=20`,
           { headers: authHeader }
         )
         const data = await r.json()
@@ -45,6 +46,8 @@ export default async function handler(req, res) {
         const { channelId: rawChannelId, text } = req.body
         const channelId = rawChannelId || defaultChannelId
         if (!channelId || !text) return res.status(400).json({ error: 'Missing channelId or text' })
+        if (channelId !== defaultChannelId) return res.status(403).json({ error: 'Channel not allowed' })
+        if (typeof text !== 'string' || text.length > 3000) return res.status(400).json({ error: 'Message is too long' })
         const r = await fetch(`${SLACK_API}/chat.postMessage`, {
           method: 'POST',
           headers: { ...authHeader, 'Content-Type': 'application/json' },
@@ -62,6 +65,7 @@ export default async function handler(req, res) {
         }
         const channelId = req.body.channelId || defaultChannelId
         if (!channelId) return res.status(400).json({ error: 'Missing channelId' })
+        if (channelId !== defaultChannelId) return res.status(403).json({ error: 'Channel not allowed' })
 
         // Block Kit layout preserved exactly from existing src/api/slack.ts
         const blocks = [
@@ -107,6 +111,6 @@ export default async function handler(req, res) {
 
     return res.status(405).json({ error: 'Method not allowed' })
   } catch (err) {
-    return res.status(500).json({ error: err.message ?? 'Internal error' })
+    return res.status(500).json({ error: 'Internal error' })
   }
 }

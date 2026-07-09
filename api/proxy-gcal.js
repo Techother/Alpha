@@ -3,7 +3,7 @@
 // Uses Node.js crypto for RS256 JWT signing — no googleapis package.
 // All requests must carry a valid Supabase JWT.
 import crypto from 'crypto'
-import { handlePreflight, setCorsHeaders, verifyJwt } from './_lib/auth.js'
+import { handlePreflight, requireProvider, setCorsHeaders } from './_lib/auth.js'
 
 function base64url(str) {
   return Buffer.from(str).toString('base64')
@@ -47,8 +47,8 @@ export default async function handler(req, res) {
   setCorsHeaders(req, res)
   if (handlePreflight(req, res)) return
 
-  const user = await verifyJwt(req, res)
-  if (!user) return // verifyJwt already sent 401
+  const user = await requireProvider(req, res)
+  if (!user) return
 
   const gcalJson = process.env.GCAL_SERVICE_ACCOUNT_JSON
   const calendarId = process.env.GCAL_CALENDAR_ID
@@ -73,6 +73,9 @@ export default async function handler(req, res) {
       const action = req.query.action
       if (action === 'events') {
         const maxResults = parseInt(req.query.maxResults ?? '10', 10)
+        if (!Number.isInteger(maxResults) || maxResults < 1 || maxResults > 50) {
+          return res.status(400).json({ error: 'maxResults must be between 1 and 50' })
+        }
         const params = new URLSearchParams({
           timeMin: new Date().toISOString(),
           singleEvents: 'true',
@@ -94,6 +97,12 @@ export default async function handler(req, res) {
         if (!title || !startDateTime || !endDateTime) {
           return res.status(400).json({ error: 'Missing required fields: title, startDateTime, endDateTime' })
         }
+        if (typeof title !== 'string' || title.length > 200) {
+          return res.status(400).json({ error: 'Title is too long' })
+        }
+        if (description && (typeof description !== 'string' || description.length > 2000)) {
+          return res.status(400).json({ error: 'Description is too long' })
+        }
         const timeZone = Intl.DateTimeFormat().resolvedOptions().timeZone
         const r = await fetch(`${gcalBase}/events`, {
           method: 'POST',
@@ -114,6 +123,6 @@ export default async function handler(req, res) {
 
     return res.status(405).json({ error: 'Method not allowed' })
   } catch (err) {
-    return res.status(500).json({ error: err.message ?? 'Internal error' })
+    return res.status(500).json({ error: 'Internal error' })
   }
 }

@@ -28,6 +28,15 @@ export function handlePreflight(req, res) {
   return false
 }
 
+function getServerSupabase() {
+  const url = process.env.SUPABASE_URL
+  const serviceRoleKey = process.env.SUPABASE_SERVICE_ROLE_KEY
+  if (!url || !serviceRoleKey) {
+    throw new Error('Supabase server credentials not configured')
+  }
+  return createClient(url, serviceRoleKey, { auth: { persistSession: false, autoRefreshToken: false } })
+}
+
 export async function verifyJwt(req, res) {
   const auth = req.headers.authorization ?? ''
   const jwt = auth.startsWith('Bearer ') ? auth.slice(7) : null
@@ -38,15 +47,43 @@ export async function verifyJwt(req, res) {
   // Use SUPABASE_URL (server-only, NOT VITE_SUPABASE_URL) + SERVICE_ROLE_KEY.
   // createClient is instantiated per-request — never at module level (prevents
   // user state leakage across warm-started Vercel invocations).
-  const supabase = createClient(
-    process.env.SUPABASE_URL,
-    process.env.SUPABASE_SERVICE_ROLE_KEY,
-    { auth: { persistSession: false, autoRefreshToken: false } }
-  )
+  let supabase
+  try {
+    supabase = getServerSupabase()
+  } catch {
+    res.status(500).json({ error: 'Authentication service not configured' })
+    return null
+  }
   const { data: { user }, error } = await supabase.auth.getUser(jwt)
   if (error || !user) {
     res.status(401).json({ error: 'Invalid or expired token' })
     return null
   }
   return user
+}
+
+export async function requireRole(req, res, allowedRoles) {
+  const user = await verifyJwt(req, res)
+  if (!user) return null
+
+  const supabase = getServerSupabase()
+  const { data: profile, error } = await supabase
+    .from('profiles')
+    .select('role')
+    .eq('id', user.id)
+    .maybeSingle()
+
+  if (error) {
+    res.status(500).json({ error: 'Unable to verify user role' })
+    return null
+  }
+  if (!profile || !allowedRoles.includes(profile.role)) {
+    res.status(403).json({ error: 'Insufficient permissions' })
+    return null
+  }
+  return { ...user, role: profile.role }
+}
+
+export function requireProvider(req, res) {
+  return requireRole(req, res, ['provider'])
 }

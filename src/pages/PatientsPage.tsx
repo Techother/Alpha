@@ -349,7 +349,6 @@ function ChatbotModal({ patient, onClose }: { patient: any; onClose: () => void 
             Authorization: `Bearer ${(await supabase!.auth.getSession()).data.session?.access_token ?? ''}`,
           },
           body: JSON.stringify({
-            system: `You are a compassionate cardiac care assistant checking in with ${patient.first_name}, a heart failure patient. Be warm and brief.`,
             userMessage: text,
             nextQuestion: QS[next].prompt,
           }),
