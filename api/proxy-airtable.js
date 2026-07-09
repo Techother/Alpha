@@ -1,7 +1,7 @@
 // api/proxy-airtable.js
 // Handles 4 Airtable operations via ?resource= query param.
 // All requests must carry a valid Supabase JWT.
-import { handlePreflight, setCorsHeaders, verifyJwt } from './_lib/auth.js'
+import { handlePreflight, requireProvider, setCorsHeaders } from './_lib/auth.js'
 
 const AIRTABLE_BASE = 'https://api.airtable.com/v0'
 
@@ -9,8 +9,8 @@ export default async function handler(req, res) {
   setCorsHeaders(req, res)
   if (handlePreflight(req, res)) return
 
-  const user = await verifyJwt(req, res)
-  if (!user) return // verifyJwt already sent 401
+  const user = await requireProvider(req, res)
+  if (!user) return
 
   const apiKey = process.env.AIRTABLE_API_KEY
   const baseId = process.env.AIRTABLE_BASE_ID
@@ -70,6 +70,6 @@ export default async function handler(req, res) {
 
     return res.status(405).json({ error: 'Method not allowed' })
   } catch (err) {
-    return res.status(500).json({ error: err.message ?? 'Internal error' })
+    return res.status(500).json({ error: 'Internal error' })
   }
 }
