@@ -1,6 +1,6 @@
 # Supabase Schema Documentation
 
-**Active Schema: v3.2 | Applied via: migrations 001 + 002 + 003 + 004 + 005**
+**Active Schema: v3.2 | Applied via: migrations 001 + 002 + 003 + 004 + 005 + 006**
 
 This directory contains the authoritative Supabase schema for MKL Health. The v3 schema uses Row Level Security (RLS) with a provider/patient role model, multi-condition patient structure, and a chatbot session architecture.
 
@@ -84,6 +84,18 @@ Activates MKL Health's dormant v3.2 schema (SCHM2-01 through SCHM2-06) by wideni
 All statements are idempotent (`ON CONFLICT ... DO NOTHING`, `DROP CONSTRAINT IF EXISTS` / `ADD CONSTRAINT`, `CREATE TABLE IF NOT EXISTS`, `DROP POLICY IF EXISTS` before `CREATE POLICY`) and safe to re-run.
 
 **Requires 001 + 002 + 003 + 004**
+
+### Step 6 — `migrations/006_prelaunch_email_signups.sql`
+
+Adds pre-launch email capture for newsletter and launch-information requests:
+
+- **`prelaunch_email_signups`** — `id`, `email`, `source`, `wants_newsletter`, `wants_launch_updates`, `created_at`.
+- Adds a unique email constraint and basic email/source validation.
+- RLS: `public_insert_prelaunch_email_signups` allows unauthenticated landing-page INSERT when at least one communication preference is selected; `providers_read_prelaunch_email_signups` restricts SELECT to `profiles.role = 'provider'`.
+
+All statements are idempotent and safe to re-run.
+
+**Requires 001 + 002 + 003 + 004 + 005**
 
 #### Step 5 Verification Query
 

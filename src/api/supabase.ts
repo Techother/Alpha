@@ -21,6 +21,33 @@ export function onAuthChange(cb: (session: any) => void) {
   return supabase.auth.onAuthStateChange((_event: any, session: any) => cb(session))
 }
 
+// ── Public launch interest ───────────────────────────────────
+
+export async function collectPrelaunchEmail(email: string) {
+  const normalizedEmail = email.trim().toLowerCase()
+  if (!normalizedEmail || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(normalizedEmail)) {
+    throw new Error('Enter a valid email address')
+  }
+  if (!supabase) {
+    throw new Error('Email collection is not configured yet')
+  }
+
+  const { error } = await supabase
+    .from('prelaunch_email_signups')
+    .insert({
+      email: normalizedEmail,
+      source: 'landing_page',
+      wants_newsletter: true,
+      wants_launch_updates: true,
+    })
+
+  if (error) {
+    if (error.code === '23505') return { alreadySubscribed: true }
+    throw error
+  }
+  return { alreadySubscribed: false }
+}
+
 // ── Patients ──────────────────────────────────────────────────
 
 export async function getPatients() {

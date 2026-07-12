@@ -3,7 +3,9 @@
 // clinical white canvas. Removed: stats bar (hero-metric ban), card grid (identical-card ban),
 // emoji icons. Added: <main>, skip-nav, 44px+ touch targets, editorial feature rows.
 
+import { useState, type FormEvent } from 'react'
 import { P, F } from '@/lib/tokens'
+import { collectPrelaunchEmail } from '@/api/supabase'
 
 const features = [
   { tag: 'Monitoring',  title: 'Real-time Vital Tracking',   desc: 'Vital signs tracked across your full roster. Weight gain, breathlessness spikes, and missed medications surface to the alert queue automatically.' },
@@ -91,6 +93,131 @@ function GhostBtn({
     >
       {children}
     </button>
+  )
+}
+
+function PrelaunchEmailForm() {
+  const [email, setEmail] = useState('')
+  const [status, setStatus] = useState<'idle' | 'loading' | 'success' | 'duplicate' | 'error'>('idle')
+  const [message, setMessage] = useState('')
+
+  async function handleSubmit(e: FormEvent<HTMLFormElement>) {
+    e.preventDefault()
+    setStatus('loading')
+    setMessage('')
+    try {
+      const result = await collectPrelaunchEmail(email)
+      setStatus(result.alreadySubscribed ? 'duplicate' : 'success')
+      setMessage(result.alreadySubscribed
+        ? "You're already on the launch list."
+        : "You're on the list. We'll send launch updates and newsletter notes before we open access."
+      )
+      setEmail('')
+    } catch (err: unknown) {
+      setStatus('error')
+      setMessage(err instanceof Error ? err.message : 'We could not save that email. Please try again.')
+    }
+  }
+
+  const isLoading = status === 'loading'
+
+  return (
+    <div>
+      <form
+        onSubmit={handleSubmit}
+        aria-label="Join the MKL Health launch list"
+        style={{
+          marginTop: 18,
+          padding: 4,
+          border: `1px solid ${P.borderStrong}`,
+          borderRadius: 8,
+          display: 'flex',
+          gap: 4,
+          background: P.canvas,
+          maxWidth: 520,
+          boxShadow: '0 8px 24px rgba(74, 64, 56, 0.08)',
+        }}
+      >
+        <div style={{ flex: 1, minWidth: 0 }}>
+          <label htmlFor="prelaunch-email" style={{
+            position: 'absolute',
+            width: 1,
+            height: 1,
+            padding: 0,
+            margin: -1,
+            overflow: 'hidden',
+            clip: 'rect(0, 0, 0, 0)',
+            whiteSpace: 'nowrap',
+            border: 0,
+          }}>
+            Email address
+          </label>
+          <input
+            id="prelaunch-email"
+            type="email"
+            inputMode="email"
+            autoComplete="email"
+            required
+            value={email}
+            onChange={e => {
+              setEmail(e.target.value)
+              if (status !== 'idle') {
+                setStatus('idle')
+                setMessage('')
+              }
+            }}
+            placeholder="you@clinic.com"
+            disabled={isLoading}
+            style={{
+              width: '100%',
+              minHeight: 48,
+              border: 'none',
+              outline: 'none',
+              background: 'transparent',
+              color: P.ink,
+              fontFamily: F.body,
+              fontSize: 15,
+              padding: '0 14px',
+            }}
+          />
+        </div>
+        <button
+          type="submit"
+          disabled={isLoading}
+          style={{
+            minHeight: 48,
+            minWidth: 148,
+            border: 'none',
+            borderRadius: 6,
+            background: isLoading ? P.borderStrong : P.clayDeep,
+            color: '#FFF8F5',
+            fontFamily: F.body,
+            fontSize: 14,
+            fontWeight: 700,
+            cursor: isLoading ? 'wait' : 'pointer',
+            padding: '0 18px',
+            transition: 'background 150ms ease-out',
+          }}
+        >
+          {isLoading ? 'Saving...' : 'Join Launch List'}
+        </button>
+      </form>
+      {message && (
+        <div
+          role={status === 'error' ? 'alert' : 'status'}
+          aria-live="polite"
+          style={{
+            marginTop: 10,
+            fontFamily: F.body,
+            fontSize: 13,
+            lineHeight: 1.5,
+            color: status === 'error' ? P.clayHover : P.sage,
+          }}
+        >
+          {message}
+        </div>
+      )}
+    </div>
   )
 }
 
@@ -215,6 +342,51 @@ export function LandingPage({ onSignIn }: { onSignIn: () => void }) {
                 <GhostBtn onClick={onSignIn}>
                   Provider Login
                 </GhostBtn>
+              </div>
+
+              <div style={{ marginTop: 42 }}>
+                <div style={{
+                  fontFamily: F.mono,
+                  fontSize: 11,
+                  color: P.clayDeep,
+                  letterSpacing: '0.1em',
+                  textTransform: 'uppercase',
+                  marginBottom: 10,
+                }}>
+                  Pre-launch updates
+                </div>
+                <h2 style={{
+                  fontFamily: F.display,
+                  fontSize: 'clamp(24px, 4vw, 34px)',
+                  color: P.ink,
+                  lineHeight: 1.12,
+                  letterSpacing: '-0.02em',
+                  marginBottom: 10,
+                  fontWeight: 700,
+                }}>
+                  Get launch information before MKL Health opens access.
+                </h2>
+                <p style={{
+                  fontFamily: F.body,
+                  fontSize: 15,
+                  color: P.body,
+                  lineHeight: 1.65,
+                  maxWidth: 500,
+                  marginBottom: 4,
+                }}>
+                  Join the newsletter for product updates, launch timing, and early-access details for care teams.
+                </p>
+                <PrelaunchEmailForm />
+                <p style={{
+                  fontFamily: F.mono,
+                  fontSize: 10,
+                  color: P.muted,
+                  lineHeight: 1.6,
+                  maxWidth: 500,
+                  marginTop: 30,
+                }}>
+                  No patient information. Just launch updates for clinical teams.
+                </p>
               </div>
 
             </div>
